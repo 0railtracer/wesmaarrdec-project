@@ -1,0 +1,55 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content%}
+<div class="hero">
+<div class="container my-5">
+<h1>CATEGORY</h1>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">CATEGORY</th>
+        <th scope="col">DELETE</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for category in categories %}
+    <tr>
+    <td>Category: {{ category.title|title }}</td>
+    <td><a href="{% url 'deletecategory' category.slug %}" style="color: brown;"> Delete Category </a></td>
+     
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+ <div class="album py-5 bg-light">
+    <div class="container">
+      <h2 style="color: rgb(0, 75, 50); font-style: italic;">ALL POST</h2>
+      <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
+        {% for post in posts %}
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{{post.image.url}}">
+            <div class="card-body">
+              <p class="card-text">Name: {{ post.title|title }}</p>
+              <p class="card-text">Detail: {{ post.body|truncatechars:100 }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{% url 'deletepost' post.slug %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: brown;"> Delete Post </button> </a>
+                  <a href="{% url 'post_update' post.slug %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: green;"> Update Post </button> </a> 
+                </div>
+                <small class="text-muted">{{ post.created_at}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
+</div>
+
+{% endblock %}

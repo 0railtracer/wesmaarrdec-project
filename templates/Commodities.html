@@ -1,0 +1,92 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <section>
+      <div class="container" data-aos="fade-in">
+        <div class="row">
+          <div class="col-lg-12 text-center mb-5">
+            <h1 class="page-title">Commodities</h1>
+          </div>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <div class="card text-center" style=" border: none;">
+
+            <section>
+                <div class="card text-center" style="border: none;">
+                  {% for commodity in commodities %}
+                    {% if forloop.counter0|divisibleby:2 %}
+                      {% if not forloop.first %}</div>{% endif %}
+                      <div class="card-group">
+                    {% endif %}
+                    <div class="card shadow-sm" style="margin: 10px;">
+                      <a href="{% url 'commodetail' commodity.slug%}" class="img-bg d-flex align-items-end" style="background-image: url('{{commodity.image.url}}');">
+                        <div class="img-bg-inner d-flex align-items-start flex-column">
+                          <h2>c{{ commodity.name }}</h2>
+                          <p style="text-align: left;">{{ commodity.detail}}</p>
+                          <button type="button" class="btn btn-success">Discover</button>
+                        </div>
+                      </a>
+                    </div>
+                    {% if forloop.last or forloop.counter0|add:1|divisibleby:2 %}</div>{% endif %}
+                  {% endfor %}
+
+              <div class="card text-center" style="border: none;">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-end">
+                    <!-- Paging -->
+                    <div class="text-start py-4">
+                        <div class="custom-pagination">
+                            {% if commodities.has_previous %}
+                                <a href="?page={{ commodities.previous_page_number }}" class="prev">Previous</a>
+                            {% endif %}
+                            {% for num in commodities.paginator.page_range %}
+                                {% if num == commodities.number %}
+                                    <a href="?page={{ num }}" class="active">{{ num }}</a>
+                                {% elif num > commodities.number|add:'-3' and num < commodities.number|add:'3' %}
+                                    <a href="?page={{ num }}">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            {% if commodities.has_next %}
+                                <a href="?page={{ commodities.next_page_number }}" class="next">Next</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                  </ul>
+                </nav>
+              </div>
+
+            </section>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+      {% endblock %}
+  <style>
+    .d-flex{
+        margin-bottom: 25px;
+    }
+    .btn-lg{
+      margin-top: 25px;
+      margin: 10px;
+    }
+    .card{
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    .card .row{
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+    .desc{
+      margin-left: 25px;
+      margin-top: 50px;
+    }
+    .text-center{
+      margin-left: 25px;
+    }
+    .hr{
+      margin-bottom: 50px;
+    }
+  </style>

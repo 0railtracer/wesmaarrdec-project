@@ -1,0 +1,17 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% block content %}
+<div class="hero">
+  <div class="container my-5">
+    <div class="i-am-centered">
+        <h1>Edit Project Status</h1>
+        <p>Current Status: {{ object.status }}</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

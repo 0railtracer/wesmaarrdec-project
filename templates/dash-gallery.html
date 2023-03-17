@@ -1,0 +1,31 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+ <div class="album py-5 bg-light">
+    <div class="container">
+      <h2 style="color: rgb(0, 75, 50); font-style: italic;">ALL PHOTO</h2>
+      <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
+        {% for photo in photos %}
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{{photo.img.url}}">
+            <div class="card-body">
+              <p class="card-text">Name: {{ photo.name|title }}</p>
+              <p class="card-text">Detail: {{ photo.caption|truncatechars:100 }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <!-- <a href="{% url 'deletephoto' photo.pk %}" style="color: brown;"> Delete Post</a> -->
+                  <a href="{% url 'deletephoto' photo.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: brown;"> Delete Photo </button> </a>
+                  <a href="{% url 'photoupdate' photo.pk %}" style="color: rgb(4, 255, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: rgb(87, 165, 42);"> Update Photo </button> </a>
+                </div>
+                <small class="text-muted">{{ post.created_at}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
+</div>
+{% endblock %}

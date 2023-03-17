@@ -1,0 +1,33 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content%}
+<div class="hero">
+<div class="container my-5">
+ <div class="album py-5 bg-light">
+    <div class="container">
+      <h2 style="color: rgb(0, 75, 50); font-style: italic;">ALL FAQ</h2>
+      <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
+        {% for faq in faq %}
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{{post.image.url}}">
+            <div class="card-body">
+              <p class="card-text">Question: {{ faq.question|title }}</p>
+              <p class="card-text">Answer: {{ faq.answer }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="#" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: brown;"> Delete FAQ </button> </a>
+                  <a href="#" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: green;"> Update FAQ </button> </a> 
+                </div>
+                <!-- <small class="text-muted">{{ post.created_at}}</small> -->
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
+</div>
+
+{% endblock %}

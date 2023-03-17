@@ -1,0 +1,30 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content%}
+<hr>
+<div class="hero">
+  <div class="container my-5">
+<h2>Commodity</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Commodity</th>
+        <th scope="col">Update Commodities</th>
+        <th scope="co">Delete Commodities</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for commodity in commodity %}
+    <tr>
+    <td>{{ commodity.name|title }}</td>
+    <td><a href="{% url 'commodity_update' commodity.slug %}" style="color: green;">Click To Update </a></td>
+    <td><a href="{% url 'deletecommodity' commodity.slug %}" style="color: brown;">DELETE: {{commodity.name|capfirst}}</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+  </div>
+{% endblock %}

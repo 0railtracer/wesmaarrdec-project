@@ -1,0 +1,105 @@
+   <!-- ======= Hero Slider Section ======= -->
+
+    <section id="hero-slider" class="hero-slider">
+      <div class="container-md" data-aos="fade-in">
+        <div class="row">
+          <div class="col-12">
+            <div class="swiper sliderFeaturedPosts">
+              <div class="swiper-wrapper">
+                {% for slide in slides%}
+                <div class="swiper-slide">
+                  <a href="{{slide.image.url}}" class="img-bg d-flex align-items-end" style="background-image: url('{{slide.image.url}}');">
+                    <div class="img-bg-inner">
+                      <h2>{{ slide.name}}</h2>
+                      <p>{{ slide.detail}}</p>
+                    </div>
+                  </a>
+                </div>
+                {% endfor %}
+              </div>
+              <div class="custom-swiper-button-next">
+                <span class="bi-chevron-right"></span>
+              </div>
+              <div class="custom-swiper-button-prev">
+                <span class="bi-chevron-left"></span>
+              </div>
+
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Hero Slider Section -->
+
+   <!-- ======= Post Grid Section ======= -->
+    <section id="posts" class="posts">
+      <div class="container" data-aos="fade-up">
+        <div class="row g-5">
+          <div class="col-lg-4">
+            <div class="post-entry-1 lg">
+              <h2><a href="{% url 'community' %}">Events this month</a></h2>
+              {% for post in random_post%}
+              <a href="{{ post.image.url }}"><img src="{{ post.image.url }}" alt="" class="img-fluid"></a>
+              <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
+              <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus exercitationem? Nihil tempore odit ab minus eveniet praesentium, similique blanditiis molestiae ut saepe perspiciatis officia nemo, eos quae cumque. Accusamus fugiat architecto rerum animi atque eveniet, quo, praesentium dignissimos</p>
+
+              <div class="d-flex align-items-center author">
+                <div class="photo"><img src="{{post.image.url}}" alt="" class="img-fluid"></div>
+                <div class="name">
+                  <h3 class="m-0 p-0">{{post.author}}</h3>
+                </div>
+              </div>
+              {% endfor %}
+              <a href="{% url 'community' %}"><p class="text-end">See all events</p></a>
+            </div>
+
+          </div>
+
+          <div class="col">
+            <div class="row g-5">
+              <div class="ecommerce-gallery" data-mdb-zoom-effect="true" data-mdb-auto-height="true" style="width: 35rem;">
+                <h1>GALLERY</h1>
+                <div class="row py-3 shadow-5">
+                  <div class="col-12 mb-1">
+                    {% for slide in random_slides %}
+                    <div class="lightbox mb-2">
+                      <a href="{{slide.image.url}}"><img src="{{slide.image.url}}" alt="" class="img-fluid"></a>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% for slide in random_slide_mini %}
+                  <div class="col-3 mt-1">
+                    <a href="{{slide.image.url}}"><img src="{{slide.image.url}}" alt="" class="img-fluid"></a>
+                  </div>
+                  {% endfor %}
+                  <hr class="hr" />
+
+                </div>
+              </div>           
+
+              <!-- Trending Section -->
+              <div class="col-lg-4">
+
+                <div class="trending">
+                  <h3>Latest News</h3>
+                  <ul class="trending-post">
+                    {% for news in post|slice:":5" %}
+                    <li>
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}">
+                        <span class="number">{{news.count}}</span>
+                        <h3>{{news.title}}</h3>
+                        <span class="author">{{news.author}}</span>
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <a href="{% url 'allpost' %}"><p class="text-end">View all news</p></a>
+
+              </div> <!-- End Trending Section -->
+            </div>
+          </div>
+
+        </div> <!-- End .row -->
+      </div>
+    </section> <!-- End Post Grid Section -->

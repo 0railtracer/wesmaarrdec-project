@@ -1,0 +1,144 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="col d-flex justify-content-center" data-aos="fade-in">
+        <div class="container my-5" style="max-width: 1305px;">
+    <div class="i-am-centered">
+        <div class="card text-center">
+          <div class="card-header" style="width: 80rem;">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'community' %}">Categories</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'allpost' %}">All Posts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'mypost' %}">My Posts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'facts' %}">FAQs</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col d-flex justify-content-center">
+            <div class="card text-center" style="border: none;">
+                <h1>Community Forum</h1>
+            </div>
+          </div>
+
+          <div class="col d-flex justify-content-center">
+            <div class="row">
+              {% for category in categories %}
+              
+              <div class="card row-hover pos-relative py-3 px-3 mb-3">
+                <div class="row align-items-center">
+                  <div class="col-md-8 mb-3 mb-sm-0">
+                    <h5>
+                      <a href="{% url 'category_detail' category.slug %}" class="text-primary">{{ category.title }}</a>
+                    </h5>
+                    <p class="text-sm">Share ideas, insights, and more!</p>
+                  </div>
+                  <div class="col-md-4 op-7">
+                    <div class="row text-center op-7">
+                      <div class="col px-1"> <i class="ion-ios-chatboxes-outline icon-1x"></i> 
+                        <span class="d-block text-sm">Posts: {{ category.posts.count }}</span> 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+
+            </div>
+          </div>
+          
+          <!-- <div class="new">
+            <div class="row">
+                <div class="col">
+                  <div class="post-entry-1 lg">
+                    <a href="single-post.html"><img src="assets/img/post-landscape-1.jpg" alt="" class="img-fluid"></a>
+                    <div class="post-meta"><span class="date">POSTED</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
+                    <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus exercitationem? Nihil tempore odit ab minus eveniet praesentium, similique blanditiis molestiae ut saepe perspiciatis officia nemo, eos quae cumque. Accusamus fugiat architecto rerum animi atque eveniet, quo, praesentium dignissimos</p>
+      
+                    <div class="d-flex align-items-center author">
+                      <div class="photo"><img src="assets/img/person-1.jpg" alt="" class="img-fluid"></div>
+                      <div class="name">
+                        <h3 class="m-0 p-0">Cameron Williamson</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="post-entry-1 lg">
+                      <a href="single-post.html"><img src="assets/img/post-landscape-1.jpg" alt="" class="img-fluid"></a>
+                      <div class="post-meta"><span class="date">POSTED</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
+                      <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus exercitationem? Nihil tempore odit ab minus eveniet praesentium, similique blanditiis molestiae ut saepe perspiciatis.</p>
+        
+                      <div class="d-flex align-items-center author">
+                        <div class="photo"><img src="assets/img/person-1.jpg" alt="" class="img-fluid"></div>
+                        <div class="name">
+                          <h3 class="m-0 p-0">Cameron Williamson</h3>
+                        </div>
+                      </div>
+                      <a href="allposts.html"><p class="text-end">View all</p></a>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="col d-flex justify-content-center">
+            <div class="row">
+              <hr class="hr" />
+              <div class="col d-flex justify-content-center" style="width: 60rem;">
+                <div class="row">
+                  <h1 class="ryt" id="qna">Questions and Answers</h1>
+                  <h5 class="ryt">Get answers and share knowledge</h5>
+                  <div class="row justify-content-center mt-5">
+                    
+                    <div class="col-lg-12">
+                      <div class="row">
+                        <div class="col-12 mb-3">
+                          <textarea class="form-control" id="comment-message" placeholder="Ask a question..." cols="30" rows="2"></textarea>
+                          <a href="login.html"><button type="button" class="btn btn-success btn-lg" style="float: right;">Submit</button></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+
+    <style>
+    .btn{
+      margin: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .card{
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .new{
+        width: 60rem;
+        margin: 60px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .ryt{
+      margin-top: 20px;
+    }
+    .hr{
+      margin-bottom: 25px;
+      margin-top: 25px;
+    }
+  </style>
+      {% endblock %}

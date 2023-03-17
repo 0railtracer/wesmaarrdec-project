@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+  <section>
+        <div class="container" data-aos="fade-in">
+    <div class="col d-flex justify-content-center">
+        <div class="card text-center">
+          <div class="card-header" style="width: 80rem;">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'community' %}">Categories</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'allpost' %}">All Posts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'mypost' %}">My Posts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'facts' %}">FAQs</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col d-flex justify-content-center">
+            <div class="card text-center" style="border: none;">
+                <h1>Frequently Asked Questions</h1>
+            </div>
+          </div>
+
+          <div class="col d-flex justify-content-center">
+            <div class="card text-center" style="width: 60rem;">
+                <div class="row">
+                    <div class="list-group w-100">
+                      {% for faq in faqs %}
+                        <a href="#shortExampleAnswer1collapse" data-mdb-toggle="collapse" aria-expanded="false"
+                          aria-controls="shortExampleAnswer1collapse" class="list-group-item list-group-item-action">
+                          <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{faq.question}}</h5>
+                          </div>
+                          <img src="{{faq.img.url}}"  style="max-width: 200px;">
+                          <p class="mb-1">
+                            {{faq.answer}}
+                          </p>
+                        </a>
+                        {% endfor %}
+                      </div>
+                </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+        </div>
+  </section>
+  <style>
+    .btn{
+      margin: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .card{
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    
+  </style>
+      {% endblock %}

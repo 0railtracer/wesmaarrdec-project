@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>WESMAARRDEC</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="/static/assets/img/wesmalogo.png" rel="icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/static/assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS Files -->
+  {% block css %}
+
+  {% endblock %}
+  <link href="/static/assets/css/variables.css" rel="stylesheet">
+  <link href="/static/assets/css/main.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: ZenBlog - v1.3.0
+  * Template URL: https://bootstrapmade.com/zenblog-bootstrap-blog-template/
+  * Author: BootstrapMade.com
+  * License: https:///bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+      
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <img src="/static/assets/img/wesmalogo.png">
+        <h1>WESMAARRDEC</h1>
+      </a>
+
+      <nav id="navbar" class="navbar"> 
+        <ul>
+            <li class="dropdown"><a href="{% url 'consortium' %}"><span>ABOUT</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="{% url 'consortium' %}">Consortium</a></li>
+              <li><a href="{% url 'consortium' %}">Executive Board</a></li>
+              <li><a href="{% url 'organization' %}">Organization</a></li>
+            </ul>
+          </li>
+          
+          <li class="dropdown"><a href="{% url 'cmi' %}"><span>CMI</span></a>
+          </li>
+          <li class="dropdown"><a href="{% url 'community' %}"><span>COMMUNITY</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="{% url 'facts' %}">Facts</a></li>
+              <li><a href="{% url 'gallery' %}">Gallery</a></li>
+            </ul>
+          </li>
+
+          <a href="{% url 'commodities' %}"><span>COMMODITIES</span></a>
+
+          <li class="dropdown"><a href="{% url 'project' %}"><span>PROJECTS</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="{% url 'onproject' %}">Ongoing</a></li>
+              <li><a href="{% url 'finproject' %}">Completed</a></li>
+            </ul>
+          </li>
+          <li class="dropdown"><a href="{% url 'services' %}"><span>SERVICES</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="#">E-Library</a></li>
+            </ul>
+          </li>
+          {% if user.is_superuser %}
+          <a href="{% url 'dashboard' %}"><span>ADMIN PANEL</span></a>
+          
+          {% endif %}
+        </ul>
+      </nav><!-- .navbar -->
+      
+
+      <div class="position-relative">
+        {% if user.is_authenticated %}
+         <a href= "{% url 'logout' %}" class="mx-2">
+        <span class="bi-person-circle">LOGOUT</span>
+         </a>
+      {%else%}
+          <a href= "{% url 'login' %}" class="mx-2">
+          <span class="bi-person-circle">LOGIN</span>
+        </a>
+      {%endif%}
+        <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+
+        <!-- ======= Search Form ======= -->
+        <div class="search-form-wrap js-search-form-wrap">
+          <form method="get" action="{% url 'search' %}" class="search-form">
+            <span class="icon bi-search"></span>
+            <input name="query" type="text"  placeholder="Search" class="form-control">
+          </form> 
+          <button class="btn js-search-close"></button>
+        </div><!-- End Search Form -->
+    </div>
+  </header><!-- End Header -->
+
+
+  <main id="main">
+    <!-- ======= Hero Slider Section ======= -->
+{% block content %}
+    
+{% endblock %}
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <div class="footer-content">
+      <div class="container">
+
+        <div class="row g-5">
+          <div class="col-lg-4">
+            <img src="/static/assets/img/wesmalogo.png" alt="" style="height: 100px; width: 100px;">
+            <h3 class="footer-heading" style="color: #43B14B;" >WESMAARRDEC</h3>
+            <p>Western Mindanao Agriculture Aquatic and Natural Resources Research and Development Consortium</p>
+            <p><a href="{% url 'about' %}" class="footer-link-more">Learn More</a></p>
+          </div>
+
+          <div class="col-6 col-lg-2">
+            <h3 class="footer-heading" style="color: #43B14B;">NAVIGATION</h3>
+            <ul class="footer-links list-unstyled">
+              <li><a href="{% url 'index' %}"><i class="bi bi-chevron-right"></i> Home</a></li>
+              <li><a href="{% url 'about' %}"><i class="bi bi-chevron-right"></i> About</a></li>
+              <li><a href="{% url 'cmi' %}"><i class="bi bi-chevron-right"></i> CMI</a></li>
+              <li><a href="{% url 'community' %}"><i class="bi bi-chevron-right"></i> Community</a></li>
+              <li><a href="{% url 'commodities' %}"><i class="bi bi-chevron-right"></i> Commodities</a></li>
+              <li><a href="{% url 'project' %}"><i class="bi bi-chevron-right"></i> Projects</a></li>
+              <li><a href="{% url 'services' %}"><i class="bi bi-chevron-right"></i> Services</a></li>
+              <li><a href="{% url 'contact' %}"><i class="bi bi-chevron-right"></i> Contact Us</a></li>
+            </ul>
+          </div>
+
+          <div class="col-2">
+            <h3 class="footer-heading" style="color: #43B14B;">CONSORTIUM</h3>
+            <ul class="footer-links list-unstyled">
+              <li><a href="#"> DOST - PCAARRD</a></li>
+              <li><a href="#"> DOST IX</a></li>
+              <li><a href="#"> WMSU</a></li>
+              <li><a href="#"> DA - RFO IX</a></li>
+              <li><a href="#"> JHCSC</a></li>
+              <li><a href="#"> DTI IX</a></li>
+              <li><a href="#"> BFAR IX</a></li>
+            </ul>
+          </div>
+
+          <div class="col-2">
+            <h3 class="footer-heading" style="color: #43B14B;">MEMBER</h3>
+            <ul class="footer-links list-unstyled">
+              <li><a href="#"> NEDA IX</a></li>
+              <li><a href="#"> PRRI IX</a></li>
+              <li><a href="#"> PHILFIDA IX</a></li>
+              <li><a href="#"> DA - BAR</a></li>
+              <li><a href="#"> PCA - ZRC</a></li>
+              <li><a href="#"> JRMSU</a></li>
+              <li><a href="#"> ATI - ZRC</a></li>
+            </ul>
+          </div>
+
+          <div class="col-2">
+            <h3 class="footer-heading" style="color: #43B14B;">INSTITUTION</h3>
+            <ul class="footer-links list-unstyled">
+              <li><a href="#"> DENR-FWRDEC-ERDB</a></li>
+              <li><a href="#"> OCA - ZC</a></li>
+              <li><a href="#"> MSU - TCTO</a></li>
+              <li><a href="#"> BaSC</a></li>
+              <li><a href="#"> MSU - Buug</a></li>
+              <li><a href="#"> ZSCMST</a></li>
+              <li><a href="#"> KRDFI</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <hr class="hr" />
+        <a href="{% url 'contact' %}"><h3 class="footer-heading" style="color: #43B14B;">GET IN TOUCH</h3></a>
+        <p>WMSU, Normal Road, Baliwasan, Zamboanga City, Philippines</p>
+        <p>(062) 991 5087 | (062) 955 8298</p>
+        <p>wesmaarrdec@gmail.com</p>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <div class="container">
+
+        <div class="row justify-content-between">
+          <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <div class="copyright">
+              © Copyright <strong><span>WESMAARRDEC</span></strong>. All Rights Reserved
+            </div>
+
+            <div class="credits">
+              <!-- All the links in the footer should remain intact. -->
+              <!-- You can delete the links only if you purchased the pro version. -->
+              <!-- Licensing information: https://bootstrapmade.com/license/ -->
+              <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/ -->
+              <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+            <div class="social-links mb-3 mb-lg-0 text-center text-md-end">
+              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
+              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </footer>
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/static/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/static/assets/vendor/aos/aos.js"></script>
+  <script src="/static/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="/static/assets/js/main.js"></script>
+</body>
+
+</html>
+<!-- Rachey Orihara
+#about------------------------------------------
+
+<li class="dropdown"><a href="about.html"><span>About</span></a>
+            <ul class="dropdown-menu">
+              <li><a href="about.html" class="dropdown-item">Consortium</a></li>
+              <li><a href="#" class="dropdown-item">Executive Board</a></li>
+              <li><a href="#" class="dropdown-item">Organization</a></li>
+            </ul>
+          </li>
+
+
+#services----------------------------------------
+
+<li class="dropdown"><a href="services.html"><span>Services</span><i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="#" class="dropdown-item">e-Library</a></li>
+            </ul>
+          </li>
+--------------------------------------------------
+
+eto sa nav papalit lahat boi tyty -->

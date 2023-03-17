@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/assets/img/favicon.png" rel="icon">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>       
+        /* #navbar {
+          background: linear-gradient(to right, rgb(255, 0, 0), orange, yellow, rgb(83, 216, 83), rgb(88, 88, 236), purple , rgb(247, 189, 189), rgb(89, 89, 241), rgb(67, 234, 67), yellow, orange, rgb(254, 40, 40), orange, yellow);
+          background-size: 600% 600%;
+          animation: gradient 7s linear infinite;
+        }
+
+        @keyframes gradient {
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 100% 50%;
+          }
+        } */
+
+        .rgbox {
+          background: hsl(0, 0%, 100%);
+          padding: 16px 24px;
+          position: relative;
+          border-radius: 8px;
+          box-shadow: 0 0 0 1px rgba(0,0,0,.01);
+        }
+
+        .rgbox::after {
+          position: absolute;
+          content: "";
+          top: 15px;
+          left: 0;
+          right: 0;
+          z-index: -1;
+          height: 100%;
+          width: 100%;
+          transform: scale(0.9) translateZ(0);
+          filter: blur(15px);
+          background: linear-gradient(
+            to left,
+            #ff5770,
+            #e4428d,
+            #c42da8,
+            #9e16c3,
+            #6501de,
+            #9e16c3,
+            #c42da8,
+            #e4428d,
+            #ff5770
+          );
+          background-size: 200% 200%;
+          animation: animateGlow 1.25s linear infinite;
+        }
+
+        @keyframes animateGlow {
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 200% 50%;
+          }
+        }
+
+      </style>
+  </head>
+  <body>
+    
+<header>
+<!-- <nav class="navbar navbar-expand-lg bg-body-tertiary" id="navbar">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'dashboard' %}">Administration</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashuser' %}"><button type="button" class="btn btn-outline-primary">Users</button></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashabout' %}"><button type="button" class="btn btn-outline-primary">ABOUT</button></a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashcmi' %}"><button type="button" class="btn btn-outline-primary">CMI</button></a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashcommodity' %}"><button type="button" class="btn btn-outline-primary">COMMODITIES</button></a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashcommunity' %}"><button type="button" class="btn btn-outline-primary">COMMUNITY</button></a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'galleryman' %}"><button type="button" class="btn btn-outline-primary">GALLERY</button></a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashproject' %}"><button type="button" class="btn btn-outline-primary">PROJECTS</button></a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashservices' %}"><button type="button" class="btn btn-outline-primary">SERVICES</button></a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'slider' %}"><button type="button" class="btn btn-outline-primary">Slider</button></a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'index' %}"><button type="button" class="btn btn-outline-success">View WESMAARDEC</button></a>
+          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><button type="button" class="btn btn-outline-secondary">Dropdown CMS</button>
+          </a>
+          <ul class="dropdown-menu" style="text-align: center;">
+            <li><a href="{% url 'createslide' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" id="navbar">Add Slide</button> </a></li>
+            <li><a href="{% url 'postcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" id="navbar">Add Post</button> </a></li>
+            <li><a href="{% url 'categorycreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" id="navbar">Add Category</button> </a></li>
+            <li><a href="{% url 'commoditycreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" id="navbar">Add Commodity</button> </a></li>
+            <li><a href="{% url 'projectcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" id="navbar">Add Project</button> </a></li>
+            <li><a href="{% url 'createconsortium' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" id="navbar">Add Consortium</button> </a></li>
+            <li><a href="{% url 'organizationcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" id="navbar">Add Organization</button> </a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav> -->
+<nav class="navbar bg-body-tertiary fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'dashboard' %}">Administration</a>
+          <ul class="nav">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashuser' %}"><button type="button" class="btn btn-outline-primary">Users</button></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashabout' %}"><button type="button" class="btn btn-outline-primary">ABOUT</button></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashslider' %}"><button type="button" class="btn btn-outline-primary">SLIDER</button></a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashcmi' %}"><button type="button" class="btn btn-outline-primary">CMI</button></a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashcommodity' %}"><button type="button" class="btn btn-outline-primary">COMMODITIES</button></a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashcommunity' %}"><button type="button" class="btn btn-outline-primary">COMMUNITY</button></a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'galleryman' %}"><button type="button" class="btn btn-outline-primary">GALLERY</button></a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashproject' %}"><button type="button" class="btn btn-outline-primary">PROJECTS</button></a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashservices' %}"><button type="button" class="btn btn-outline-primary">SERVICES</button></a>
+  </li>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'dashfaq' %}"><button type="button" class="btn btn-outline-primary">FAQ</button></a>
+  </li>
+  </ul>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Administration</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'index' %}"><button type="button" class="btn btn-outline-success mb-2">VIEW WESMAARRDEC</button></a>
+          </li>
+          <li class="nav-item">
+            <li><a href="{% url 'createslide' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2"  style="width: 200px;">Add Slide</button> </a></li>
+            <li><a href="{% url 'createfaq' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2"  style="width: 200px;">Add Fact</button> </a></li>
+            <li><a href="{% url 'postcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2"  style="width: 200px;">Add Post</button> </a></li>
+            <li><a href="{% url 'categorycreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2"  style="width: 200px;">Add Category</button> </a></li>
+            <li><a href="{% url 'commoditycreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Commodity</button> </a></li>
+            <li><a href="{% url 'projectcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Project</button> </a></li>
+            <li><a href="{% url 'createconsortium' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Consortium</button> </a></li>
+            <li><a href="{% url 'organizationcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Organization</button> </a></li>
+            <li><a href="{% url 'createalbum' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Album</button> </a></li>
+            <li><a href="{% url 'createphoto' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Photo</button> </a></li>
+          </li>
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              ADD
+            </a>
+            <ul class="dropdown-menu">
+            <li><a href="{% url 'createslide' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2"  style="width: 200px;">Add Slide</button> </a></li>
+            <li><a href="{% url 'postcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2"  style="width: 200px;">Add Post</button> </a></li>
+            <li><a href="{% url 'categorycreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2"  style="width: 200px;">Add Category</button> </a></li>
+            <li><a href="{% url 'commoditycreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Commodity</button> </a></li>
+            <li><a href="{% url 'projectcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Project</button> </a></li>
+            <li><a href="{% url 'createconsortium' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Consortium</button> </a></li>
+            <li><a href="{% url 'organizationcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Organization</button> </a></li>
+            <li><a href="{% url 'organizationcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Album</button> </a></li>
+            <li><a href="{% url 'organizationcreateview' %}" class="text-black"><button type="button" class="btn btn-outline-success mb-2" style="width: 200px;">Add Photo</button> </a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li> -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+</header>
+<main class="rgbox">
+  {% block content %}
+  <hr>
+  <div class="hero">
+  <div class="container my-5">
+  <div class="card text-center">
+  <div class="card-header">
+    <h1>WELCOME</h1>
+  </div>
+  <div class="card-body">
+    <h2 class="card-title">{{user.username|upper}}</h2>
+    <h5 class="card-text">WESMAARDEC WEB CMS</h5>
+    <a href="{% url 'dashuser' %}" class="btn btn-primary" id="navbar">Users</a>
+  </div>
+  <div class="card-footer text-muted">
+  </div>
+</div>
+  </div>
+  </div>
+  <!-- <hr>
+  <div class="hero">
+  <div class="container my-5">
+
+  
+  <h2>Users</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Username</th>
+        <th scope="col">Email Address</th>
+        <th scope="col">Active Status</th>
+        <th scope="col">Date Joined</th>
+        <th scope="col">Authorization</th>
+        <th scope="col">Delete Users </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user_data in user_data_list %}
+    <tr>
+    <td>{{ user_data.user.username|title }}</td>
+    <td>{{ user_data.user.email }}</td>
+    <td>{{ user_data.active_status }}</td>
+    <td>{{ user_data.user.date_joined}}</td>
+    <td>{{ user_data.user.is_superuser|yesno:"Admin, Regular"}}</td>
+    <td>{% if user_data.user.is_superuser%} NO {% else%} <a href="{% url 'deleteuser' user_data.user.id %}" style="color: brown;"> Delete User</a> {% endif%}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+  </div>
+  </div> -->
+
+<!-- <hr>
+<div class="hero">
+  <div class="container my-5">
+<h2>Commodity</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Commodity</th>
+        <th scope="col">Update Commodities</th>
+        <th scope="co">Delete Commodities</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for commodity in commodity %}
+    <tr>
+    <td>{{ commodity.name|title }}</td>
+    <td><a href="{% url 'commodity_update' commodity.slug %}" style="color: green;">Click To Update </a></td>
+    <td><a href="{% url 'deletecommodity' commodity.slug %}" style="color: brown;">DELETE: {{commodity.name|capfirst}}</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+  </div> -->
+  <!-- <hr>
+  <div class="hero">
+  <div class="container my-5">
+<h2>Project</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Projects</th>
+        <th scope="col">Update Status</th>
+        <th scope="col">Delete Project</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for project in projects %}
+    <tr>
+    <td>{{ project.title|title }}</td>
+    <td><a href="{% url 'project_update' project.slug %}" style="color: green;">{{ project.status|capfirst }}</a></td>
+    <td><a href="{% url 'projectdelete' project.slug %}" style="color: brown;">DELETE: {{project.title|capfirst}}</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+  </div> -->
+<!-- <hr>
+<div class="hero">
+  <div class="container my-5">
+<h1>Consortium</h1>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">UPDATE CONSORTIUM</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><a href="#" style="color: green;">Click To Update:   {{ consortium.title }}</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div> -->
+<!-- <hr>
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <h2 style="color: rgb(0, 75, 50); font-style: italic;">Organization Management</h2>
+      <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
+        {% for organization in organizations %}
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{{organization.image1.url}}">
+            <div class="card-body">
+              <p class="card-text">Name: {{ organization.name|title }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{% url 'deleteorganization' organization.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                  <a href="{% url 'organization_update' organization.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div> -->
+<!-- <hr>
+<div class="container py-5">
+  <h1>GALLERY MANAGEMENT</h1>
+  <a href="{% url 'galleryman' %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary"> GALLERY MANAGEMENT </button> </a>
+</div> -->
+<!-- <hr>
+<div class="hero">
+<div class="container my-5">
+<h1>CATEGORY</h1>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">CATEGORY</th>
+        <th scope="col">DELETE</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for category in categories %}
+    <tr>
+    <td>Category: {{ category.title|title }}</td>
+    <td><a href="{% url 'deletecategory' category.slug %}" style="color: brown;"> Delete Category </a></td>
+     
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div> -->
+<!-- <hr>
+<div class="container py-5">
+  <h1>POST MANAGEMENT</h1>
+  <a href="{% url 'postman' %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary"> POST MANAGEMENT </button> </a>
+</div> -->
+<!-- <hr>
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <h2 style="color: rgb(0, 75, 50); font-style: italic;">SLIDE</h2>
+      <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
+        {% for slide in slides %}
+        <div class="col">
+          <div class="card shadow-sm"> -->
+            <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
+            <!-- <img src="{{slide.image.url}}">
+            <div class="card-body">
+              <p class="card-text">Name: {{ slide.name|title }}</p>
+              <p class="card-text">Detail: {{ slide.detail|truncatechars:100 }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+
+                <a href="{% url 'deleteslide' slide.id %}" style="color: brown;"> Delete Slide </a>
+
+                  <button type="button" class="btn btn-sm btn-outline-secondary">()()()</button>
+                </div>
+                <small class="text-muted">{{ slide.created_at}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div> -->
+
+    {% endblock %}
+</main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,151 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+  <section id="hero-slider" class="hero-slider">
+      <div class="container-md" data-aos="fade-in">
+        <div class="row">
+          <div class="col-12">
+            <div class="swiper sliderFeaturedPosts">
+              <div class="swiper-wrapper">
+                {% for slide in slides%}
+                <div class="swiper-slide">
+                  <a href="{{slide.image.url}}" class="img-bg d-flex align-items-end" style="background-image: url('{{slide.image.url}}');">
+                    <div class="img-bg-inner">
+                      <h2>{{ slide.name}}</h2>
+                      <p>{{ slide.detail}}</p>
+                    </div>
+                  </a>
+                </div>
+                {% endfor %}
+              </div>
+              <div class="custom-swiper-button-next">
+                <span class="bi-chevron-right"></span>
+              </div>
+              <div class="custom-swiper-button-prev">
+                <span class="bi-chevron-left"></span>
+              </div>
+
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Hero Slider Section -->
+
+    <!-- ======= news ======= -->
+    <section id="hero-slider" class="hero-slider">
+      <div class="container" data-aos="fade-in">
+          <div class="row">
+              <div class="d-flex justify-content-end">
+                  <a href="#">
+                      <i class="fa fa-arrow-left"></i>
+                  </a>
+                  <a href="#">
+                      <i class="fa fa-arrow-right"></i>
+                  </a>
+              </div>
+
+              <div class="swiper sliderFeaturedPosts">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    
+                    <div class="carousel-item active">
+                      <div class="row">
+                        {% for news in news_posts %}
+                          <div class="col-md-4 mb-3">
+                              <div class="card">
+                                  <img class="img-fluid" alt="100%x280" src="{{news.image.url}}">
+                                  <div class="card-body">
+                                      <h4 class="card-title">{{news.title}}</h4>
+                                      <p class="card-text">{{news.body}}</p>
+
+                                  </div>
+                              </div>
+                          </div>
+                          {% endfor %}
+                        </div>
+
+                      </div>
+                  </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!-- news -->
+
+    <!-- ======= events ======= -->
+    <section id="posts" class="posts">
+      <div class="container" data-aos="fade-up">
+        <div class="row g-5">
+          <hr class="hr" />
+
+          <!-- Trending Section -->
+          <div class="col-lg-4">
+
+            <div class="trending">
+              <h3>Latest News</h3>
+              <ul class="trending-post">
+                {% for news in news_posts%}
+                <li>
+                  <a href="news.html">
+                    <span class="number">1</span>
+                    <h3>{{news.title}}</h3>
+                    <span class="author">{{news.author}}</span>
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            <a href="{% url 'category_detail' slug='news' %}"><p class="text-end">View all news</p></a>
+
+          </div> <!-- End Trending Section -->
+
+          <div class="col">
+            <div class="post-entry-1 lg">
+              <h2><a href="single-post.html">Events this month</a></h2>
+              <a href="single-post.html"><img src="{{new_event.image.url}}" alt="" class="img-fluid"></a>
+              <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_event.created_at}}</span></div>
+              <p class="mb-4 d-block">{{new_event.body}}</p>
+
+              <div class="d-flex align-items-center author">
+                <div class="name">
+                  <h3 class="m-0 p-0">{{new_event.author}}</h3>
+                </div>
+              </div>
+              <a href="{% url 'category_detail' slug='events' %}"><p class="text-end">See all events</p></a>
+            </div>
+
+          </div>
+
+        </div> <!-- End .row -->
+      </div>
+    </section> <!-- events -->
+
+    <!-- ======= cmi map ======= -->
+    <section id="posts" class="posts">
+      <div class="container" data-aos="fade-up">
+        <hr class="hr" />
+        <div class="row w-100">
+          <div class="col-lg-6 my-4">
+            <div id="map">{{ map|safe }}</div>
+          </div>
+          <div class="col-lg-6 my-4 d-flex align-items-center">
+            <div>
+              <h4>CMI</h4>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> <!-- cmi map -->
+
+    
+{% endblock %}

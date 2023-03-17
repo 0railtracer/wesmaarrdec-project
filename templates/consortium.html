@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="col d-flex justify-content-center">
+      <div class="container my-5" data-aos="fade-up" style="text-align: center;" >
+          <div class="card-body">
+            <h2 class="card-title">{{consortium.consortium_name}}</h2>
+            <hr>
+            <h5 class="card-text" style="line-height: 30px;">{{consortium.consortium_desc}}</h5>
+            <a href="{{ consortium.consortium_logo.url }}" class="me-4 thumbnail">
+              <img src="{{ consortium.consortium_logo.url }}" alt="" class="img-fluid mt-5 mb-5" style="width: 1200px;">
+            </a>
+            <hr class="hr" />
+
+            <div class="col d-flex justify-content-center" style="padding: 50px;">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6">
+                  <h2 class="text-center">VISION</h2>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 mt-3 mb-3">
+                  <h5 style="line-height: 30px;" >{{consortium.vision}}</h5>
+                </div>
+              </div>
+            </div>
+
+            <hr class="hr" />
+        
+            <div class="col d-flex justify-content-center" style="padding: 50px;">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 mt-3 mb-3">
+                  <h5 style="line-height: 30px;" >{{consortium.mission}}</h5>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6">
+                  <h2 class="text-center">MISSION</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      {% endblock %}
+  <style>
+    .card{
+      width: 80rem;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    .card-body{
+      margin-top: 25px;
+    }
+    .hr{
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    .col{
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    .text-center{
+      margin: 40px;
+    }
+  </style>

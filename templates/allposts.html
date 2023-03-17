@@ -1,0 +1,87 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="col d-flex justify-content-center" data-aos="fade-in">
+        <div class="container my-5" style="max-width: 1305px;">
+    <div class="i-am-centered">
+        <div class="card text-center">
+          <div class="card-header" style="width: 80rem;">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'community' %}">Categories</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'allpost' %}">All Posts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'mypost' %}">My Posts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'facts' %}">FAQs</a>
+              </li>
+            </ul>
+          </div>
+          {% if user.is_authenticated%}
+          <div class="col d-flex justify-content-center">
+            <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-success btn-lg">Add new post</button></a>
+          </div>
+          {% endif %}
+          <div class="col d-flex justify-content-center">
+            <div class="container my-5" style="max-width: 1200px;">
+            <div class="row">
+              {% for post in posts %}         
+              <div class="card row-hover pos-relative py-2 px-3 mb-1">               
+                <div class="row align-items-center">                  
+                  <div class="col-md-5 mb-0 mb-sm-0">
+                    <h2>                     
+                      <a href="{% url 'post_detail' post.category.slug post.slug %}" class="text-primary ">{{post.title}}</a>
+                    </h2>
+                    <a href="{{ post.image.url }}"> <img src="{{ post.image.url }}" width="300" height="200" alt="" class="img-fluid"></a>
+                    <h5>Author: {{ post.author}} </h5>
+                    <!-- <p class="text-sm">Description: {{post.body}}</p> -->
+                  </div>
+                  <div class="col-md-4 op-7">
+                    <div class="row text-center op-7">
+                      <div class="col px-1"> <i class="ion-ios-eye-outline icon-1x"></i> <span class="d-block text-sm">{{post.body}}</span> </div>
+                      <div class="col px-1"> <i class="ion-ios-chatboxes-outline icon-1x"></i> <span class="d-block text-sm">Comments: {{post.comments.count}}</span> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+
+            </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>   
+    </div>
+        </div>
+  </section>
+          <style>
+    .btn{
+      margin: 20px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .card{
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .new{
+        width: 60rem;
+        margin: 60px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .ryt{
+      margin-top: 20px;
+    }
+    .hr{
+      margin-bottom: 25px;
+      margin-top: 25px;
+    }
+  </style>
+{% endblock %}

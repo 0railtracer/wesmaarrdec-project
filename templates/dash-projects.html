@@ -1,0 +1,30 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content%}
+  <hr>
+  <div class="hero">
+  <div class="container my-5">
+<h2>Project</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Projects</th>
+        <th scope="col">Update Status</th>
+        <th scope="col">Delete Project</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for project in projects %}
+    <tr>
+    <td>{{ project.title|title }}</td>
+    <td><a href="{% url 'project_update' project.slug %}" style="color: green;">{{ project.status|capfirst }}</a></td>
+    <td><a href="{% url 'projectdelete' project.slug %}" style="color: brown;">DELETE: {{project.title|capfirst}}</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+  </div>
+{% endblock %}
