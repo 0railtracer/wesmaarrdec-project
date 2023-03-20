@@ -27,27 +27,336 @@
 </div>
 </div>
 <hr>
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <h2 style="color: rgb(0, 75, 50); font-style: italic;">Organization Management</h2>
-      <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
-        {% for organization in organizations %}
-        <div class="col">
-          <div class="card shadow-sm">
-            <img src="{{organization.image1.url}}">
-            <div class="card-body">
-              <p class="card-text">Name: {{ organization.name|title }}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a href="{% url 'deleteorganization' organization.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
-                  <a href="{% url 'organization_update' organization.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a>
-                </div>
+<div class="album py-5 bg-light">
+  <div class="container">
+    <h2 style="color: rgb(0, 75, 50); font-style: italic;">Organization Management</h2>
+    <a href="{% url 'organization_update' org.pk %}"> <button type="button" class="btn btn-primary btn-lg mb-5">EDIT</button> </a>
+    <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a> -->
+    <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.dostpcaarrd_ExDi_img %}
+          <img src="{{org.dostpcaarrd_ExDi_img.url}}" alt="CEO Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.dostpcaarrd_ExDi_name }}</p>
+            <p class="card-text"> DOST-PCAARRD/EXECUTIVE-DIRECTOR </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
               </div>
             </div>
           </div>
         </div>
-        {% endfor %}
       </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.wmsupres_rrdcchair_exdi_img %}
+          <img src="{{org.wmsupres_rrdcchair_exdi_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.wmsupres_rrdcchair_exdi_name }}</p>
+            <p class="card-text"> WMSU-President/RDCC-CHAIR/EXCECUTIVE-DIRECTOR </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.depu_di_img %}
+          <img src="{{org.depu_di_img.url}}" alt="CEO Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.depu_di_name }}</p>
+            <p class="card-text"> RRDCC-VICE-CHAIR/DEPUTY-DIRECTOR </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.EXBM_ZSCMST_img %}
+          <img src="{{org.EXBM_ZSCMST_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.EXBM_ZSCMST_name }}</p>
+            <p class="card-text"> EXECUTIVE-BOARD-MEMBER-ZSCMST </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.EXBM_DA_RFO_IX_img %}
+          <img src="{{org.EXBM_DA_RFO_IX_img.url}}" alt="CEO Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.EXBM_DA_RFO_IX_name }}</p>
+            <p class="card-text"> EXECUTIVE-BOARD-MEMBER-DA_RFO_IX </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.EXBM_DA_BAR_img %}
+          <img src="{{org.EXBM_DA_BAR_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.EXMB_DA_BAR_name }}</p>
+            <p class="card-text"> EXECUTIVE-BOARD-MEMBER-DA_BAR </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.EXBM_JHCSC_img %}
+          <img src="{{org.EXBM_JHCSC_img.url}}" alt="CEO Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.EXBM_JHCSC_name }}</p>
+            <p class="card-text"> EXECUTIVE-BOARD-MEMBER-JHCSC </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.EXBM_PHILFIDA_img %}
+          <img src="{{org.EXBM_PHILFIDA_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.EXBM_PHILFIDA_name }}</p>
+            <p class="card-text"> EXECUTIVE-BOARD-MEMBER-PHILFIDA </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.WESMAARRDEC_Dir_img %}
+          <img src="{{org.WESMAARRDEC_Dir_img.url}}" alt="CEO Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.WESMAARRDEC_Dir_name }}</p>
+            <p class="card-text"> WESMAARRDEC-DIRECTOR </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.Clus_Coord_R_and_D_img %}
+          <img src="{{org.Clus_Coord_R_and_D_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.Clus_Coord_R_and_D_name }}</p>
+            <p class="card-text"> CLUSTER-COORDINATOR-RESEARCH-AND-DEVELOPMENT </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.Clus_Coord_Tech_Trans_img %}
+          <img src="{{org.Clus_Coord_Tech_Trans_img.url}}" alt="CEO Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.Clus_Coord_Tech_Trans_name }}</p>
+            <p class="card-text"> CLUSTER-COORDINATOR-TECHNOLOGY-TRANSFER </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.Clus_Coord_ICT_img %}
+          <img src="{{org.Clus_Coord_ICT_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.Clus_Coord_ICT_name }}</p>
+            <p class="card-text"> CLUSTER-COORDINATOR-INFORMATION-COMMUNICATION-TECHNOLOGY </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.Clus_Coord_Sci_Com_img %}
+          <img src="{{org.Clus_Coord_Sci_Com_img.url}}" alt="CEO Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.Clus_Coord_Sci_Com_name }}</p>
+            <p class="card-text"> CLUSTER-COORDINATOR-SCIENCE-COMMUNITCATION </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.Management_sup1_img %}
+          <img src="{{org.Management_sup1_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.Management_sup1_name }}</p>
+            <p class="card-text"> STAFF-SECRETARIAT-1 </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.Management_sup2_img %}
+          <img src="{{org.Management_sup2_img.url}}" alt="CEO Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.Management_sup2_name }}</p>
+            <p class="card-text"> STAFF-SECRETARIAT-2 </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.Management_sup3_img %}
+          <img src="{{org.Management_sup3_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.Management_sup3_name }}</p>
+            <p class="card-text"> STAFF-SECRETARIAT-3 </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-sm">
+          {% if org.Management_sup4_img %}
+          <img src="{{org.Management_sup4_img.url}}" alt="Chairman Image">
+          {% else %}
+          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <p class="card-text">Name: {{ org.Management_sup4_name }}</p>
+            <p class="card-text"> STAFF-SECRETARIAT-4 </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a>
+                <a href="{% url 'organization_update' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT</button> </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- repeat for other fields in the Organization model -->
     </div>
   </div>
+</div>
+
 {% endblock %}

@@ -38,6 +38,7 @@ urlpatterns = [
     path('organization/<str:pk>/update/', OrganizationUpdateView.as_view(), name='organization_update'),
     path('deleteorganization/<str:pk>/', deleteorganization, name='deleteorganization'),
     path('cmi/', cmi, name='cmi'),  
+    path('cmidetail/', cmidetail, name='cmidetail'),  
     path('community/', community, name='community'),
     path('allpost/', allpost, name='allpost'),
     path('mypost/', mypost, name='mypost'),
