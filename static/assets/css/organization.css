@@ -13,6 +13,7 @@
 }
 
 ol {
+  padding: 0;
   list-style: none;
 }
 
@@ -40,7 +41,7 @@ body {
 .level-1 {
   width: 40%;
   margin: 0 auto 40px;
-  background: var(--level-1);
+  background: rgba(67, 177, 75, 1); /* set the opacity of the background to 0.8 */
 }
 
 .level-1::before {
@@ -51,29 +52,66 @@ body {
   transform: translateX(-50%);
   width: 2px;
   height: 20px;
-  background: var(--white);
+  background: var(--black);
 }
+
+#level-11::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 545px;
+  background: var(--black);
+}
+
 .level-1 img {
   width: 300px;
   height: 300px;
   border-radius: 5%;
-  box-shadow: 0px 0px 38px rgb(255, 255, 255);
+  box-shadow: 0px 0px 38px rgb(0, 0, 0);
+  opacity: 1;
+}
+
+.level-1dost {
+  width: 40%;
+  margin: 0 auto 40px;
+  background: rgba(67, 177, 75, 1);
+}
+
+.level-1dost::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 20px;
+  background: var(--white);
+}
+.level-1dost img {
+  width: 300px;
+  height: 300px;
+  border-radius: 5%;
+  box-shadow: 0px 0px 38px rgb(0, 0, 0);
+  opacity: 1;
 }
 
 /* LEVEL-2 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-2-wrapper {
+  margin-top: 100px;
   position: relative;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .level-2-wrapper::before {
   content: "";
   position: absolute;
   top: -20px;
-  left: 26.5%;
-  width: 50%;
+  width: 100%;
   height: 2px;
   background: var(--black);
 }
@@ -98,27 +136,28 @@ body {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 0);
   width: 2px;
   height: 20px;
-  background: var(--white);
+  background: var(--black);
 }
+
 
 .level-2 {
-  width: 30%;
+  width: 70%;
   margin: 0 auto 40px;
-  background: var(--level-2);
+  background: rgba(67, 177, 75, 1);
 }
 
-.level-2::before {
+#level-2::before {
   content: "";
   position: absolute;
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
   width: 2px;
-  height: 20px;
-  background: var(--white);
+  height: 400px;
+  background: var(--black);
 }
 
 .level-2::after {
@@ -132,11 +171,182 @@ body {
   height: 2px;
   background: var(--black);
 }
+
 .level-2 img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
+  border-radius: 5%;
+  box-shadow: 0px 0px 38px rgb(0, 0, 0);
+  opacity: 1;
 }
 
+
+.level-22-wrapper {
+  margin-top: 100px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center; /* centers grid items horizontally */
+  box-sizing: border-box; /* includes padding in width calculation */
+}
+
+
+.level-22-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  width: 100%;
+  height: 2px;
+  background: var(--black);
+}
+
+.level-22-wrapper::after {
+  display: none;
+  content: "";
+  position: absolute;
+  left: -20px;
+  bottom: -20px;
+  width: calc(100% + 20px);
+  height: 2px;
+  background: var(--black);
+}
+
+.level-22-wrapper li {
+  position: relative;
+}
+
+.level-22-wrapper > li::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-16px, 0);
+  width: 2px;
+  height: 20px;
+  background: var(--black);
+}
+
+
+.level-22 {
+  width: 80%;
+  margin: 0 auto 40px;
+  background: rgba(67, 177, 75, 1);
+}
+
+#level-22::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 300px;
+  background: var(--black);
+}
+
+.level-22::after {
+  display: none;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-100%, -50%);
+  width: 20px;
+  height: 2px;
+  background: var(--black);
+}
+
+.level-22 img {
+  width: 150px;
+  height: 150px;
+  border-radius: 5%;
+  box-shadow: 0px 0px 38px rgb(0, 0, 0);
+  opacity: 1;
+}
+
+
+.level-222-wrapper {
+  margin-top: 100px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center; /* centers grid items horizontally */
+  box-sizing: border-box; /* includes padding in width calculation */
+}
+
+
+.level-222-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  width: 100%;
+  height: 2px;
+  background: var(--black);
+}
+
+.level-222-wrapper::after {
+  display: none;
+  content: "";
+  position: absolute;
+  left: -20px;
+  bottom: -20px;
+  width: calc(100% + 20px);
+  height: 2px;
+  background: var(--black);
+}
+
+.level-222-wrapper li {
+  position: relative;
+}
+
+.level-222-wrapper > li::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-16px, 0);
+  width: 2px;
+  height: 20px;
+  background: var(--black);
+}
+
+
+.level-222 {
+  width: 80%;
+  margin: 0 auto 40px;
+  background: rgba(67, 177, 75, 1);
+}
+
+#level-222::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 300px;
+  background: var(--black);
+}
+
+.level-222::after {
+  display: none;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-100%, -50%);
+  width: 20px;
+  height: 2px;
+  background: var(--black);
+}
+
+.level-222 img {
+  width: 100px;
+  height: 100px;
+  border-radius: 5%;
+  box-shadow: 0px 0px 38px rgb(0, 0, 0);
+  opacity: 1;
+}
 /* LEVEL-3 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-3-wrapper {
@@ -148,6 +358,17 @@ body {
   margin: 0 auto;
 }
 
+.level-3 > li::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 20px;
+  background: var(--black);
+}
+
 .level-3-wrapper::before {
   content: "";
   position: absolute;
@@ -155,10 +376,32 @@ body {
   left: calc(29% - 5px);
   width: calc(50% + 10px);
   height: 2px;
+  background: var(--white);
+}
+
+.manager-c::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 33%;
+  transform: translate(-50%, -100%);
+  width: 2px;
+  height: 343px;
   background: var(--black);
 }
 
-.level-3-wrapper > li::before {
+.manager-d::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 70%;
+  transform: translate(-50%, -100%);
+  width: 2px;
+  height: 343px;
+  background: var(--black);
+}
+
+/* .level-3-wrapper > li::before {
   content: "";
   position: absolute;
   top: 0;
@@ -166,26 +409,28 @@ body {
   transform: translate(-50%, -100%);
   width: 2px;
   height: 20px;
-  background: var(--white);
-}
+  background: var(--black);
+} */
 
 .level-3 {
   margin-bottom: 20px;
-  background: var(--level-3);
+  background: rgba(67, 177, 75, 1);
 }
 .level-3 img {
   width: 100px;
   height: 100px;
   margin: 10px;
-  padding: 5px;
+  border-radius: 5%;
+  box-shadow: 0px 0px 38px rgb(0, 0, 0);
+  opacity: 1;
 }
 
 /* LEVEL-4 STYLES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .level-4-wrapper {
   position: relative;
-  width: 80%;
-  margin-left: auto;
+  width: 50%;
+  margin-left: 52%;
 }
 
 .level-4-wrapper::before {
@@ -194,17 +439,18 @@ body {
   top: -20px;
   left: -20px;
   width: 2px;
-  height: calc(100% + 20px);
+  height: calc(100% + 100px);
   background: var(--black);
 }
 
 .level-4-wrapper li + li {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .level-4 {
+  margin-left: 30px;
   font-weight: normal;
-  background: var(--level-4);
+  background: rgba(67, 177, 75, 1);
 }
 
 .level-4::before {
@@ -213,13 +459,16 @@ body {
   top: 50%;
   left: 0%;
   transform: translate(-100%, -50%);
-  width: 20px;
+  width: 50px;
   height: 2px;
   background: var(--black);
 }
 .level-4 img {
-  width: 50px;
-  height: 50px;
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 38px rgb(0, 0, 0);
+  opacity: 1;
 }
 
 /* MQ STYLES

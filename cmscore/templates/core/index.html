@@ -109,13 +109,13 @@
           <div class="col">
             <div class="post-entry-1 lg">
               <h2><a href="single-post.html">Events this month</a></h2>
-              <a href="single-post.html"><img src="{{new_event.image.url}}" alt="" class="img-fluid"></a>
-              <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_event.created_at}}</span></div>
-              <p class="mb-4 d-block">{{new_event.body}}</p>
+              <a href="single-post.html"><img src="{{new_events.image.url}}" alt="" class="img-fluid"></a>
+              <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_events.created_at}}</span></div>
+              <p class="mb-4 d-block">{{new_events.body}}</p>
 
               <div class="d-flex align-items-center author">
                 <div class="name">
-                  <h3 class="m-0 p-0">{{new_event.author}}</h3>
+                  <h3 class="m-0 p-0">{{new_events.author}}</h3>
                 </div>
               </div>
               <a href="{% url 'category_detail' slug='events' %}"><p class="text-end">See all events</p></a>

@@ -25,11 +25,12 @@ from django.core.paginator import Paginator, EmptyPage
 def index(request):
     slides = Slide.objects.all()
     post = Post.objects.filter(featured=True)
-    news_category = Category.objects.get(title='news')
-    news_posts = Post.objects.filter(category=news_category)
-    event_category = Category.objects.get(title='events')
-    new_event = get_object_or_404(Post, category=event_category)
 
+    news_category = Category.objects.filter(title='news').first()
+    news_posts = Post.objects.filter(category=news_category) if news_category else None
+
+    event_category = Category.objects.filter(title='events').first()
+    new_events = Post.objects.filter(category=event_category) if event_category else None
 
     if post:
         random_post = sample(list(post), 1)[0]
@@ -90,7 +91,7 @@ def index(request):
 
     context = {
         'post': post,
-        'new_event': new_event,
+        'new_events': new_events,
         'news_posts': news_posts,
         'slides' : slides, 
         'random_post' : random_post, 
@@ -192,9 +193,9 @@ class ConsortiumUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 def organization(request):
-    organizations = Organization.objects.all()
+    org = Organization.objects.all()
 
-    return render(request, 'organization.html', {'organizations': organizations})
+    return render(request, 'organization.html', {'org': org})
 
 class OrganizationCreateView(LoginRequiredMixin, CreateView):
     model = Organization
@@ -204,7 +205,7 @@ class OrganizationCreateView(LoginRequiredMixin, CreateView):
 
 class OrganizationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Organization
-    fields = ['title', 'name', 'detail', 'image1', 'image2']
+    fields = '__all__'
     success_url = reverse_lazy('dashboard')
     template_name = 'commodity_update.html'
 
