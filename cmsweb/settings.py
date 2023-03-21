@@ -93,12 +93,12 @@ DATABASES = {
         # 'PORT': '5433',
 
         #mysql localhost
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'databs',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'databs',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306'
 
         # mysql live
         # 'ENGINE': 'django.db.backends.mysql',
@@ -107,6 +107,7 @@ DATABASES = {
         # 'PASSWORD': '88tn1wEA7NsHph5',
         # 'HOST': 'sql204.epizy.com',
         # 'PORT': '3306'
+        
     }
 }
 

@@ -55,20 +55,32 @@ def index(request):
     cursor = conn.cursor()
 
             # query data from database and load into a DataFrame
-    query = "SELECT geolat, geolong FROM cmi"
+    query = "SELECT geolat, geolong, name FROM cmi"
     df = pd.read_sql_query(query, conn)
 
             # create map
-    m = folium.Map(location=[7.635,124.854], zoom_start=7)
+    m = folium.Map(location=[7.561,124.233], zoom_start=7)
 
             # loop through DataFrame rows and add markers to the map
     for index, row in df.iterrows():
         folium.Marker(
             location=[row['geolat'], row['geolong']],
-            # popup=row['name'],
+            popup=row['name'],
             icon=folium.Icon(icon='cloud')
         ).add_to(m)
+    
+    # dynamic icon test
+#    markers = Marker.objects.all()
+#     for marker in markers:
+#         folium.Marker(
+#             location=[marker.geolat, marker.geolong],
+#             popup=marker.name,
+#             icon=folium.Icon(icon=marker.icon_path)
+#         ).add_to(m)
 
+#     context = {
+#         'my_map': m._repr_html_(),
+        
     # m = folium.Map(location=[7.635,124.854], zoom_start=7)
 
     # folium.Marker(

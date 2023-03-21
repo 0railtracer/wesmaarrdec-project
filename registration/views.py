@@ -104,7 +104,7 @@ def login(request):
             messages.info(request, 'Invalid Credentials')
             return redirect('login')
     else:
-        return render(request, 'registration/login.html')
+        return render(request, 'registration/login.html', {'messages': messages})
 
 def logout(request):
     auth.logout(request)
