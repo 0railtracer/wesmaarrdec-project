@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-w0d@ke1%w(c73d)k@w7tg)nti3z@9=6jys#_95#w3tv0i5d9gf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dpg-cgcj22ndvk4htno03di0-a', ]
 
 # Application definition
 
@@ -92,13 +92,21 @@ DATABASES = {
         # 'HOST': 'localhost',
         # 'PORT': '5433',
 
+        # postgreslive
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'wesmaarrdec_test',
+        # 'USER': 'wesmaarrdec_test_user',
+        # 'PASSWORD': 'NR9XcGJj6xaWvXr8UEIKWsP5nt7FtXlo',
+        # 'HOST': 'dpg-cgcj22ndvk4htno03di0-a',
+        # 'PORT': '5432',
+
         #mysql localhost
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'databs',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': 'localhost',
-        # 'PORT': '3306'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'databs',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306'
 
         # mysql live
         # 'ENGINE': 'django.db.backends.mysql',
