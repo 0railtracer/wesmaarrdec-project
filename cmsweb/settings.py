@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-w0d@ke1%w(c73d)k@w7tg)nti3z@9=6jys#_95#w3tv0i5d9gf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['dpg-cgcj22ndvk4htno03di0-a', 'wesmaarrdec-test.onrender.com', 'localhost', '127.0.0.1' ]
+ALLOWED_HOSTS = ['wesmaarrdec-test.onrender.com', 'localhost', '127.0.0.1' ]
 
 # Application definition
 
@@ -81,8 +81,8 @@ WSGI_APPLICATION = 'cmsweb.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
         
         # postgres
         # 'ENGINE': 'django.db.backends.postgresql',
@@ -101,12 +101,12 @@ DATABASES = {
         # 'PORT': '5432',
 
         #mysql localhost
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'databs',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'databs',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306'
 
         # mysql live
         # 'ENGINE': 'django.db.backends.mysql',
