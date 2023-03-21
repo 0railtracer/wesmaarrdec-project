@@ -5,6 +5,9 @@
 {% block content %}
 <section class="single-post-content">
       <div class="container">
+            <div class="section-header d-flex justify-content-between align-items-center mb-5">
+            <div><a href="{% url 'allpost' %}" class="more">Back To All Post</a></div>
+            </div>
         <div class="row">
           <div class="col-md-9 post-content" data-aos="fade-up">
 
@@ -37,7 +40,7 @@
               <div class="comment d-flex mb-4">               
                 <div class="flex-shrink-0">
                   <div class="avatar avatar-sm rounded-circle">
-                    <img class="avatar-img" src="assets/img/person-5.jpg" alt="" class="img-fluid">
+                    <!-- <img class="avatar-img" src="/static/assets/img/.jpg" alt="" class="img-fluid"> -->
                   </div>
                 </div>
                 <div class="flex-grow-1 ms-2 ms-sm-3">

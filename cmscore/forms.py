@@ -104,6 +104,6 @@ class PhotoForm(forms.ModelForm):
         fields = '__all__'
         labels = '__all__'
         widgets = {
-                'slide': forms.CheckboxInput(),
-                'carousel': forms.CheckboxInput(),
+                'slide': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_slide'}),
+                'carousel': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_carousel'}),
         }

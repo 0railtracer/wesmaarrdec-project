@@ -25,12 +25,14 @@ from django.core.paginator import Paginator, EmptyPage
 def index(request):
     slides = Slide.objects.all()
     post = Post.objects.filter(featured=True)
+    photo = AlbumPhoto.objects.filter(slide=True)
+    commodity = Commodity.objects.filter(slide=True)
 
-    news_category = Category.objects.filter(title='news').first()
+    news_category = Category.objects.filter(title__iexact='news').first()
     news_posts = Post.objects.filter(category=news_category) if news_category else None
 
-    event_category = Category.objects.filter(title='events').first()
-    new_events = Post.objects.filter(category=event_category) if event_category else None
+    event_category = Category.objects.filter(title__iexact='events').first()
+    new_events = Post.objects.filter(category=event_category).first() if event_category else None
 
     if post:
         random_post = sample(list(post), 1)[0]
@@ -59,14 +61,14 @@ def index(request):
     df = pd.read_sql_query(query, conn)
 
             # create map
-    m = folium.Map(location=[7.561,124.233], zoom_start=7)
-
+    m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
+    
             # loop through DataFrame rows and add markers to the map
     for index, row in df.iterrows():
         folium.Marker(
             location=[row['geolat'], row['geolong']],
             popup=row['name'],
-            icon=folium.Icon(icon='cloud')
+            icon=folium.Icon(icon='icon')
         ).add_to(m)
     
     # dynamic icon test
@@ -105,7 +107,7 @@ def index(request):
         'post': post,
         'new_events': new_events,
         'news_posts': news_posts,
-        'slides' : slides, 
+        'slides' : list(slides) + list(photo) + list(commodity), 
         'random_post' : random_post, 
         'random_slides' : random_slides, 
         'random_slide_mini' : random_slide_mini, 
@@ -264,7 +266,7 @@ def commodetail(request, commodity_slug):
 class CommodityCreateView(LoginRequiredMixin, CreateView):
     model = Commodity
     form_class = CommodityForm
-    template_name = 'createpost.html'
+    template_name = 'createcommodity.html'
     success_url = reverse_lazy('dashboard')
 
     def form_valid(self, form):
@@ -341,9 +343,9 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
 
 class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Project
-    fields = ['status']
+    form_class = ProjectForm
     success_url = reverse_lazy('dashboard')
-    template_name = 'project_update.html'
+    template_name = 'commodity_update.html'
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
@@ -486,7 +488,11 @@ def postman(request):
 
 def galleryman(request):
     photos = AlbumPhoto.objects.all()
-    context = {'photos': photos}
+    albums = Album.objects.all()
+    context = {
+        'photos': photos,
+        'albums': albums
+        }
     return render(request, 'dash-gallery.html', context)
 
 def robots_txt(request):
@@ -518,6 +524,15 @@ def createalbum(request):
 
     context = {'form': form}
     return render(request, 'createcategory.html', context)
+
+class albumupdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Album
+    form_class = AlbumForm
+    success_url = reverse_lazy('dashboard')
+    template_name = 'createcategory.html'
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
 
 @staff_member_required(login_url='/login')
 def deleteAlbum(request, pk):
@@ -554,7 +569,7 @@ def createphoto(request):
 
 class photoupdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = AlbumPhoto
-    fields = '__all__'
+    form_class = PhotoForm
     success_url = reverse_lazy('dashboard')
     template_name = 'createcategory.html'
 

@@ -11,14 +11,14 @@
         {% for faq in faq %}
         <div class="col">
           <div class="card shadow-sm">
-            <img src="{{post.image.url}}">
+            <img src="{{faq.image.url}}">
             <div class="card-body">
               <p class="card-text">Question: {{ faq.question|title }}</p>
               <p class="card-text">Answer: {{ faq.answer }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="#" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: brown;"> Delete FAQ </button> </a>
-                  <a href="#" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: green;"> Update FAQ </button> </a> 
+                  <a href="{%url 'deletefaq' faq.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: brown;"> Delete FAQ </button> </a>
+                  <a href="{%url 'UpdateFaq' faq.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: green;"> Update FAQ </button> </a> 
                 </div>
                 <!-- <small class="text-muted">{{ post.created_at}}</small> -->
               </div>

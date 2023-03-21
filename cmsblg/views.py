@@ -3,10 +3,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required, permission_required
 from .forms import CommentForm, CategoryForm, FactForm
 from .models import Post, Category, Fact
+from cmscore.models import Commodity, Album, AlbumPhoto, Project
 from django.utils.text import slugify
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 def detail(request, category_slug, slug):
     post = get_object_or_404(Post, slug=slug, status=Post.ACTIVE)
@@ -37,8 +40,15 @@ def search(request):
     query = request.GET.get('query', '')
 
     posts = Post.objects.filter(status=Post.ACTIVE).filter(Q(title__icontains=query) | Q(intro__icontains=query) | Q(body__icontains=query))
+    commodities = Commodity.objects.filter(Q(name__icontains=query) | Q(detail__icontains=query))
+    photo = AlbumPhoto.objects.filter(Q(name__icontains=query) | Q(caption__icontains=query))
+    project = Project.objects.filter(Q(title__icontains=query))
+    category = Category.objects.filter(Q(title__icontains=query) | Q(slug__icontains=query))
 
-    return render(request, 'cmsblg/search.html', {'posts': posts, 'query': query})
+
+
+
+    return render(request, 'cmsblg/search.html', {'posts': posts, 'category': category, 'project': project, 'photo': photo, 'commodities': commodities, 'query': query})
 
 def facts(request):
     faqs = Fact.objects.all()
@@ -50,6 +60,25 @@ class CreateFact(LoginRequiredMixin, CreateView):
     form_class = FactForm
     template_name = 'createcommodity.html'
     success_url = reverse_lazy('dashboard')
+
+class UpdateFaq(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Fact
+    form_class = FactForm
+    success_url = reverse_lazy('dashboard')
+    template_name = 'commodity_update.html'
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+@staff_member_required(login_url='/login')
+def deleteFaq(request, pk):
+    faq = get_object_or_404(Fact, id=pk)
+    try:
+        faq.delete()
+        messages.success(request, 'Faq deleted successfully')
+    except Exception as e:
+        messages.error(request, f'Error deleting Faq: {str(e)}')
+    return redirect('/dashboard')
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category

@@ -22,7 +22,7 @@
                     <div class="card shadow-sm" style="margin: 10px;">
                       <a href="{% url 'commodetail' commodity.slug%}" class="img-bg d-flex align-items-end" style="background-image: url('{{commodity.image.url}}');">
                         <div class="img-bg-inner d-flex align-items-start flex-column">
-                          <h2>c{{ commodity.name }}</h2>
+                          <h2>{{ commodity.name }}</h2>
                           <p style="text-align: left;">{{ commodity.detail}}</p>
                           <button type="button" class="btn btn-success">Discover</button>
                         </div>

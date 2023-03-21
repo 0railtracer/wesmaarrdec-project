@@ -20,6 +20,7 @@ urlpatterns = [
     path('about/', about, name='about'),
     path('gallery/', gallery, name='gallery'),
     path('createalbum/', createalbum, name='createalbum'),
+    path('albumupdate/<str:pk>/update/', albumupdate.as_view(), name='albumupdate'),
     path('deletealbum/<str:pk>/', deleteAlbum, name='deletealbum'),
     path('album/<str:pk>/', album, name='album'),
     path('createphoto/', createphoto, name='createphoto'),

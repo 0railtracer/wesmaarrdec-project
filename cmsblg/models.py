@@ -5,9 +5,9 @@ class Category(models.Model):
     # blgcat_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     slug = models.SlugField()
-    created_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     created_by = models.CharField(max_length=50, blank=True, null=True)
-    modified_at = models.DateTimeField(blank=True, null=True)
+    modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
@@ -42,7 +42,7 @@ class Post(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=CHOICES_STATUS, default=ACTIVE)
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
-    modified_at = models.DateTimeField(blank=True, null=True)
+    modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
@@ -75,7 +75,7 @@ class Comment(models.Model):
     parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.CharField(max_length=50, blank=True, null=True)
-    modified_at = models.DateTimeField(blank=True, null=True)
+    modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
@@ -96,9 +96,9 @@ class Fact(models.Model):
     answer = models.TextField()
     img = models.ImageField(upload_to='Fact', blank=False, null=True)
     category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
-    created_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     created_by = models.CharField(max_length=50, blank=True, null=True)
-    modified_at = models.DateTimeField(blank=True, null=True)
+    modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
     # class Meta:

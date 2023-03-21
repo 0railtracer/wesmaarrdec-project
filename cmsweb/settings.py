@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-w0d@ke1%w(c73d)k@w7tg)nti3z@9=6jys#_95#w3tv0i5d9gf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['tiny.db.elephantsql.com', 'wesmaarrdec-test.onrender.com', 'localhost', '127.0.0.1' ]
 
@@ -94,20 +94,20 @@ DATABASES = {
         # 'PORT': '5433',
 
         # postgreslive
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nwvlrejo',
-        'USER': 'nwvlrejo',
-        'PASSWORD': 'pjoptCD8FCS36aCBJe8Wm6UGGnKNT85m',
-        'HOST': 'tiny.db.elephantsql.com',
-        'PORT': '5432',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'nwvlrejo',
+        # 'USER': 'nwvlrejo',
+        # 'PASSWORD': 'pjoptCD8FCS36aCBJe8Wm6UGGnKNT85m',
+        # 'HOST': 'tiny.db.elephantsql.com',
+        # 'PORT': '5432',
 
         #mysql localhost
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'databs',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': 'localhost',
-        # 'PORT': '3306'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'databs',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306'
 
         # mysql live
         # 'ENGINE': 'django.db.backends.mysql',

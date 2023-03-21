@@ -15,7 +15,7 @@
                   <a href="{{slide.image.url}}" class="img-bg d-flex align-items-end" style="background-image: url('{{slide.image.url}}');">
                     <div class="img-bg-inner">
                       <h2>{{ slide.name}}</h2>
-                      <p>{{ slide.detail}}</p>
+                      <p>{{ slide.detail}} {{slide.caption }}</p>
                     </div>
                   </a>
                 </div>
@@ -48,16 +48,16 @@
                   </a>
               </div>
 
-              <div class="swiper sliderFeaturedPosts">
+              <div class="swiper2 sliderFeaturedPosts2">
                 <div class="swiper-wrapper">
                   <div class="swiper-slide">
                     
                     <div class="carousel-item active">
                       <div class="row">
-                        {% for news in news_posts %}
+                        {% for news in news_posts|slice:"3" %}
                           <div class="col-md-4 mb-3">
                               <div class="card">
-                                  <img class="img-fluid" alt="100%x280" src="{{news.image.url}}">
+                                  <img class="img-fluid" style="object-fit: cover; width: 100%; height: 280px;" alt="100%x280" src="{{news.image.url}}">
                                   <div class="card-body">
                                       <h4 class="card-title">{{news.title}}</h4>
                                       <p class="card-text">{{news.body}}</p>
@@ -93,7 +93,7 @@
               <ul class="trending-post">
                 {% for news in news_posts%}
                 <li>
-                  <a href="news.html">
+                  <a href="{% url 'post_detail' news.category.slug news.slug %}">
                     <span class="number">1</span>
                     <h3>{{news.title}}</h3>
                     <span class="author">{{news.author}}</span>
@@ -108,8 +108,8 @@
 
           <div class="col">
             <div class="post-entry-1 lg">
-              <h2><a href="single-post.html">Events this month</a></h2>
-              <a href="single-post.html"><img src="{{new_events.image.url}}" alt="" class="img-fluid"></a>
+              <h2><a href="{% url 'category_detail' new_events.category.slug %}">Events this month</a></h2>
+              <a href="{  % url 'category_detail' new_events.category.slug %}"><img src="{{new_events.image.url}}" alt="" class="img-fluid"></a>
               <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_events.created_at}}</span></div>
               <p class="mb-4 d-block">{{new_events.body}}</p>
 
@@ -130,7 +130,10 @@
     <section id="posts" class="posts">
       
       <div class="container" data-aos="fade-up">
-        <hr class="hr" />
+            <div class="section-header d-flex justify-content-between align-items-center mb-5">
+            <div><a href="{% url 'cmi' %}" class="more"></a></div>
+            </div>
+            <div class="text-center mb-md-5"><a href="{% url 'cmi' %}"><h1>Consortium Member Institutions</h1></a></div>
             <div id="map">{{ map|safe }}</div>
       </div>
     </section> <!-- cmi map -->

@@ -37,13 +37,13 @@
                     <h2>                     
                       <a href="{% url 'post_detail' post.category.slug post.slug %}" class="text-primary ">{{post.title}}</a>
                     </h2>
-                    <a href="{{ post.image.url }}"> <img src="{{ post.image.url }}" width="300" height="200" alt="" class="img-fluid"></a>
+                    <a href="{% url 'post_detail' post.category.slug post.slug %}"> <img src="{{ post.image.url }}" width="300" height="200" alt="" class="img-fluid"></a>
                     <h5>Author: {{ post.author}} </h5>
                     <!-- <p class="text-sm">Description: {{post.body}}</p> -->
                   </div>
                   <div class="col-md-4 op-7">
                     <div class="row text-center op-7">
-                      <div class="col px-1"> <i class="ion-ios-eye-outline icon-1x"></i> <span class="d-block text-sm">{{post.body}}</span> </div>
+                      <div class="col px-1"> <i class="ion-ios-eye-outline icon-1x"></i> <span class="d-block text-sm">{{post.intro}}</span> </div>
                       <div class="col px-1"> <i class="ion-ios-chatboxes-outline icon-1x"></i> <span class="d-block text-sm">Comments: {{post.comments.count}}</span> </div>
                     </div>
                   </div>
