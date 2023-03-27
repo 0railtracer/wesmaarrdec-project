@@ -16,18 +16,27 @@
           {% else %}
             <img src="/static/assets/img/unknown.jpg" alt="Default Image">
           {% endif %}
-          <div id="green"><br>{{org.dostpcaarrd_ExDi_name}}<br>DOST PCAARRD <br> Executive Director  </div></h5>
+          <div id="green" style="
+                width: 100%;
+                height: 60px;
+                margin: 0 35px 0 0;
+                font-size: 12px;"><br>{{org.dostpcaarrd_ExDi_name}}<br>DOST PCAARRD <br> Executive Director  </div></h5>
       </div>
       <div class="container" data-aos="fade-up">
         <h1 style="margin-top: 100px;">RRDC / Executive Board</h1>
         <hr style="color: green;">
         <h5 class="level-1 rectangle">
           {% if org.wmsupres_rrdcchair_exdi_img %}
-            <img src="{{ org.wmsupres_rrdcchair_exdi_img.url }}" alt="CEO Image">
+            <img src="{{ org.wmsupres_rrdcchair_exdi_img.url }}" alt="CEO Image" id="resize">
           {% else %}
-            <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+            <img src="/static/assets/img/unknown.jpg" alt="Default Image" id="resize">
           {% endif %}          
-          <div id="green"><br>{{org.wmsupres_rrdcchair_exdi_name}}<br>WMSU-President/RDCC-CHAIR/EXCECUTIVE-DIRECTOR </div></h5>
+          <div id="green" style="
+            width: 200px;
+            height: 50px;
+            margin: 0 20%;
+            font-size: 10px;
+        "><br>{{org.wmsupres_rrdcchair_exdi_name}}<br>WMSU-President/RDCC-CHAIR/EXCECUTIVE-DIRECTOR </div></h5>
         <ol class="level-4-wrapper">
           <li>
             <h5 class="level-4 rectangle" style="
@@ -42,7 +51,12 @@
               {% else %}
                 <img src="/static/assets/img/unknown.jpg" alt="Default Image">
               {% endif %}               -->
-              <div id="green"><br>{{org.depu_di_name}}<br>RRDCC-VICE-CHAIR <br> DEPUTY-DIRECTOR </div></h5>
+              <div id="green" style="
+                width: 100%;
+                height: 60px;
+                margin: 0 35px 0 41px;
+                font-size: 10px;
+            "><br>{{org.depu_di_name}}<br>RRDCC-VICE-CHAIR <br> DEPUTY-DIRECTOR </div></h5>
           </li>
         </ol>
         <ol class="level-2-wrapper">
@@ -53,7 +67,12 @@
               {% else %}
                 <img src="/static/assets/img/unknown.jpg" alt="Default Image">
               {% endif %}               -->
-              <div id="green"><br>{{org.EXBM_ZSCMST_name}}<br>EXECUTIVE-BOARD-MEMBER-ZSCMST </div></h6>
+              <div id="green" style="
+                width: 100px;
+                height: 60px;
+                margin: 0 35px 0 41px;
+                font-size: 10px;
+            "><br>{{org.EXBM_ZSCMST_name}}<br>EXECUTIVE-BOARD-MEMBER-ZSCMST </div></h6>
           </li>
           <li>
             <h6 class="level-2 rectangle" id="level-2">
@@ -62,7 +81,12 @@
               {% else %}
                 <img src="/static/assets/img/unknown.jpg" alt="Default Image">
               {% endif %}               -->
-              <div id="green"><br>{{org.EXBM_DA_RFO_IX_name}}<br>EXECUTIVE-BOARD-MEMBER-DA_RFO_IX  </div></h6>
+              <div id="green" style="
+                width: 100px;
+                height: 60px;
+                margin: 0 35px 0 41px;
+                font-size: 8px;
+            "><br>{{org.EXBM_DA_RFO_IX_name}}<br>EXECUTIVE-BOARD-MEMBER-DA_RFO_IX  </div></h6>
           </li>
           <li>
             <h6 class="level-2 rectangle">
@@ -71,7 +95,12 @@
               {% else %}
                 <img src="/static/assets/img/unknown.jpg" alt="Default Image">
               {% endif %}               -->
-              <div id="green"><br>{{org.EXMB_DA_BAR_name}}<br>EXECUTIVE-BOARD-MEMBER-DA_BAR </div></h6>
+              <div id="green" style="
+                width: 100px;
+                height: 60px;
+                margin: 0 35px 0 41px;
+                font-size: 10px;
+            "><br>{{org.EXMB_DA_BAR_name}}<br>EXECUTIVE-BOARD-MEMBER-DA_BAR </div></h6>
           </li>
         </ol>
         <ol class="level-3-wrapper">
@@ -85,7 +114,12 @@
               {% else %}
                 <img src="/static/assets/img/unknown.jpg" alt="Default Image">
               {% endif %}               -->
-              <div id="green"><br>{{org.EXBM_JHCSC_name}}<br>EXECUTIVE-BOARD-MEMBER-JHCSC  </div></h6>
+              <div id="green" style="
+                width: 100%;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 10px;
+            "><br>{{org.EXBM_JHCSC_name}}<br>EXECUTIVE-BOARD-MEMBER-JHCSC  </div></h6>
           </li>
           <li class="manager-d">
             <h6 class="level-3 rectangle" style="
@@ -97,95 +131,14 @@
               {% else %}
                 <img src="/static/assets/img/unknown.jpg" alt="Default Image">
               {% endif %}               -->
-              <div id="green"><br>{{org.EXBM_PHILFIDA_name}}<br>EXECUTIVE-BOARD-MEMBER-PHILFIDA </div></h6>
-          </li>
-        </ol> 
-        <h1 style="margin-top: 100px;">Consortium Secretariat</h1>
-        <hr style="color: green;">
-        <h5 class="level-1 rectangle" id="level-11">
-          {% if org.WESMAARRDEC_Dir_img %}
-            <img src="{{ org.WESMAARRDEC_Dir_img.url }}" alt="CEO Image">
-          {% else %}
-            <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-          {% endif %}          
-          <div id="green"><br>{{org.WESMAARRDEC_Dir_name}}<br>WESMAARRDEC-DIRECTOR </div></h5>
-        <ol class="level-22-wrapper">
-          <li>
-            <h6 class="level-22 rectangle">
-              {% if org.Clus_Coord_R_and_D_img %}
-                <img src="{{ org.Clus_Coord_R_and_D_img.url }}" alt="CEO Image">
-              {% else %}
-                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-              {% endif %}              
-              <div id="green"><br>{{org.Clus_Coord_R_and_D_name}}<br>CLUSTER-COORDINATOR-RESEARCH-AND-DEVELOPMENT </div></h6>
-          </li>
-          <li>
-            <h6 class="level-22 rectangle">
-              {% if org.Clus_Coord_Tech_Trans_img %}
-                <img src="{{ org.Clus_Coord_Tech_Trans_img.url }}" alt="CEO Image">
-              {% else %}
-                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-              {% endif %}              
-              <div id="green"><br>{{org.Clus_Coord_Tech_Trans_name}}<br>CLUSTER-COORDINATOR-TECHNOLOGY-TRANSFER </div></h6>
-          </li>
-          <li>
-            <h6 class="level-22 rectangle">
-              {% if org.Clus_Coord_ICT_img %}
-                <img src="{{ org.Clus_Coord_ICT_img.url }}" alt="CEO Image">
-              {% else %}
-                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-              {% endif %}              
-              <div id="green"><br>{{org.Clus_Coord_ICT_name}}<br>CLUSTER-COORDINATOR-INFORMATION-COMMUNICATION-TECHNOLOGY </div></h6>
-          </li>
-          <li>
-            <h6 class="level-22 rectangle">
-              {% if org.Clus_Coord_Sci_Com_img %}
-                <img src="{{ org.Clus_Coord_Sci_Com_img.url }}" alt="CEO Image">
-              {% else %}
-                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-              {% endif %}              
-              <div id="green"><br>{{org.Clus_Coord_Sci_Com_name}}<br>CLUSTER-COORDINATOR-SCIENCE-COMMUNITCATION </div></h6>
+              <div id="green" style="
+                width: 100%;
+                height: 50px;
+                margin: 0 35px 0;
+                font-size: 10px;
+            "><br>{{org.EXBM_PHILFIDA_name}}<br>EXECUTIVE-BOARD-MEMBER-PHILFIDA </div></h6>
           </li>
         </ol>
-        <ol class="level-222-wrapper">
-          <li>
-            <h6 class="level-222 rectangle">
-              {% if org.Management_sup1_img %}
-                <img src="{{ org.Management_sup1_img.url }}" alt="CEO Image">
-              {% else %}
-                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-              {% endif %}              
-              <div id="green"><br>{{org.Management_sup1_name}}<br>STAFF-SECRETARIAT-1 </div></h6>
-          </li>
-          <li>
-            <h6 class="level-222 rectangle">
-              {% if org.Management_sup2_img %}
-                <img src="{{ org.Management_sup2_img.url }}" alt="CEO Image">
-              {% else %}
-                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-              {% endif %}              
-              <div id="green"><br>{{org.Management_sup2_name}}<br>STAFF-SECRETARIAT-2 </div></h6>
-          </li>
-          <li>
-            <h6 class="level-222 rectangle">
-              {% if org.Management_sup3_img %}
-                <img src="{{ org.Management_sup3_img.url }}" alt="CEO Image">
-              {% else %}
-                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-              {% endif %}             
-              <div id="green"><br>{{org.Management_sup3_name}}<br>STAFF-SECRETARIAT-3 </div></h6>
-          </li>
-          <li>
-            <h6 class="level-222 rectangle">
-              {% if org.Management_sup4_img %}
-                <img src="{{ org.Management_sup4_img.url }}" alt="CEO Image">
-              {% else %}
-                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-              {% endif %}            
-              <div id="green"><br>{{org.Management_sup4_name}}<br>STAFF-SECRETARIAT-4 </div></h6>
-          </li>
-        </ol>
-        
         <!-- <ol class="level-2-wrapper">
           <li>
             <h2 class="level-2 rectangle">Director A<br> <img src="/static/assets/img/me.jpg" ></h2>
@@ -221,6 +174,138 @@
           </li>
         </ol> -->
       </div>
+        <div class="container" data-aos="fade-up"> 
+        <h1 style="margin-top: 100px;">Consortium Secretariat</h1>
+        <hr style="color: green;">
+        <h5 class="level-1 rectangle" id="level-11 resize">
+          {% if org.WESMAARRDEC_Dir_img %}
+            <img src="{{ org.WESMAARRDEC_Dir_img.url }}" alt="CEO Image" id="resize">
+          {% else %}
+            <img src="/static/assets/img/unknown.jpg" alt="Default Image"  id="resize">
+          {% endif %}          
+          <div id="green" style="
+            width: 200px;
+            height: 50px;
+            margin: 0 20%;
+            font-size: 12px;
+        "><br>{{org.WESMAARRDEC_Dir_name}}<br>WESMAARRDEC-DIRECTOR </div></h5>
+        <ol class="level-22-wrapper">
+          <li>
+            <h6 class="level-22 rectangle">
+              {% if org.Clus_Coord_R_and_D_img %}
+                <img src="{{ org.Clus_Coord_R_and_D_img.url }}" alt="CEO Image">
+              {% else %}
+                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+              {% endif %}              
+                <div id="green" style="
+                width: 100px;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 12px; font-size: 7px;
+            "><br>{{org.Clus_Coord_R_and_D_name}}<br>CLUSTER-COORDINATOR-RESEARCH-AND-DEVELOPMENT </div></h6>
+          </li>
+          <li>
+            <h6 class="level-22 rectangle">
+              {% if org.Clus_Coord_Tech_Trans_img %}
+                <img src="{{ org.Clus_Coord_Tech_Trans_img.url }}" alt="CEO Image">
+              {% else %}
+                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+              {% endif %}              
+              <div id="green" style="
+                width: 100px;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 12px; font-size: 7px;
+            "><br>{{org.Clus_Coord_Tech_Trans_name}}<br>CLUSTER-COORDINATOR-TECHNOLOGY-TRANSFER </div></h6>
+          </li>
+          <li>
+            <h6 class="level-22 rectangle">
+              {% if org.Clus_Coord_ICT_img %}
+                <img src="{{ org.Clus_Coord_ICT_img.url }}" alt="CEO Image">
+              {% else %}
+                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+              {% endif %}              
+              <div id="green" style="
+                width: 100px;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 12px; font-size: 7px;
+            "><br>{{org.Clus_Coord_ICT_name}}<br>CLUSTER-COORDINATOR-INFORMATION-COMMUNICATION-TECHNOLOGY </div></h6>
+          </li>
+          <li>
+            <h6 class="level-22 rectangle">
+              {% if org.Clus_Coord_Sci_Com_img %}
+                <img src="{{ org.Clus_Coord_Sci_Com_img.url }}" alt="CEO Image">
+              {% else %}
+                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+              {% endif %}              
+              <div id="green" style="
+                width: 100px;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 12px; font-size: 7px;
+            "><br>{{org.Clus_Coord_Sci_Com_name}}<br>CLUSTER-COORDINATOR-SCIENCE-COMMUNITCATION </div></h6>
+          </li>
+        </ol>
+        <ol class="level-222-wrapper">
+          <li>
+            <h6 class="level-222 rectangle">
+              {% if org.Management_sup1_img %}
+                <img src="{{ org.Management_sup1_img.url }}" alt="CEO Image">
+              {% else %}
+                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+              {% endif %}              
+              <div id="green" style="
+                width: 100px;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 12px; font-size: 7px;
+            "><br>{{org.Management_sup1_name}}<br>STAFF-SECRETARIAT-1 </div></h6>
+          </li>
+          <li>
+            <h6 class="level-222 rectangle">
+              {% if org.Management_sup2_img %}
+                <img src="{{ org.Management_sup2_img.url }}" alt="CEO Image">
+              {% else %}
+                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+              {% endif %}              
+              <div id="green" style="
+                width: 100px;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 12px; font-size: 7px;
+            "><br>{{org.Management_sup2_name}}<br>STAFF-SECRETARIAT-2 </div></h6>
+          </li>
+          <li>
+            <h6 class="level-222 rectangle">
+              {% if org.Management_sup3_img %}
+                <img src="{{ org.Management_sup3_img.url }}" alt="CEO Image">
+              {% else %}
+                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+              {% endif %}             
+              <div id="green" style="
+                width: 100px;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 12px; font-size: 7px;
+            "><br>{{org.Management_sup3_name}}<br>STAFF-SECRETARIAT-3 </div></h6>
+          </li>
+          <li>
+            <h6 class="level-222 rectangle">
+              {% if org.Management_sup4_img %}
+                <img src="{{ org.Management_sup4_img.url }}" alt="CEO Image">
+              {% else %}
+                <img src="/static/assets/img/unknown.jpg" alt="Default Image">
+              {% endif %}            
+              <div id="green" style="
+                width: 100px;
+                height: 50px;
+                margin: 0 35px 0 0;
+                font-size: 12px; font-size: 7px;
+            "><br>{{org.Management_sup4_name}}<br>STAFF-SECRETARIAT-4 </div></h6>
+          </li>
+        </ol>
+        </div>
   </div>
 </div>
     </section>

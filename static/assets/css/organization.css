@@ -6,6 +6,11 @@
   --black: rgb(0, 79, 34);
 }
 
+#resize{
+  width: 100px;
+  height: 100px;
+}
+
 #green{
   background: #43B14B;
   border-radius: 5%;
@@ -36,6 +41,13 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+#containerer {
+  width: 720px;
+  height: 1080px;
+  overflow: scroll;
+  zoom: 0.5;
+}
+
 .container {
   max-width: 1000px;
   padding: 0 10px;
@@ -64,7 +76,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 2px;
-  height: 20px;
+  height: 300px;
   background: var(--black);
 }
 
@@ -104,8 +116,8 @@ body {
   background: var(--white);
 }
 .level-1dost img {
-  width: 300px;
-  height: 300px;
+  width: 150px;
+  height: 150px;
   border-radius: 1%;
   box-shadow: 0px 0px 38px rgb(191, 255, 185);
   opacity: 1;
@@ -169,7 +181,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 2px;
-  height: 290px;
+  height: 240px;
   background: var(--black);
 }
 
@@ -195,7 +207,6 @@ body {
 
 
 .level-22-wrapper {
-  margin-top: 100px;
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -208,7 +219,7 @@ body {
   content: "";
   position: absolute;
   top: -20px;
-  width: 100%;
+  width: 75%;
   height: 2px;
   background: var(--black);
 }
@@ -233,7 +244,7 @@ body {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translate(-16px, 0);
+  transform: translate(0px, 0);
   width: 2px;
   height: 20px;
   background: var(--black);
@@ -270,8 +281,8 @@ body {
 }
 
 .level-22 img {
-  width: 150px;
-  height: 150px;
+  width: 50px;
+  height: 50px;
   border-radius: 1%;
   box-shadow: 0px 0px 38px rgb(191, 255, 185);
   opacity: 1;
@@ -279,11 +290,11 @@ body {
 
 
 .level-222-wrapper {
-  margin-top: 100px;
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center; /* centers grid items horizontally */
+  margin: 100px;
   box-sizing: border-box; /* includes padding in width calculation */
 }
 
@@ -292,7 +303,7 @@ body {
   content: "";
   position: absolute;
   top: -20px;
-  width: 100%;
+  width: 75%;
   height: 2px;
   background: var(--black);
 }
@@ -317,7 +328,7 @@ body {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translate(-16px, 0);
+  transform: translate(0px, 0);
   width: 2px;
   height: 20px;
   background: var(--black);
@@ -354,8 +365,8 @@ body {
 }
 
 .level-222 img {
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
   border-radius: 1%;
   box-shadow: 0px 0px 38px rgb(191, 255, 185);
   opacity: 1;

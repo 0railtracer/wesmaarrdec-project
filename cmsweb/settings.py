@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'registration',
     'cmsblg',
     'cmscore',
+    # 'Chat'
 ]
 
 MIDDLEWARE = [
@@ -94,20 +95,20 @@ DATABASES = {
         # 'PORT': '5433',
 
         # postgreslive
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'nwvlrejo',
-        # 'USER': 'nwvlrejo',
-        # 'PASSWORD': 'pjoptCD8FCS36aCBJe8Wm6UGGnKNT85m',
-        # 'HOST': 'tiny.db.elephantsql.com',
-        # 'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'nwvlrejo',
+        'USER': 'nwvlrejo',
+        'PASSWORD': 'pjoptCD8FCS36aCBJe8Wm6UGGnKNT85m',
+        'HOST': 'tiny.db.elephantsql.com',
+        'PORT': '5432',
 
         #mysql localhost
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'databs',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'databs',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306'
 
         # mysql live
         # 'ENGINE': 'django.db.backends.mysql',

@@ -30,5 +30,6 @@ urlpatterns = [
     path('', include('cmscore.urls')), 
     path('', include('registration.urls')),
     path('', include('cmsblg.urls')),   
+    # path('', include,('Chat.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

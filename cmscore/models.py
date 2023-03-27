@@ -166,7 +166,7 @@ class Album(models.Model):
     
     def get_cover_image_url(self):
         try:
-            return self.photos.first().img.url
+            return self.photos.first().image.url
         except AttributeError:
             return None
     

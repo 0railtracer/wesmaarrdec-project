@@ -236,7 +236,7 @@ section {
     align-items: center;
     justify-content: space-between;
     padding: 10px 0 10px 30px;
-    font-family: var(--font-default);
+    font-family: var(--font-primary);
     font-size: 16px;
     font-weight: 500;
     color: rgba(var(--color-default-rgb), 1);

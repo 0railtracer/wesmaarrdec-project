@@ -111,25 +111,25 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   });
 
-  var swiper2 = new Swiper2(".sliderFeaturedPosts2", {
-    spaceBetween: 0,
-    speed: 200,
-    centeredSlides: true,
-    loop: true,
-    slideToClickedSlide: true,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-    navigation: {
-      nextEl: ".custom-swiper-button-next",
-      prevEl: ".custom-swiper-button-prev",
-    },
-  });
+  // var swiper2 = new Swiper2(".sliderFeaturedPosts2", {
+  //   spaceBetween: 0,
+  //   speed: 200,
+  //   centeredSlides: true,
+  //   loop: true,
+  //   slideToClickedSlide: true,
+  //   autoplay: {
+  //     delay: 3000,
+  //     disableOnInteraction: false,
+  //   },
+  //   pagination: {
+  //     el: ".swiper-pagination",
+  //     clickable: true,
+  //   },
+  //   navigation: {
+  //     nextEl: ".custom-swiper-button-next",
+  //     prevEl: ".custom-swiper-button-prev",
+  //   },
+  // });
 
 
   /**
