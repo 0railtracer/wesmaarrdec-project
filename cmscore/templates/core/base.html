@@ -83,7 +83,7 @@
             </ul>
           </li>
           {% if user.is_superuser %}
-          <a href="{% url 'dashboard' %}"><span>ADMIN PANEL</span></a>
+          <a href="{% url 'dashboard' %}"><span>ADMIN DASHBOARD</span></a>
           
           {% endif %}
         </ul>
@@ -140,7 +140,7 @@
             <h3 class="footer-heading" style="color: #43B14B;">NAVIGATION</h3>
             <ul class="footer-links list-unstyled">
               <li><a href="{% url 'index' %}"><i class="bi bi-chevron-right"></i> Home</a></li>
-              <li><a href="{% url 'about' %}"><i class="bi bi-chevron-right"></i> About</a></li>
+              <li><a href="{% url 'consortium' %}"><i class="bi bi-chevron-right"></i> About</a></li>
               <li><a href="{% url 'cmi' %}"><i class="bi bi-chevron-right"></i> CMI</a></li>
               <li><a href="{% url 'community' %}"><i class="bi bi-chevron-right"></i> Community</a></li>
               <li><a href="{% url 'commodities' %}"><i class="bi bi-chevron-right"></i> Commodities</a></li>

@@ -194,7 +194,7 @@ def createconsortium(request):
             return redirect('/dashboard')
 
     context = {'form': form}
-    return render(request, 'createpost.html', context)
+    return render(request, 'createcategory.html', context)
 
 class ConsortiumUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Consortium

@@ -5,6 +5,7 @@
 <div class="hero">
 <div class="container my-5">
 <h1>CATEGORY</h1>
+<div><a href="{% url 'categorycreateview'%}"><button type="button" type="button" class="btn btn-primary"> Add Category </button></a></div>
 <div class="table-responsive">
   <table class="table table-striped table-sm">
     <thead>
@@ -29,6 +30,7 @@
  <div class="album py-5 bg-light">
     <div class="container">
       <h2 style="color: rgb(0, 75, 50); font-style: italic;">ALL POST</h2>
+      <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-primary"> Add Post </button></a>      
       <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
         {% for post in posts %}
         <div class="col">

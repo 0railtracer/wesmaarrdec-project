@@ -7,6 +7,7 @@
  <div class="album py-5 bg-light">
     <div class="container">
       <h2 style="color: rgb(0, 75, 50); font-style: italic;">ALL FAQ</h2>
+      <a href="{% url 'createfaq' %}"><button type="button" class="btn btn-primary"> Add FAQ </button></a>
       <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
         {% for faq in faq %}
         <div class="col">
