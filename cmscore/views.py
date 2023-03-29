@@ -52,24 +52,24 @@ def index(request):
 
             # # connect to database
     # conn = psycopg2.connect(database="databs", user="root", password="", host="localhost", port="3306")
-    conn = mysql.connector.connect(user='root', password='',host='localhost', database='databs')
+    # conn = mysql.connector.connect(user='root', password='',host='localhost', database='databs')
     
-    cursor = conn.cursor()
+    # cursor = conn.cursor()
 
-            # query data from database and load into a DataFrame
-    query = "SELECT geolat, geolong, name FROM cmi"
-    df = pd.read_sql_query(query, conn)
+    #         # query data from database and load into a DataFrame
+    # query = "SELECT geolat, geolong, name FROM cmi"
+    # df = pd.read_sql_query(query, conn)
 
-            # create map
-    m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
+    #         # create map
+    # m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
     
-            # loop through DataFrame rows and add markers to the map
-    for index, row in df.iterrows():
-        folium.Marker(
-            location=[row['geolat'], row['geolong']],
-            popup=row['name'],
-            icon=folium.Icon(icon='icon')
-        ).add_to(m)
+    #         # loop through DataFrame rows and add markers to the map
+    # for index, row in df.iterrows():
+    #     folium.Marker(
+    #         location=[row['geolat'], row['geolong']],
+    #         popup=row['name'],
+    #         icon=folium.Icon(icon='icon')
+    #     ).add_to(m)
     
     # dynamic icon test
 #    markers = Marker.objects.all()
@@ -83,25 +83,25 @@ def index(request):
 #     context = {
 #         'my_map': m._repr_html_(),
         
-    # m = folium.Map(location=[7.635,124.854], zoom_start=7)
+    m = folium.Map(location=[7.635,124.854], zoom_start=7)
 
-    # folium.Marker(
-    #     location=[7.040, 122.075],
-    #     popup='Zamboanga',
-    #     icon=folium.Icon(icon='cloud')
-    # ).add_to(m)
+    folium.Marker(
+        location=[7.040, 122.075],
+        popup='Zamboanga',
+        icon=folium.Icon(icon='icon')
+    ).add_to(m)
 
-    # folium.Marker(
-    #     location=[7.187, 124.214],
-    #     popup='Cotabato',
-    #     icon=folium.Icon(icon='cloud')
-    # ).add_to(m)
+    folium.Marker(
+        location=[7.187, 124.214],
+        popup='Cotabato',
+        icon=folium.Icon(icon='icon')
+    ).add_to(m)
 
-    # folium.Marker(
-    #     location=[8.172, 124.216],
-    #     popup='Cagayan de Oro',
-    #     icon=folium.Icon(icon='cloud')
-    # ).add_to(m)
+    folium.Marker(
+        location=[8.172, 124.216],
+        popup='Cagayan de Oro',
+        icon=folium.Icon(icon='icon')
+    ).add_to(m)
 
     context = {
         'post': post,
