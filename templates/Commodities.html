@@ -20,7 +20,9 @@
                       <div class="card-group">
                     {% endif %}
                     <div class="card shadow-sm" style="margin: 10px;">
-                      <a href="{% url 'commodetail' commodity.slug%}" class="img-bg d-flex align-items-end" style="background-image: url('{{commodity.image.url}}');">
+                      {% if commodity.com_id %}
+                          <a href="{% url 'commodetail' com_id=commodity.com_id %}" class="img-bg d-flex align-items-end" style="background-image: url('{{ commodity.img.url }}');">
+                      {% endif %}
                         <div class="img-bg-inner d-flex align-items-start flex-column">
                           <h2>{{ commodity.name }}</h2>
                           <p style="text-align: left;">{{ commodity.detail}}</p>

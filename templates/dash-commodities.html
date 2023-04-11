@@ -4,7 +4,7 @@
 {% block content%}
 <hr>
 <div class="hero">
-  <div class="d-flex align-items-center justify-content-center"><a href="{% url 'commoditycreateview'%}"><button type="button" type="button" class="btn btn-primary btn-lg"> Add Commodities </button></a></div>
+
   <div class="container my-5">
 <h2>Commodity</h2>
 <div class="table-responsive">
@@ -12,16 +12,12 @@
     <thead>
       <tr>
         <th scope="col">Commodity</th>
-        <th scope="col">Update Commodities</th>
-        <th scope="co">Delete Commodities</th>
       </tr>
     </thead>
     <tbody>
     {% for commodity in commodity %}
     <tr>
     <td>{{ commodity.name|title }}</td>
-    <td><a href="{% url 'commodity_update' commodity.slug %}" style="color: green;">Click To Update </a></td>
-    <td><a href="{% url 'deletecommodity' commodity.slug %}" style="color: brown;">DELETE: {{commodity.name|capfirst}}</a></td>
     </tr>
     {% endfor %}
     </tbody>

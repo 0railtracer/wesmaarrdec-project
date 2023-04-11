@@ -15,9 +15,9 @@
                 <div class="container" data-aos="fade-up">
                   <div class="row justify-content-between align-items-lg-center">
                     <div class="col-lg-5 mb-4 mb-lg-0">
-                      <h2 class="display-4 mb-4">{{ commodities.name }}</h2>
-                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, rem eaque vel est asperiores iste pariatur placeat molestias, rerum provident ea maiores debitis eum earum esse quas architecto! Minima, voluptatum! Minus tempora distinctio quo sint est blanditiis voluptate eos. Commodi dolore nesciunt culpa adipisci nemo expedita suscipit autem dolorum rerum?</p>
-                      <p>At magni dolore ullam odio sapiente ipsam, numquam eius minus animi inventore alias quam fugit corrupti error iste laboriosam dolorum culpa doloremque eligendi repellat iusto vel impedit odit cum. Sequi atque molestias nesciunt rem eum pariatur quibusdam deleniti saepe eius maiores porro quam, praesentium ipsa deserunt laboriosam adipisci. Optio, animi!</p>
+                      <h2 class="display-4 mb-4">{{ commodite.name }}</h2>
+                      <p>{{ commodite.detail}}</p>
+                      <p></p>
                     </div>
                     <div class="col-lg-6">
                       <div class="row">
@@ -71,7 +71,7 @@
             <ul class="nav nav-tabs card-header-tabs">
               {% for commodity in commodity %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'commodetail' commodity.slug %}">{{commodity.name}}</a>
+                <a class="nav-link" href="">{{commodity.name}}</a>
               </li>
               {% endfor %}
               </li>

@@ -11,16 +11,12 @@
     <thead>
       <tr>
         <th scope="col">Projects</th>
-        <th scope="col">Update Status</th>
-        <th scope="col">Delete Project</th>
       </tr>
     </thead>
     <tbody>
     {% for project in projects %}
     <tr>
     <td>{{ project.title|title }}</td>
-    <td><a href="{% url 'project_update' project.slug %}" style="color: green;">{{ project.status|capfirst }}</a></td>
-    <td><a href="{% url 'projectdelete' project.slug %}" style="color: brown;">DELETE: {{project.title|capfirst}}</a></td>
     </tr>
     {% endfor %}
     </tbody>

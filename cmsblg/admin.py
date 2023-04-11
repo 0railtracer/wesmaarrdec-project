@@ -18,10 +18,10 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['title']
     prepopulated_fields = {'slug': ('title',)}
 
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'post', 'created_at']
+# class CommentAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'post', 'created_at']
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(Comment, CommentAdmin)
+# admin.site.register(Comment, CommentAdmin)
 admin.site.register(Fact)

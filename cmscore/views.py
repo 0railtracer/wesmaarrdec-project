@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import *
+from auth_user.models import User
 from django.utils.text import slugify
 from django.contrib.sessions.models import Session
 from django.utils import timezone
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import *
@@ -20,13 +21,15 @@ import pandas as pd
 import psycopg2
 import mysql.connector
 import folium
+from django.contrib.auth import authenticate, login, logout
+from django.db import connection
 from django.core.paginator import Paginator, EmptyPage
 
 def index(request):
     slides = Slide.objects.all()
     post = Post.objects.filter(featured=True)
     photo = AlbumPhoto.objects.filter(slide=True)
-    commodity = Commodity.objects.filter(slide=True)
+    # commodity = Commodity.objects.filter(slide=True)
 
     news_category = Category.objects.filter(title__iexact='news').first()
     news_posts = Post.objects.filter(category=news_category) if news_category else None
@@ -52,68 +55,69 @@ def index(request):
 
             # # connect to database
     # conn = psycopg2.connect(database="databs", user="root", password="", host="localhost", port="3306")
-    # conn = mysql.connector.connect(user='root', password='',host='localhost', database='databs')
+    conn = mysql.connector.connect(user='root', password='',host='localhost', database='test101')
     
-    # cursor = conn.cursor()
+    cursor = conn.cursor()
 
-    #         # query data from database and load into a DataFrame
-    # query = "SELECT geolat, geolong, name FROM cmi"
-    # df = pd.read_sql_query(query, conn)
+            # query data from database and load into a DataFrame
+    query = "SELECT geolat, geolong, consortium_name FROM consortium"
+    df = pd.read_sql_query(query, conn)
 
-    #         # create map
-    # m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
+            # create map
+    m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
     
-    #         # loop through DataFrame rows and add markers to the map
-    # for index, row in df.iterrows():
-    #     folium.Marker(
-    #         location=[row['geolat'], row['geolong']],
-    #         popup=row['name'],
-    #         icon=folium.Icon(icon='icon')
-    #     ).add_to(m)
+            # loop through DataFrame rows and add markers to the map
+    for index, row in df.iterrows():
+        folium.Marker(
+            location=[row['geolat'], row['geolong']],
+            popup=row['consortium_name'],
+            icon=folium.Icon(icon='icon')
+        ).add_to(m)
     
     # dynamic icon test
-#    markers = Marker.objects.all()
-#     for marker in markers:
-#         folium.Marker(
-#             location=[marker.geolat, marker.geolong],
-#             popup=marker.name,
-#             icon=folium.Icon(icon=marker.icon_path)
-#         ).add_to(m)
+    # markers = Marker.objects.all()
+    # for marker in markers:
+    #     folium.Marker(
+    #         location=[marker.geolat, marker.geolong],
+    #         popup=marker.name,
+    #         icon=folium.Icon(icon=marker.icon_path)
+    #     ).add_to(m)
 
-#     context = {
-#         'my_map': m._repr_html_(),
+    # context = {
+    #     'my_map': m._repr_html_(),
         
-    m = folium.Map(location=[7.635,124.854], zoom_start=7)
+    # m = folium.Map(location=[7.635,124.854], zoom_start=7)
 
-    folium.Marker(
-        location=[7.040, 122.075],
-        popup='Zamboanga',
-        icon=folium.Icon(icon='icon')
-    ).add_to(m)
+    # folium.Marker(
+    #     location=[7.040, 122.075],
+    #     popup='Zamboanga',
+    #     icon=folium.Icon(icon='icon')
+    # ).add_to(m)
 
-    folium.Marker(
-        location=[7.187, 124.214],
-        popup='Cotabato',
-        icon=folium.Icon(icon='icon')
-    ).add_to(m)
+    # folium.Marker(
+    #     location=[7.187, 124.214],
+    #     popup='Cotabato',
+    #     icon=folium.Icon(icon='icon')
+    # ).add_to(m)
 
-    folium.Marker(
-        location=[8.172, 124.216],
-        popup='Cagayan de Oro',
-        icon=folium.Icon(icon='icon')
-    ).add_to(m)
+    # folium.Marker(
+    #     location=[8.172, 124.216],
+    #     popup='Cagayan de Oro',
+    #     icon=folium.Icon(icon='icon')
+    # ).add_to(m)
 
     context = {
         'post': post,
         'new_events': new_events,
         'news_posts': news_posts,
-        'slides' : list(slides) + list(photo) + list(commodity), 
+        'slides' : list(slides) + list(photo), 
         'random_post' : random_post, 
         'random_slides' : random_slides, 
         'random_slide_mini' : random_slide_mini, 
         'map': m._repr_html_(),
     }
     return render(request, 'core/index.html', context)
+
 
 def community(request):
     categories = Category.objects.all()
@@ -170,16 +174,16 @@ def deletepost(request, slug):
 
 def about(request):
     try:
-        consortium = Consortium.objects.get(pk=1)
-    except Consortium.DoesNotExist:
+        consortium = About.objects.get(pk=1)
+    except About.DoesNotExist:
         consortium = None
     return render(request, 'about.html', {'consortium': consortium})
 
 
 def consortium(request):
     try:
-        consortium = Consortium.objects.get(pk=1)
-    except Consortium.DoesNotExist:
+        consortium = About.objects.get(pk=1)
+    except About.DoesNotExist:
         consortium = None
     return render(request, 'consortium.html', {'consortium': consortium})
 
@@ -197,7 +201,7 @@ def createconsortium(request):
     return render(request, 'createcategory.html', context)
 
 class ConsortiumUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Consortium
+    model = About
     fields = '__all__'
     success_url = reverse_lazy('dashboard')
     template_name = 'commodity_update.html'
@@ -249,59 +253,119 @@ def cmidetail(request):
 # def category(request):
 #     return render(request, 'category.html')
 
+class Commodity:
+    def __init__(self, com_id, name, detail, img):
+        self.com_id = com_id
+        self.name = name
+        self.detail = detail
+        self.img = img
 
 def commodities(request):
-    commodity_list = Commodity.objects.all()
-    paginator = Paginator(commodity_list, 4)  # Show 10 commodities per page
+    conn = mysql.connector.connect(user='root', password='', host='localhost', database='test101')
+    cursor = conn.cursor()
+
+    query = "SELECT * FROM commodity"
+    cursor.execute(query)
+
+    commodity_list = []
+    for row in cursor.fetchall():
+        commodity = Commodity(row[0], row[1], row[2], row[3])
+        commodity_list.append(commodity)
+
+    paginator = Paginator(commodity_list, 4)
     page = request.GET.get('page')
     commodities = paginator.get_page(page)
+
     return render(request, 'Commodities.html', {'commodities': commodities, 'commodity_list': commodity_list})
 
-def commodetail(request, commodity_slug):
-    commodity = Commodity.objects.all()
-    commodities = get_object_or_404(Commodity, slug=commodity_slug)
-    
-    return render(request, 'commodetail.html', {'commodities': commodities, 'commodity': commodity})
 
-class CommodityCreateView(LoginRequiredMixin, CreateView):
-    model = Commodity
-    form_class = CommodityForm
-    template_name = 'createcommodity.html'
-    success_url = reverse_lazy('dashboard')
 
-    def form_valid(self, form):
-        slug = slugify(form.cleaned_data['name'])
-        count = 1
-        while Commodity.objects.filter(slug=slug).exists():
-            slug = f"{slug}-{count}"
-            count += 1
-        form.instance.slug = slug
-        return super().form_valid(form)
-    
-class CommodityUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Commodity
-    fields = ['name', 'detail', 'image']
-    success_url = reverse_lazy('dashboard')
-    template_name = 'commodity_update.html'
-
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
-    
-@staff_member_required(login_url='/login')
-def deletecommodity(request, commodity_slug):
-    commodity = get_object_or_404(Commodity, slug=commodity_slug)
+def commodetail(request, com_id):
+    cnx = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='test101')
     try:
-        commodity.delete()
-        messages.success(request, 'Commodity deleted successfully')
-    except Exception as e:
-        messages.error(request, f'Error deleting Commodity: {str(e)}')
-    return redirect('/dashboard')
+        # create a cursor to execute SQL queries
+        cursor = cnx.cursor()
+
+        # execute a SELECT query to fetch data for the specified commodity
+        query = "SELECT * FROM commodity WHERE com_id = %s"
+        cursor.execute(query, (com_id,))
+
+        row = cursor.fetchone()
+        commodite = Commodity(row[0], row[1], row[2], row[3])
+        
+        
+        # execute a SELECT query to fetch all the data from the commodity table
+        query_all = "SELECT * FROM commodity"
+        cursor.execute(query_all)
+        commodity = cursor.fetchall()
+
+        # render the template with the fetched data
+        return render(request, 'commodetail.html', {'commodite': commodite, 'commodity': commodity})
+
+    finally:
+        # close the cursor and database connection
+        cursor.close()
+        cnx.close()
+
+# class CommodityCreateView(LoginRequiredMixin, CreateView):
+#     model = Commodity
+#     form_class = CommodityForm
+#     template_name = 'createcommodity.html'
+#     success_url = reverse_lazy('dashboard')
+
+#     def form_valid(self, form):
+#         slug = slugify(form.cleaned_data['name'])
+#         count = 1
+#         while Commodity.objects.filter(slug=slug).exists():
+#             slug = f"{slug}-{count}"
+#             count += 1
+#         form.instance.slug = slug
+#         return super().form_valid(form)
+    
+# class CommodityUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Commodity
+#     fields = ['name', 'detail', 'image']
+#     success_url = reverse_lazy('dashboard')
+#     template_name = 'commodity_update.html'
+
+#     def test_func(self):
+#         return self.request.user.is_staff or self.request.user.is_superuser
+    
+# @staff_member_required(login_url='/login')
+# def deletecommodity(request, commodity_slug):
+#     commodity = get_object_or_404(Commodity, slug=commodity_slug)
+#     try:
+#         commodity.delete()
+#         messages.success(request, 'Commodity deleted successfully')
+#     except Exception as e:
+#         messages.error(request, f'Error deleting Commodity: {str(e)}')
+#     return redirect('/dashboard')
     
 
 def project(request):
-    projects = Project.objects.all()
-    onprojects = Project.objects.filter(status=Project.ONGOING)
-    finprojects = Project.objects.filter(status=Project.FINISHED)
+    cnx = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='test101')
+
+    # create a cursor to execute SQL queries
+    cursor = cnx.cursor()
+
+    # execute a SELECT query to fetch data from a table
+    query = "SELECT * FROM commodity"
+
+    cursor.execute(query)
+    projects = cursor.fetchall()
+
+    # Filter by ONGOING status
+    query_ongoing = "SELECT * FROM project WHERE status = 'ongoing'"
+    cursor.execute(query_ongoing)
+    onprojects = cursor.fetchall()
+
+    # Filter by FINISHED status
+    query_finished = "SELECT * FROM project WHERE status = 'completed'"
+    cursor.execute(query_finished)
+    finprojects = cursor.fetchall()
+
     context = {
         'projects': projects,
         'onprojects': onprojects,
@@ -311,54 +375,76 @@ def project(request):
     return render(request, 'projects.html', context)
 
 def onproject(request):
-    onprojects = Project.objects.filter(status=Project.ONGOING)
+    cnx = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='test101')
+
+    # create a cursor to execute SQL queries
+    cursor = cnx.cursor()
+
+    # execute a SELECT query to fetch data from a table
+
+    # Filter by ONGOING status
+    query_ongoing = "SELECT * FROM project WHERE status = 'ongoing'"
+    cursor.execute(query_ongoing)
+    onprojects = cursor.fetchall()
     return render(request, 'onproject.html', {'onprojects': onprojects})
 
 def finproject(request):
-    finprojects = Project.objects.filter(status=Project.FINISHED)
+    cnx = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='test101')
+
+    # create a cursor to execute SQL queries
+    cursor = cnx.cursor()
+
+    # execute a SELECT query to fetch data from a table
+
+    # Filter by ONGOING status
+    query_ongoing = "SELECT * FROM project WHERE status = 'completedd'"
+    cursor.execute(query_ongoing)
+    finprojects = cursor.fetchall()
     return render(request, 'finproject.html', {'finprojects': finprojects})
 
-def onprojectdetail(request, project_slug):
-    onprojects = get_object_or_404(Project, slug=project_slug)
-    return render(request, 'ondetail.html', {'onprojects': onprojects})
+# def onprojectdetail(request, project_slug):
+#     onprojects = get_object_or_404(Project, slug=project_slug)
+#     return render(request, 'ondetail.html', {'onprojects': onprojects})
 
-def finprojectdetail(request, project_slug):
-    finprojects = get_object_or_404(Project, slug=project_slug)
-    return render(request, 'findetail.html', {'finprojects': finprojects})
+# def finprojectdetail(request, project_slug):
+#     finprojects = get_object_or_404(Project, slug=project_slug)
+#     return render(request, 'findetail.html', {'finprojects': finprojects})
 
-class ProjectCreateView(LoginRequiredMixin, CreateView):
-    model = Project
-    form_class = ProjectForm
-    template_name = 'createproject.html'
-    success_url = reverse_lazy('dashboard')
+# class ProjectCreateView(LoginRequiredMixin, CreateView):
+#     model = Project
+#     form_class = ProjectForm
+#     template_name = 'createproject.html'
+#     success_url = reverse_lazy('dashboard')
 
-    def form_valid(self, form):
-        slug = slugify(form.cleaned_data['title'])
-        count = 1
-        while Project.objects.filter(slug=slug).exists():
-            slug = f"{slug}-{count}"
-            count += 1
-        form.instance.slug = slug
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         slug = slugify(form.cleaned_data['title'])
+#         count = 1
+#         while Project.objects.filter(slug=slug).exists():
+#             slug = f"{slug}-{count}"
+#             count += 1
+#         form.instance.slug = slug
+#         return super().form_valid(form)
 
-class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Project
-    form_class = ProjectForm
-    success_url = reverse_lazy('dashboard')
-    template_name = 'commodity_update.html'
+# class ProjectUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Project
+#     form_class = ProjectForm
+#     success_url = reverse_lazy('dashboard')
+#     template_name = 'commodity_update.html'
 
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
+#     def test_func(self):
+#         return self.request.user.is_staff or self.request.user.is_superuser
 
-@staff_member_required(login_url='/login')
-def projectdelete(request, project_slug):
-    project = get_object_or_404(Category, slug=project_slug)
-    try:
-        project.delete()
-        messages.success(request, 'project deleted successfully')
-    except Exception as e:
-        messages.error(request, f'Error deleting project: {str(e)}')
-    return redirect('/dashboard')
+# @staff_member_required(login_url='/login')
+# def projectdelete(request, project_slug):
+#     project = get_object_or_404(Category, slug=project_slug)
+#     try:
+#         project.delete()
+#         messages.success(request, 'project deleted successfully')
+#     except Exception as e:
+#         messages.error(request, f'Error deleting project: {str(e)}')
+#     return redirect('/dashboard')
 
 def services(request):
     return render(request, 'services.html')
@@ -422,19 +508,22 @@ def deletecategory(request, slug):
         messages.error(request, f'Error deleting Category: {str(e)}')
     return redirect('/dashboard')
 
+from django.contrib.auth import get_user_model
+
 @staff_member_required(login_url='/login')
 def dashboard(request):
-    commodity = Commodity.objects.all()
+    # commodity = Commodity.objects.all()
     slides = Slide.objects.all()
     posts = Post.objects.all()
     categories = Category.objects.all()
-    projects = Project.objects.all()
+    # projects = Project.objects.all()
     try:
-        consortium = Consortium.objects.get(id=1)
-    except Consortium.DoesNotExist:
+        consortium = About.objects.get(id=1)
+    except About.DoesNotExist:
         consortium = None
     organizations = Organization.objects.all()
 
+    User = get_user_model()
     users = User.objects.all().order_by('-is_staff')
     # Get a QuerySet of all session objects
     sessions = Session.objects.filter(expire_date__gte=timezone.now())  
@@ -472,9 +561,9 @@ def dashboard(request):
                 'user_data_list': user_data_list,
                 'slides': slides,
                 'posts': posts,
-                'commodity': commodity,
+                # 'commodity': commodity,
                 'categories': categories,
-                'projects' : projects,
+                # 'projects' : projects,
                 'consortium' : consortium,
                 'organizations' : organizations,
 
@@ -611,8 +700,8 @@ def map(request):
 
 def dashabout(request):
     try:
-        consortium = Consortium.objects.get(id=1)
-    except Consortium.DoesNotExist:
+        consortium = About.objects.get(id=1)
+    except About.DoesNotExist:
         consortium = None
     if consortium is not None:
         url = reverse('consortium_update', args=[consortium.pk])
@@ -643,7 +732,16 @@ def dashfaq(request):
     return render(request, 'dash-faq.html', context)
 
 def dashcommodity(request):
-    commodity = Commodity.objects.all()
+    cnx = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='test101')
+
+    # create a cursor to execute SQL queries
+    cursor = cnx.cursor()
+
+    # execute a SELECT query to fetch data from a table
+    query = "SELECT * FROM commodity"
+    cursor.execute(query)
+    commodity = cursor.fetchall()
     context = {'commodity': commodity}
     return render(request, 'dash-commodities.html', context)
 
@@ -654,17 +752,35 @@ def dashcommunity(request):
     return render(request, 'dash-community.html', context)
 
 def dashproject(request):
-    projects = Project.objects.all()
+    cnx = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='test101')
+
+    # create a cursor to execute SQL queries
+    cursor = cnx.cursor()
+
+    # execute a SELECT query to fetch data from a table
+    query = "SELECT * FROM project"
+    cursor.execute(query)
+    projects = cursor.fetchall()
     context = {'projects': projects}
     return render(request, 'dash-projects.html', context)
 
 def dashservices(request):
-    services = Commodity.objects.all()
+    cnx = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='test101')
+
+    # create a cursor to execute SQL queries
+    cursor = cnx.cursor()
+
+    # execute a SELECT query to fetch data from a table
+    query = "SELECT * FROM commodity"
+    cursor.execute(query)
+    commodity = cursor.fetchall()
     context = {'services': services}
     return render(request, 'dash-services.html', context)
 
 def dashuser(request):
-
+    User = get_user_model()
     users = User.objects.all().order_by('-is_staff')
     # Get a QuerySet of all session objects
     sessions = Session.objects.filter(expire_date__gte=timezone.now())  

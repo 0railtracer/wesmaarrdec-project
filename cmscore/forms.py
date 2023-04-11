@@ -19,7 +19,7 @@ class PostForm(ModelForm):
     
 class ConsortiumForm(ModelForm):
     class Meta:
-        model = Consortium
+        model = About
         fields = '__all__'
         labels = '__all__'
         
@@ -64,33 +64,33 @@ class OrganizationForm(ModelForm):
             'Management_sup4_img': 'STAFF-SECRETARIAT-4_2X2-IMG',
         }
 
-class CommodityForm(ModelForm):
-    class Meta:
-        model = Commodity
-        fields = ['name', 'detail', 'image']
-        labels = {
-            'name': 'Name',
-            'detail': 'Detail',
-            'image': 'Image',
-        }
+# class CommodityForm(ModelForm):
+#     class Meta:
+#         model = Commodity
+#         fields = ['name', 'detail', 'image']
+#         labels = {
+#             'name': 'Name',
+#             'detail': 'Detail',
+#             'image': 'Image',
+#         }
 
 class SlideForm(ModelForm):
     class Meta:
         model = Slide
         fields = '__all__'
 
-class ProjectForm(ModelForm):
-    class Meta:
-        model = Project
-        fields = ['title', 'description', 'researcher', 'image1', 'image2', 'status']
-        labels = {
-            'title': 'Title',
-            'description': 'Description',
-            'researcher': 'Researcher',
-            'status': 'Status',
-            'image1': 'Image1',
-            'image2': 'Image2',
-        }
+# class ProjectForm(ModelForm):
+#     class Meta:
+#         model = Project
+#         fields = ['title', 'description', 'researcher', 'image1', 'image2', 'status']
+#         labels = {
+#             'title': 'Title',
+#             'description': 'Description',
+#             'researcher': 'Researcher',
+#             'status': 'Status',
+#             'image1': 'Image1',
+#             'image2': 'Image2',
+#         }
 
 class AlbumForm(ModelForm):
     class Meta:
