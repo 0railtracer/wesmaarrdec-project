@@ -96,20 +96,20 @@ DATABASES = {
         # 'PORT': '5433',
 
         # postgreslive
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'nwvlrejo',
-        # 'USER': 'nwvlrejo',
-        # 'PASSWORD': 'pjoptCD8FCS36aCBJe8Wm6UGGnKNT85m',
-        # 'HOST': 'tiny.db.elephantsql.com',
-        # 'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'qvmaadup',
+        'USER': 'qvmaadup',
+        'PASSWORD': '9M0j5yPa9j1Hm4nyzb-vj5slJWVYYO8W',
+        'HOST': 'tiny.db.elephantsql.com',
+        'PORT': '5432',
 
         #mysql localhost
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test101',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'test101',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '3306'
 
         # mysql live
         # 'ENGINE': 'django.db.backends.mysql',
