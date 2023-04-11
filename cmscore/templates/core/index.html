@@ -112,7 +112,7 @@
 
           <div class="col">
             <div class="post-entry-1 lg">
-              {% if news_evetns.category.slug %}
+              {% if news_events.category.slug %}
               <h2><a href="{% url 'category_detail' new_events.category.slug %}">Events this month</a></h2>
               <a href="{  % url 'category_detail' new_events.category.slug %}"><img src="{{new_events.image.url}}" alt="" class="img-fluid"></a>
               <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_events.created_at}}</span></div>
