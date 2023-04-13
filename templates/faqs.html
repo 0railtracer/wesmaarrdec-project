@@ -34,15 +34,17 @@
                 <div class="row">
                     <div class="list-group w-100">
                       {% for faq in faqs %}
-                        <a href="#shortExampleAnswer1collapse" data-mdb-toggle="collapse" aria-expanded="false"
-                          aria-controls="shortExampleAnswer1collapse" class="list-group-item list-group-item-action">
-                          <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{faq.question}}</h5>
+                        <a href="#shortExampleAnswer1collapse" data-bs-toggle="collapse" aria-expanded="false"
+                          aria-controls="shortExampleAnswer1collapse" class="list-group-item list-group-item-action" style="border: none;">
+                          <div class="d-flex w-100 justify-content-between border-bottom">
+                            <h5 class="bi bi-chevron-down mb-1">{{faq.question}}</h5>
                           </div>
                           <img src="{{faq.img.url}}"  style="max-width: 200px;">
-                          <p class="mb-1">
+                          <div id="shortExampleAnswer1collapse" class="collapse border-bottom">
+                            <p class="mb-1">
                             {{faq.answer}}
-                          </p>
+                            </p>
+                          </div>
                         </a>
                         {% endfor %}
                       </div>
