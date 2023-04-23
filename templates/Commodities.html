@@ -21,7 +21,7 @@
                     {% endif %}
                     <div class="card shadow-sm" style="margin: 10px;">
                       {% if commodity.com_id %}
-                          <a href="{% url 'commodetail' com_id=commodity.com_id %}" class="img-bg d-flex align-items-end" style="background-image: url('{{ commodity.img.url }}');">
+                          <a href="{% url 'commodetail' com_id=commodity.com_id %}" class="img-bg d-flex align-items-end" style="background-image: url('{{ commodity.img_url }}');">
                       {% endif %}
                         <div class="img-bg-inner d-flex align-items-start flex-column">
                           <h2>{{ commodity.name }}</h2>

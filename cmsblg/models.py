@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
+from auth_user.models import User
 
 class Category(models.Model):
     # blgcat_id = models.AutoField(primary_key=True)
@@ -32,7 +32,7 @@ class Post(models.Model):
         (DRAFT, 'Draft')
     )
     # blgpost_id = models.AutoField(primary_key=True)
-    # author = models.ForeignKey(User, null=True, blank=True, related_name='posts', on_delete=models.CASCADE )
+    author = models.ForeignKey(User, null=True, blank=True, related_name='posts', on_delete=models.CASCADE )
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     slug = models.SlugField()
@@ -69,7 +69,7 @@ class Post(models.Model):
     
     #upgrade comment model
 class Comment(models.Model):
-    # name = models.ForeignKey(User, related_name='users', on_delete=models.CASCADE)
+    name = models.ForeignKey(User, related_name='users', on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     body = models.TextField()
     # created_date = models.DateTimeField(auto_now_add=True)
@@ -102,9 +102,9 @@ class Fact(models.Model):
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
-    # class Meta:
+    class Meta:
     #     managed = False
-        # db_table = 'cmsblg_faq'
+        db_table = 'cmsblg_faq'
 
     def __str__(self):
         return self.question

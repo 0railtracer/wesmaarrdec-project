@@ -24,6 +24,7 @@ import folium
 from django.contrib.auth import authenticate, login, logout
 from django.db import connection
 from django.core.paginator import Paginator, EmptyPage
+from django.core.files.storage import default_storage
 
 def index(request):
     slides = Slide.objects.all()
@@ -55,56 +56,66 @@ def index(request):
 
             # # connect to database
     # conn = psycopg2.connect(database="databs", user="root", password="", host="localhost", port="3306")
-    conn = mysql.connector.connect(user='root', password='',host='localhost', database='test101')
-    
-    cursor = conn.cursor()
-
-            # query data from database and load into a DataFrame
-    query = "SELECT geolat, geolong, consortium_name FROM consortium"
-    df = pd.read_sql_query(query, conn)
-
-            # create map
-    m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
-    
-            # loop through DataFrame rows and add markers to the map
-    for index, row in df.iterrows():
-        folium.Marker(
-            location=[row['geolat'], row['geolong']],
-            popup=row['consortium_name'],
-            icon=folium.Icon(icon='icon')
-        ).add_to(m)
-    
-    # dynamic icon test
-    # markers = Marker.objects.all()
-    # for marker in markers:
-    #     folium.Marker(
-    #         location=[marker.geolat, marker.geolong],
-    #         popup=marker.name,
-    #         icon=folium.Icon(icon=marker.icon_path)
-    #     ).add_to(m)
-
-    # context = {
-    #     'my_map': m._repr_html_(),
+    cursor = None
+    conn = None 
+    m = None
+    try:
+        conn = mysql.connector.connect(user='root', password='',host='localhost', database='testo')
         
-    # m = folium.Map(location=[7.635,124.854], zoom_start=7)
+        cursor = conn.cursor()
 
-    # folium.Marker(
-    #     location=[7.040, 122.075],
-    #     popup='Zamboanga',
-    #     icon=folium.Icon(icon='icon')
-    # ).add_to(m)
+                # query data from database and load into a DataFrame
+        query = "SELECT geolat, geolong, name FROM cmi"
+        df = pd.read_sql_query(query, conn)
 
-    # folium.Marker(
-    #     location=[7.187, 124.214],
-    #     popup='Cotabato',
-    #     icon=folium.Icon(icon='icon')
-    # ).add_to(m)
+                # create map
+        m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
+        
+                # loop through DataFrame rows and add markers to the map
+        for index, row in df.iterrows():
+            folium.Marker(
+                location=[row['geolat'], row['geolong']],
+                popup=row['name'],
+                icon=folium.Icon(icon='icon')
+            ).add_to(m)
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+        # dynamic icon test
+        # markers = Marker.objects.all()
+        # for marker in markers:
+        #     folium.Marker(
+        #         location=[marker.geolat, marker.geolong],
+        #         popup=marker.name,
+        #         icon=folium.Icon(icon=marker.icon_path)
+        #     ).add_to(m)
 
-    # folium.Marker(
-    #     location=[8.172, 124.216],
-    #     popup='Cagayan de Oro',
-    #     icon=folium.Icon(icon='icon')
-    # ).add_to(m)
+        # context = {
+        #     'my_map': m._repr_html_(),
+            
+        # m = folium.Map(location=[7.635,124.854], zoom_start=7)
+
+        # folium.Marker(
+        #     location=[7.040, 122.075],
+        #     popup='Zamboanga',
+        #     icon=folium.Icon(icon='icon')
+        # ).add_to(m)
+
+        # folium.Marker(
+        #     location=[7.187, 124.214],
+        #     popup='Cotabato',
+        #     icon=folium.Icon(icon='icon')
+        # ).add_to(m)
+
+        # folium.Marker(
+        #     location=[8.172, 124.216],
+        #     popup='Cagayan de Oro',
+        #     icon=folium.Icon(icon='icon')
+        # ).add_to(m)
 
     context = {
         'post': post,
@@ -114,8 +125,11 @@ def index(request):
         'random_post' : random_post, 
         'random_slides' : random_slides, 
         'random_slide_mini' : random_slide_mini, 
-        'map': m._repr_html_(),
+        # 'map': m._repr_html_(),
     }
+    if m is not None:
+        context['map'] = m._repr_html_()
+    
     return render(request, 'core/index.html', context)
 
 
@@ -242,50 +256,144 @@ def deleteorganization(request, pk):
         messages.error(request, f'Error deleting Organization: {str(e)}')
     return redirect('/dashboard')
 
+class CMI:
+    def __init__(self, cmi_id, name, detail, logo):
+        self.cmi_id = cmi_id
+        self.name = name
+        self.detail = detail
+        self.logo_url = default_storage.url(logo)
 
 def cmi(request):
-    return render(request, 'CMI.html')
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connector.connect(user='root', password='', host='localhost', database='testo')
+        cursor = conn.cursor()
+
+        query = "SELECT * FROM cmi"
+        cursor.execute(query)
+
+        cmi_list = []
+        for row in cursor.fetchall():
+            cmi = CMI(row[0], row[2], row[8], row[7])
+            cmi_list.append(cmi)
+            # print(row[3])
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
+        cmi_list = None
+        # commodity_list = None
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+    if cmi_list is not None:
+        context = {
+            'cmi_list': cmi_list,
+        
+        }
+    else:
+        context = {}
+        
+    return render(request, 'CMI.html', context)
 
 
-def cmidetail(request):
-    return render(request, 'CMI-detail.html')
+def cmidetail(request, cmi_id):
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='testo')
+        cursor = conn.cursor()
+
+        query = "SELECT * FROM cmi WHERE agency_id = %s"
+        cursor.execute(query, (cmi_id,))
+        row = cursor.fetchone()
+        cmi = CMI(row[0], row[2], row[8], row[7])
+
+        # Make sure cursor is fully read before executing second query
+        cursor.fetchall()
+
+        query_all = "SELECT * FROM cmi"
+        cursor.execute(query_all)
+
+        cmis = []
+        for rows in cursor.fetchall():
+            cmidetail = CMI(rows[17], rows[2], rows[8], rows[7])
+            cmis.append(cmidetail)
+
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+    context = {
+        'cmi':cmi,
+        # 'cmis':cmis
+    }
+    return render(request, 'CMI-detail.html', context)
+
 
 # def category(request):
 #     return render(request, 'category.html')
 
 class Commodity:
-    def __init__(self, com_id, name, detail, img):
+    def __init__(self, com_id, name, detail, img_path):
         self.com_id = com_id
         self.name = name
         self.detail = detail
-        self.img = img
+        self.img_url = default_storage.url(img_path)
 
 def commodities(request):
-    conn = mysql.connector.connect(user='root', password='', host='localhost', database='test101')
-    cursor = conn.cursor()
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connector.connect(user='root', password='', host='localhost', database='test101')
+        cursor = conn.cursor()
 
-    query = "SELECT * FROM commodity"
-    cursor.execute(query)
+        query = "SELECT * FROM commodity"
+        cursor.execute(query)
 
-    commodity_list = []
-    for row in cursor.fetchall():
-        commodity = Commodity(row[0], row[1], row[2], row[3])
-        commodity_list.append(commodity)
+        commodity_list = []
+        for row in cursor.fetchall():
+            commodity = Commodity(row[0], row[1], row[2], row[3])
+            commodity_list.append(commodity)
+            print(row[3])
+        paginator = Paginator(commodity_list, 4)
+        page = request.GET.get('page')
+        commodities = paginator.get_page(page)
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
+        commodities = None
+        commodity_list = None
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
-    paginator = Paginator(commodity_list, 4)
-    page = request.GET.get('page')
-    commodities = paginator.get_page(page)
-
-    return render(request, 'Commodities.html', {'commodities': commodities, 'commodity_list': commodity_list})
+    if commodities is not None and commodity_list is not None:
+        context = {'commodities': commodities,
+                   'commodity_list': commodity_list,
+        }
+    else:
+        context = {}
+        
+    return render(request, 'Commodities.html', context)
 
 
 
 def commodetail(request, com_id):
-    cnx = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='test101')
+    conn = None
+    cursor = None
     try:
+        conn = mysql.connector.connect(user='root', password='',
+                              host='localhost', database='test101')
         # create a cursor to execute SQL queries
-        cursor = cnx.cursor()
+        cursor = conn.cursor()
 
         # execute a SELECT query to fetch data for the specified commodity
         query = "SELECT * FROM commodity WHERE com_id = %s"
@@ -299,14 +407,15 @@ def commodetail(request, com_id):
         query_all = "SELECT * FROM commodity"
         cursor.execute(query_all)
         commodity = cursor.fetchall()
-
-        # render the template with the fetched data
-        return render(request, 'commodetail.html', {'commodite': commodite, 'commodity': commodity})
-
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
     finally:
-        # close the cursor and database connection
-        cursor.close()
-        cnx.close()
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+        # render the template with the fetched data
+    return render(request, 'commodetail.html', {'commodite': commodite, 'commodity': commodity})
 
 # class CommodityCreateView(LoginRequiredMixin, CreateView):
 #     model = Commodity
@@ -342,67 +451,231 @@ def commodetail(request, com_id):
 #         messages.error(request, f'Error deleting Commodity: {str(e)}')
 #     return redirect('/dashboard')
     
+class Project:
+    def __init__(self, title, proj_description, status, proj_team, start_date, end_date, Researcher):
+        self.title = title
+        self.proj_description = proj_description
+        self.status = status
+        self.proj_team = proj_team
+        self.start_date = start_date
+        self.end_date = end_date
+
+class Researcher:
+    def __init__(self, researcher_id, fname, lname):
+        self.researcher_id = researcher_id
+        self.fname = fname
+        self.lname = lname
 
 def project(request):
-    cnx = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='test101')
+    cnx = None
+    cursor = None
+    try:
+        cnx = mysql.connector.connect(user='root', password='',
+                                host='localhost', database='testo')
 
-    # create a cursor to execute SQL queries
-    cursor = cnx.cursor()
+        # create a cursor to execute SQL queries
+        cursor = cnx.cursor()
 
-    # execute a SELECT query to fetch data from a table
-    query = "SELECT * FROM commodity"
+        # execute a SELECT query to fetch data from a table
+        query = "SELECT p.proj_id, p.title, p.proj_description, p.status, r.researcher_id, r.fname, r.lname, p.start_date, p.end_date FROM project p \
+                LEFT JOIN project_proj_team ppt ON p.proj_id = ppt.project_id \
+                LEFT JOIN researcher r ON ppt.researcher_id = r.researcher_id \
+                ORDER BY p.proj_id ASC"
 
-    cursor.execute(query)
-    projects = cursor.fetchall()
+        cursor.execute(query)
 
-    # Filter by ONGOING status
-    query_ongoing = "SELECT * FROM project WHERE status = 'ongoing'"
-    cursor.execute(query_ongoing)
-    onprojects = cursor.fetchall()
+        current_project_id = None
+        current_project = None
+        projects = []
+        for row in cursor.fetchall():
+            project_id = row[0]
+            if project_id != current_project_id:
+                current_project = Project(row[1], row[2], row[3], [], row[7], row[8], None)
+                projects.append(current_project)
+                current_project_id = project_id
+            researcher_id = row[4]
+            if researcher_id is not None:   
+                researcher = Researcher(row[4], row[5], row[6])
+                current_project.proj_team.append(researcher)
 
-    # Filter by FINISHED status
-    query_finished = "SELECT * FROM project WHERE status = 'completed'"
-    cursor.execute(query_finished)
-    finprojects = cursor.fetchall()
+        # Filter by ONGOING status
+        query_ongoing = "SELECT p.proj_id, p.title, p.proj_description, p.status, r.researcher_id, r.fname, r.lname, p.start_date, p.end_date \
+                                FROM project p \
+                                LEFT JOIN project_proj_team ppt ON p.proj_id = ppt.project_id \
+                                LEFT JOIN researcher r ON ppt.researcher_id = r.researcher_id \
+                                WHERE p.status = 'ongoing'\
+                                ORDER BY p.proj_id ASC"
+        cursor.execute(query_ongoing)
+        onprojects = []
+        current_proj_id = None
+        for row in cursor.fetchall():
+            proj_id = row[0]
+            if proj_id != current_proj_id:
+                # Add a new project to the list
+                projecton = Project(row[1], row[2], row[3], [], row[7], row[8], row[0])
+                onprojects.append(projecton)
+                current_proj_id = proj_id
 
-    context = {
-        'projects': projects,
-        'onprojects': onprojects,
-        'finprojects': finprojects,
+            researcher_id = row[4]
+            if researcher_id is not None:
+                researcher = Researcher(row[4], row[5], row[6])
+                projecton.proj_team.append(researcher)
+            # onprojects.append(projecton)
+        # for project in onprojects:
+        #     print(project.title)
 
-    }
+        # Filter by FINISHED status
+        query_completed = "SELECT p.proj_id, p.title, p.proj_description, p.status, r.researcher_id, r.fname, r.lname, p.start_date, p.end_date \
+                                FROM project p \
+                                LEFT JOIN project_proj_team ppt ON p.proj_id = ppt.project_id \
+                                LEFT JOIN researcher r ON ppt.researcher_id = r.researcher_id \
+                                WHERE p.status = 'completed'\
+                                ORDER BY p.proj_id ASC"
+        cursor.execute(query_completed)
+        finprojects = []
+        current_proj_id = None
+        for row in cursor.fetchall():
+            proj_id = row[0]
+            if proj_id != current_proj_id:
+                # Add a new project to the list
+                projecton = Project(row[1], row[2], row[3], [], row[7], row[8], row[0])
+                finprojects.append(projecton)
+                current_proj_id = proj_id
+
+            researcher_id = row[4]
+            if researcher_id is not None:
+                researcher = Researcher(row[4], row[5], row[6])
+                projecton.proj_team.append(researcher)
+
+            # finprojects.append(projecton)
+        # for project in finprojects:
+        #     print(project.title)
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
+        projects = None
+        onprojects = None
+        finprojects = None
+    finally:
+        if cursor:
+            cursor.close()
+        if cnx:
+            cnx.close()
+
+    if projects is not None and onprojects is not None and finprojects is not None:
+        context = {
+            'projects': projects,
+            'onprojects': onprojects,
+            'finprojects': finprojects,
+
+        }
+    else:
+        context = {}
     return render(request, 'projects.html', context)
 
 def onproject(request):
-    cnx = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='test101')
+    cnx = None
+    cursor = None
+    try:
+        cnx = mysql.connector.connect(user='root', password='',
+                                host='localhost', database='testo')
 
-    # create a cursor to execute SQL queries
-    cursor = cnx.cursor()
+        # create a cursor to execute SQL queries
+        cursor = cnx.cursor()
 
-    # execute a SELECT query to fetch data from a table
+        # execute a SELECT query to fetch data from a table
 
-    # Filter by ONGOING status
-    query_ongoing = "SELECT * FROM project WHERE status = 'ongoing'"
-    cursor.execute(query_ongoing)
-    onprojects = cursor.fetchall()
-    return render(request, 'onproject.html', {'onprojects': onprojects})
+        # Filter by ONGOING status
+        # Filter by ONGOING status
+        query_ongoing = "SELECT p.proj_id, p.title, p.proj_description, p.status, r.researcher_id, r.fname, r.lname, p.start_date, p.end_date \
+                                FROM project p \
+                                LEFT JOIN project_proj_team ppt ON p.proj_id = ppt.project_id \
+                                LEFT JOIN researcher r ON ppt.researcher_id = r.researcher_id \
+                                WHERE p.status = 'ongoing'\
+                                ORDER BY p.proj_id ASC"
+        cursor.execute(query_ongoing)
+        onprojects = []
+        current_proj_id = None
+        for row in cursor.fetchall():
+            proj_id = row[0]
+            if proj_id != current_proj_id:
+                # Add a new project to the list
+                projecton = Project(row[1], row[2], row[3], [], row[7], row[8], row[0])
+                onprojects.append(projecton)
+                current_proj_id = proj_id
+
+            researcher_id = row[4]
+            if researcher_id is not None:
+                researcher = Researcher(row[4], row[5], row[6])
+                projecton.proj_team.append(researcher)
+            # onprojects.append(projecton)
+        # for project in onprojects:
+        #     print(project.title)
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
+        onprojects = None
+    finally:
+        if cursor:
+            cursor.close()
+        if cnx:
+            cnx.close()
+    if onprojects is not None:
+        context = {'onprojects': onprojects}
+    else:
+        context = {}
+    return render(request, 'onproject.html', context)
 
 def finproject(request):
-    cnx = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='test101')
+    cnx = None
+    cursor = None
+    try:
+        cnx = mysql.connector.connect(user='root', password='',
+                                host='localhost', database='testo')
 
-    # create a cursor to execute SQL queries
-    cursor = cnx.cursor()
+        # create a cursor to execute SQL queries
+        cursor = cnx.cursor()
 
-    # execute a SELECT query to fetch data from a table
+        # execute a SELECT query to fetch data from a table
 
-    # Filter by ONGOING status
-    query_ongoing = "SELECT * FROM project WHERE status = 'completedd'"
-    cursor.execute(query_ongoing)
-    finprojects = cursor.fetchall()
-    return render(request, 'finproject.html', {'finprojects': finprojects})
+        # Filter by ONGOING status
+        # Filter by ONGOING status
+        query_completed = "SELECT p.proj_id, p.title, p.proj_description, p.status, r.researcher_id, r.fname, r.lname, p.start_date, p.end_date \
+                                FROM project p \
+                                LEFT JOIN project_proj_team ppt ON p.proj_id = ppt.project_id \
+                                LEFT JOIN researcher r ON ppt.researcher_id = r.researcher_id \
+                                WHERE p.status = 'completed'\
+                                ORDER BY p.proj_id ASC"
+        cursor.execute(query_completed)
+        finprojects = []
+        current_proj_id = None
+        for row in cursor.fetchall():
+            proj_id = row[0]
+            if proj_id != current_proj_id:
+                # Add a new project to the list
+                projecton = Project(row[1], row[2], row[3], [], row[7], row[8], row[0])
+                finprojects.append(projecton)
+                current_proj_id = proj_id
+
+            researcher_id = row[4]
+            if researcher_id is not None:
+                researcher = Researcher(row[4], row[5], row[6])
+                projecton.proj_team.append(researcher)
+            # onprojects.append(projecton)
+        # for project in onprojects:
+        #     print(project.title)
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
+        finprojects = None
+    finally:
+        if cursor:
+            cursor.close()
+        if cnx:
+            cnx.close()
+    
+    if finprojects is not None:
+        context = {'finprojects': finprojects}
+    else:
+        context = {}
+    return render(request, 'finproject.html', context)
 
 # def onprojectdetail(request, project_slug):
 #     onprojects = get_object_or_404(Project, slug=project_slug)

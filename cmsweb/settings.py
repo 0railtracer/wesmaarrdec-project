@@ -84,9 +84,9 @@ WSGI_APPLICATION = 'cmsweb.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+
         # postgres
         # 'ENGINE': 'django.db.backends.postgresql',
         # 'NAME': 'testtetete',
@@ -96,16 +96,16 @@ DATABASES = {
         # 'PORT': '5433',
 
         # postgreslive
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'qvmaadup',
-        'USER': 'qvmaadup',
-        'PASSWORD': '9M0j5yPa9j1Hm4nyzb-vj5slJWVYYO8W',
-        'HOST': 'tiny.db.elephantsql.com',
-        'PORT': '5432',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'qvmaadup',
+        # 'USER': 'qvmaadup',
+        # 'PASSWORD': '9M0j5yPa9j1Hm4nyzb-vj5slJWVYYO8W',
+        # 'HOST': 'tiny.db.elephantsql.com',
+        # 'PORT': '5432',
 
         #mysql localhost
         # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'test101',
+        # 'NAME': 'testo',
         # 'USER': 'root',
         # 'PASSWORD': '',
         # 'HOST': 'localhost',

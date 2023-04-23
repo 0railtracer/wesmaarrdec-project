@@ -49,12 +49,8 @@ class Slide(models.Model):
     
 class About(models.Model):
     # consortium_id = models.AutoField(primary_key=True)
-    consortium_code = models.CharField(max_length=50)
-    consortium_name = models.CharField(max_length=255)
-    consortium_address = models.CharField(max_length=255)
-    geolat = models.FloatField(blank=True, null=True)
-    geolong = models.FloatField(blank=True, null=True)
-    consortium_logo = models.ImageField(upload_to='Consortium', blank=False, null=True)
+    About_name = models.CharField(max_length=255)
+    About_image = models.ImageField(upload_to='Consortium', blank=False, null=True)
     mission = models.TextField(blank=True, null=True)
     vision = models.TextField(blank=True, null=True)
     consortium_desc = models.TextField(blank=True, null=True)
