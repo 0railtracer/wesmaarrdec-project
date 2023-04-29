@@ -1323,3 +1323,10 @@ section {
 .footer .credits a {
   color: var(--color-white);
 }
+
+/* breadcrumb */
+.about-breadcrumb{
+  display: flex;
+  background-color: #43b14a2d;
+  padding: 10px;
+}
