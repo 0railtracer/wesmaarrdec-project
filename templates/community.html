@@ -3,10 +3,25 @@
 
 {% block content %}
 
+    <section class="about-breadcrumb">
+      <div class="container d-flex flex-column">
+          <nav class="justify-content-start">
+              <ol class="breadcrumb">
+                  <li class="breadcrumb-item fs-5"><a active href="{% url 'community' %}">Categories</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'allpost' %}">All Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'mypost' %}">My Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'facts' %}">FAQs</a></li>
+              </ol>
+          </nav>
+      </div>
+    </section>
+
     <div class="col d-flex justify-content-center" data-aos="fade-in">
-        <div class="container my-5" style="max-width: 1305px;">
-    <div class="i-am-centered">
-        <div class="card text-center">
+      <div class="container my-5" style="max-width: 1305px;">
+        
+            <!-- old breadcrumb -------------------------------------------------
+        <div class="i-am-centered">
+            <div class="card text-center">
           <div class="card-header" style="width: 80rem;">
             <ul class="nav nav-tabs card-header-tabs">
               <li class="nav-item">
@@ -22,39 +37,39 @@
                 <a class="nav-link" href="{% url 'facts' %}">FAQs</a>
               </li>
             </ul>
-          </div>
+          </div> -------------------------------------------- old breadcrumb -->
 
-          <div class="col d-flex justify-content-center">
-            <div class="card text-center" style="border: none;">
-                <h1>Community Forum</h1>
-            </div>
-          </div>
-
-          <div class="col d-flex justify-content-center">
-            <div class="row">
-              {% for category in categories %}
-              
-              <div class="card row-hover pos-relative py-3 px-3 mb-3">
-                <div class="row align-items-center">
-                  <div class="col-md-8 mb-3 mb-sm-0">
-                    <h5>
-                      <a href="{% url 'category_detail' category.slug %}" class="text-primary">{{ category.title }}</a>
-                    </h5>
-                    <p class="text-sm">Share ideas, insights, and more!</p>
-                  </div>
-                  <div class="col-md-4 op-7">
-                    <div class="row text-center op-7">
-                      <div class="col px-1"> <i class="ion-ios-chatboxes-outline icon-1x"></i> 
-                        <span class="d-block text-sm">Posts: {{ category.posts.count }}</span> 
-                      </div>
+                <div class="col d-flex justify-content-center">
+                    <div class="card text-center" style="border: none;">
+                        <h1>Community Forum</h1>
                     </div>
-                  </div>
                 </div>
-              </div>
-              {% endfor %}
 
-            </div>
-          </div>
+                <div class="col d-flex justify-content-center">
+                    <div class="row">
+                    {% for category in categories %}
+              
+                        <div class="card row-hover pos-relative py-3 px-3 mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-8 mb-3 mb-sm-0">
+                                    <h5>
+                                    <a href="{% url 'category_detail' category.slug %}" class="text-primary">{{ category.title }}</a>
+                                    </h5>
+                                    <p class="text-sm">Share ideas, insights, and more!</p>
+                                </div>
+                                <div class="col-md-4 op-7">
+                                    <div class="row text-center op-7">
+                                        <div class="col px-1"> <i class="ion-ios-chatboxes-outline icon-1x"></i> 
+                                            <span class="d-block text-sm">Posts: {{ category.posts.count }}</span> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
           
           <!-- <div class="new">
             <div class="row">
