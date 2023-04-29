@@ -2,8 +2,22 @@
 {% load static %}
 
 {% block content %}
+    <section class="about-breadcrumb">
+      <div class="container d-flex flex-column">
+          <nav class="justify-content-start">
+              <ol class="breadcrumb">
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'community' %}">Categories</a></li>
+                  <li class="breadcrumb-item fs-5"><a active href="{% url 'allpost' %}">All Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'mypost' %}">My Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'facts' %}">FAQs</a></li>
+              </ol>
+          </nav>
+      </div>
+    </section>
+
     <div class="col d-flex justify-content-center" data-aos="fade-in">
         <div class="container my-5" style="max-width: 1305px;">
+            <!-- old breadcrumb----------------------------------------------------------------
     <div class="i-am-centered">
         <div class="card text-center">
           <div class="card-header" style="width: 80rem;">
@@ -21,7 +35,7 @@
                 <a class="nav-link" href="{% url 'facts' %}">FAQs</a>
               </li>
             </ul>
-          </div>
+          </div> ----------------------------------------------------------- old breadcrumb -->
           {% if user.is_authenticated%}
           <div class="col d-flex justify-content-center">
             <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-success btn-lg">Add new post</button></a>
