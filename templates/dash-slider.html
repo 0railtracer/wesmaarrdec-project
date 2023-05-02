@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% load static %}
 {% block content%}
-  <div class="album py-5 bg-light">
+  <div class="album py-5">
   <div class="d-flex align-items-center justify-content-center">
     <a href="{% url 'createslide' %}">
       <button type="button" class="btn btn-primary btn-lg mb-5"> Add Custom Slider </button>
@@ -25,8 +25,8 @@
                 <a href="{% url 'deleteslide' slide.id %}" style="color: brown;"><button type="button" class="btn btn-danger">Delete Slide </button>  </a>
 
                 <a href="{% url 'sliderupdate' slide.id %}" style="color: rgb(106, 202, 85);"><button type="button" class="btn btn-info"> Update Slide </button></a>
+                
                 </div>
-                <small class="text-muted">{{ slide.created_at}}</small>
               </div>
             </div>
           </div>

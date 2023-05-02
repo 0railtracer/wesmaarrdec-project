@@ -2,38 +2,41 @@
 {% load static %}
 
 {% block content %}
+  <section class="about-breadcrumb">
+      <div class="container d-flex flex-column">
+          <nav class="justify-content-start">
+              <ol class="breadcrumb">
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'community' %}">Categories</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'allpost' %}">All Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'mypost' %}">My Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a active href="{% url 'facts' %}">FAQs</a></li>
+              </ol>
+          </nav>
+      </div>
+    </section>
     <section class="single-post-content">
       <div class="container">
           <div class="section-header d-flex justify-content-between align-items-center mb-5">
-          <h2>My Post</h2>
-          <div><a href="{% url 'allpost' %}" class="more">See All Post</a></div>
+          <h2 style="margin: auto;">My Post</h2>
         </div>
         <div class="row">
           <div class=" post-content" data-aos="fade-up">
             <!-- ======= Single Post Content ======= -->
-            <div class="col-lg-4">
-              <div class="post-entry-1 lg">
-                <div class="d-flex align-items-center author">
-                  <div class="photo"><img src="assets/img/person-1.jpg" alt="" class="img-fluid"></div>
-                  <div class="name">
-                    <h3 class="m-0 p-0">{{user}}</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
             {% for post in posts %}
-            <div class="single-post">
-              <div class="post-meta"><span class="date">Posted</span> <span class="mx-1">&bullet;</span> <span>{{post.created_at}}</span></div>
+            <div class="card text-center">
+            <div class="card-header">
+              {{post.title}}
+            </div>
+            <div class="card-body">
               <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" style="max-width: 400px;"></a>
-              <h1>{{post.title}}</h1>
-              <hr>
-              <h5>intro: {{ post.intro }}</h5>
-              <hr>
-              <p>body: {{ post.body }}</p>
-              <p>Comments: {{post.comments.count}} </p>
-              </div><!-- End Single Post Content -->
+              <h5 class="card-title">{{ post.body }}</h5>
+              <p class="card-text">Comments: {{post.comments.count}}</p>
               <a href="{% url 'post_update' post.slug %}" style="color: green ;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT POST</button> </a>
-              <hr class="hr" />
+            </div>
+            <div class="card-footer text-body-secondary">
+              {{post.created_at}}
+            </div>
+          </div>
             {% endfor %}
             <hr class="hr" />
           </div>

@@ -10,29 +10,39 @@
                 <h2>{{albums.name}}</h2>
                 <div><a href="{% url 'gallery' %}" class="more">Back to Gallery</a></div>
                 </div>
-                <section class="section">
-                    <div class="columns">
-                        <div class="column is-8 is-offset-2">
-                            <h1>{{category.title}}</h1>
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="card-container">
                             {% for photo in albumphotos %}
-                                <div class="content is-medium">
-                                    <a href="{{ photo.image.url }}">
-                                        <img src="{{ photo.image.url }}" style=" width: 500px;">
-                                        <h1 class="title">Title: {{ photo.name }}</h1>
-                                        <h2>Introduction: {{ photo.caption }}</h2>
-                                        <p class="subtitle is-4">#</p>
-                                    </a>
-                                    <hr>
+                                <div class="card" style="width: 25rem;">
+                                    <img src="{{ photo.image.url }}" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ photo.name }}</h5>
+                                        <p class="card-text">{{ photo.caption }}</p>
+                                    </div>
                                 </div>
                             {% empty %}
                                 <div class="content">
-                                    <p>There is no posts in this category...</p>
+                                    <p>There are no photos in this album...</p>
                                 </div>
                             {% endfor %}
                         </div>
                     </div>
-                </section>
+                </div>
             </div>
         </div>
     </section>
+    <style>
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .card {
+        width: calc(33.33% - 20px);
+        margin-bottom: 20px;
+    }
+</style>
 {% endblock %}

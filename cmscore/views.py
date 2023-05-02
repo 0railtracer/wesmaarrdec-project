@@ -18,13 +18,20 @@ from cmsblg.models import *
 from datetime import datetime
 from django.urls import reverse_lazy, reverse
 import pandas as pd
-import psycopg2
 import mysql.connector
 import folium
 from django.contrib.auth import authenticate, login, logout
 from django.db import connection
 from django.core.paginator import Paginator, EmptyPage
 from django.core.files.storage import default_storage
+
+class CMI:
+    def __init__(self, cmi_id, name, detail, logo):
+        self.cmi_id = cmi_id
+        self.name = name
+        self.detail = detail
+        self.logo_url = default_storage.url(logo)
+
 
 def index(request):
     slides = Slide.objects.all()
@@ -255,13 +262,6 @@ def deleteorganization(request, pk):
     except Exception as e:
         messages.error(request, f'Error deleting Organization: {str(e)}')
     return redirect('/dashboard')
-
-class CMI:
-    def __init__(self, cmi_id, name, detail, logo):
-        self.cmi_id = cmi_id
-        self.name = name
-        self.detail = detail
-        self.logo_url = default_storage.url(logo)
 
 def cmi(request):
     conn = None
@@ -801,6 +801,16 @@ def dashboard(request):
     # Get a QuerySet of all session objects
     sessions = Session.objects.filter(expire_date__gte=timezone.now())  
     # Create a dictionary to hold the last activity time for each user
+    logged_in_user_ids = set()
+        # Loop over the sessions and add the user ID to the set
+    for session in sessions:
+        data = session.get_decoded()
+        user_id = data.get('_auth_user_id')
+        if user_id:
+            logged_in_user_ids.add(user_id)
+    # Count the number of unique user IDs in the set
+    num_logged_in_users = len(logged_in_user_ids)
+    inactive_users_count = len(users) - num_logged_in_users
     user_activity = {}  
     # Loop over the sessions and update the last activity time for each user
     for session in sessions:
@@ -839,6 +849,8 @@ def dashboard(request):
                 # 'projects' : projects,
                 'consortium' : consortium,
                 'organizations' : organizations,
+                'num_logged_in_users': num_logged_in_users,
+                'inactive_users_count': inactive_users_count,
 
 }     
     return render(request, 'dashboard.html', context)

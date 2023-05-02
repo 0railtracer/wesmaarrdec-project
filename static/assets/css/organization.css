@@ -6,23 +6,37 @@
   --black: rgb(0, 79, 34);
 }
 
+.my-div:hover {
+  background-color: black;
+}
+
+
 #resize{
   width: 100px;
   height: 100px;
 }
 
 #green{
-  background: #43B14B;
+  background: #66b366;
   border-radius: 5%;
 }
 
 img {
-  transition: transform 0.5s ease;
+  transition: transform 0.7s ease-in-out;
 }
 
 img:hover {
-  transform: scale(1.5);
+  transform: scale(2);
 }
+
+.enlarge-on-click {
+  transition: transform 0.7s ease-in-out;
+}
+
+.enlarge-on-click.enlarged {
+  transform: scale(1.2);
+}
+
 
 * {
   padding: 0;

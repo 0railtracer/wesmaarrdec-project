@@ -60,7 +60,7 @@
             </ul>
           </li>
           
-          <li class="dropdown"><a href="{% url 'cmi' %}"><span>CMI</span></a>
+          <li><a href="{% url 'cmi' %}"><span>CMI</span></a>
           </li>
           <li class="dropdown"><a href="{% url 'community' %}"><span>COMMUNITY</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul>
@@ -79,7 +79,7 @@
           </li>
           <li class="dropdown"><a href="{% url 'services' %}"><span>SERVICES</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul>
-              <li><a href="#">E-Library</a></li>
+              <li><a href="#">Comming Soon</a></li>
             </ul>
           </li>
           {% if user.is_superuser %}
@@ -155,35 +155,23 @@
             <div class="col-9"><h3 class="footer-heading" style="color: #43B14B;">CONSORTIUM MEMBER INSTITUTION</h3></div>
             <div class="col-4">
                     <ul class="footer-links list-unstyled">
-                      <li><a href="#"> DOST - PCAARRD</a></li>
-                      <li><a href="#"> DOST IX</a></li>
-                      <li><a href="#"> WMSU</a></li>
-                      <li><a href="#"> DA - RFO IX</a></li>
-                      <li><a href="#"> JHCSC</a></li>
-                      <li><a href="#"> DTI IX</a></li>
-                      <li><a href="#"> BFAR IX</a></li>
+                       {% for cmi in cmi_list|slice:":5" %}
+                      <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.name }}</a></li>
+                      {% endfor %}
                     </ul> 
             </div>
             <div class="col-3">
               <ul class="footer-links list-unstyled">
-                      <li><a href="#"> NEDA IX</a></li>
-                      <li><a href="#"> PRRI IX</a></li>
-                      <li><a href="#"> PHILFIDA IX</a></li>
-                      <li><a href="#"> DA - BAR</a></li>
-                      <li><a href="#"> PCA - ZRC</a></li>
-                      <li><a href="#"> JRMSU</a></li>
-                      <li><a href="#"> ATI - ZRC</a></li>
+                    {% for cmi in cmi_list|slice:"5:"|slice:":5" %}
+                    <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.name }}</a></li>
+                    {% endfor %}
               </ul>
             </div>
             <div class="col-3">
                     <ul class="footer-links list-unstyled">
-                      <li><a href="#"> DENR-FWRDEC-ERDB</a></li>
-                      <li><a href="#"> OCA - ZC</a></li>
-                      <li><a href="#"> MSU - TCTO</a></li>
-                      <li><a href="#"> BaSC</a></li>
-                      <li><a href="#"> MSU - Buug</a></li>
-                      <li><a href="#"> ZSCMST</a></li>
-                      <li><a href="#"> KRDFI</a></li>
+                      {% for cmi in cmi_list|slice:"10:"|slice:":5" %}
+                      <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.name }}</a></li>
+                      {% endfor %}
                     </ul>         
             </div>
           </div>

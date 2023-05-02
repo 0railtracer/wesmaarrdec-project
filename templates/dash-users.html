@@ -15,7 +15,7 @@
         <th scope="col">Active Status</th>
         <th scope="col">Date Joined</th>
         <th scope="col">Authorization</th>
-        <th scope="col">Delete Users </th>
+        <th scope="col">Delete User </th>
       </tr>
     </thead>
     <tbody>
@@ -24,9 +24,9 @@
     <td>{{ user_data.user.username|title }}</td>
     <td>{{ user_data.user.email }}</td>
     <td>{{ user_data.active_status }}</td>
-    <td>{{ user_data.user.date_joined}}</td>
+    <td>{{ user_data.user.date_joined|date:"Y-m-d"}}</td>
     <td>{{ user_data.user.is_superuser|yesno:"Admin, Regular"}}</td>
-    <td>{% if user_data.user.is_superuser%} NO {% else%} <a href="{% url 'deleteuser' user_data.user.id %}" style="color: brown;"> Delete User</a> {% endif%}</td>
+    <td>{% if user_data.user.is_superuser%} Unavailable {% else%} <a href="{% url 'deleteuser' user_data.user.id %}" style="color: brown;"> Delete User</a> {% endif%}</td>
     </tr>
     {% endfor %}
     </tbody>

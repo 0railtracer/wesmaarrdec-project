@@ -11,18 +11,21 @@
                             <div><a href="{% url 'community' %}" class="more">Back To Forum</a></div>
                             </div>
                     <div class="columns">
-                        <div class="column is-8 is-offset-2">
+                        <div class="column is-8 is-offset-2 align-items-center">
                             <h1>{{category.title}}</h1>
+                            <hr>
                             {% for post in posts %}
-                                <div class="content is-medium">
-                                    <hr>
-                                    <a href="{% url 'post_detail' post.category.slug post.slug %}">
-                                        <img src="{{ post.image.url }}" style="max-width: 200px;">
-                                        <h1 class="title">Title: {{ post.title }}</h1>
-                                        <h2>Intro:<br> {{ post.intro }}</h2>
-                                        <p class="subtitle is-4">{{ post.created_at|timesince }} ago</p>
-                                    </a>
+                            <div class="card" style="width:35rem; margin: auto;">
+                                <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top" alt="..."></a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ post.title }}</h5>
+                                    <p class="card-text">{{ post.intro }}</p>
                                 </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">{{ post.created_at|timesince }} ago</li>
+                                    <li class="list-group-item">Comments: {{post.comments.count}}</li>
+                                </ul>
+                            </div>
                             {% empty %}
                                 <div class="content">
                                     <p>There is no posts in this category...</p>

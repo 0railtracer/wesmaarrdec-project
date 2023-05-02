@@ -5,11 +5,12 @@
     <div class="col d-flex justify-content-center">
       <div class="container my-5" data-aos="fade-up" style="text-align: center;" >
           <div class="card-body">
-            <h2 class="card-title">{{consortium.consortium_name}}</h2>
+            <h2 class="card-title">{{consortium.About_name}}</h2>
             <hr>
             <h5 class="card-text" style="line-height: 30px;">{{consortium.consortium_desc}}</h5>
-            <a href="{{ consortium.consortium_logo.url }}" class="me-4 thumbnail">
-              <img src="{{ consortium.consortium_logo.url }}" alt="" class="img-fluid mt-5 mb-5" style="width: 1200px;">
+            <h5 class="card-text" style="line-height: 30px;">{{consortium.consortium_objectives}}</h5>
+            <a href="{{ consortium.About_image.url }}" class="me-4 thumbnail">
+              <img src="{{ consortium.About_image.url }}" alt="" class="img-fluid mt-5 mb-5" style="width: 1200px;">
             </a>
             <hr class="hr" />
 

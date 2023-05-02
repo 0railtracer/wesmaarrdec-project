@@ -19,7 +19,7 @@
     <tbody>
     <tr>
     {% if consortium %}
-    <td><a href="{% url 'consortium_update' consortium.pk %}" style="color: green;">Click To Update:   {{ consortium.title }}</a></td>
+    <td><a href="{% url 'consortium_update' consortium.pk %}" style="color: green;"><button type="button" class="btn btn-info"> Update About </button></a></td>
     {% else %}
         <td>No consortium object found.</td>
     {% endif %}
@@ -30,7 +30,7 @@
 </div>
 </div>
 <hr>
-<div class="album py-5 bg-light">
+<div class="album py-5">
   {% if org.pk is None %}
   <a href="{% url 'organizationcreateview'%}"><buttontype="button" class="btn btn-primary btn-lg mb-5"> Add Organization Object to View</buttontype=></a>
   {% endif %}

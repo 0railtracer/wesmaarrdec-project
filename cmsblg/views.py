@@ -13,6 +13,7 @@ from django.contrib import messages
 
 def detail(request, category_slug, slug):
     post = get_object_or_404(Post, slug=slug, status=Post.ACTIVE)
+    posts = Post.objects.all()
 
     if request.method == 'POST':
         if request.user.is_authenticated:
@@ -28,7 +29,7 @@ def detail(request, category_slug, slug):
     else:
         form = CommentForm()
 
-    return render(request, 'cmsblg/detail.html', {'post': post, 'form': form})
+    return render(request, 'cmsblg/detail.html', {'post': post, 'posts': posts, 'form': form})
 
 def category(request, slug):
     category = get_object_or_404(Category, slug=slug)

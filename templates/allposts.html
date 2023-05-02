@@ -2,8 +2,22 @@
 {% load static %}
 
 {% block content %}
+    <section class="about-breadcrumb">
+      <div class="container d-flex flex-column">
+          <nav class="justify-content-start">
+              <ol class="breadcrumb">
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'community' %}">Categories</a></li>
+                  <li class="breadcrumb-item fs-5"><a active href="{% url 'allpost' %}">All Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'mypost' %}">My Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'facts' %}">FAQs</a></li>
+              </ol>
+          </nav>
+      </div>
+    </section>
+
     <div class="col d-flex justify-content-center" data-aos="fade-in">
         <div class="container my-5" style="max-width: 1305px;">
+            <!-- old breadcrumb----------------------------------------------------------------
     <div class="i-am-centered">
         <div class="card text-center">
           <div class="card-header" style="width: 80rem;">
@@ -21,7 +35,7 @@
                 <a class="nav-link" href="{% url 'facts' %}">FAQs</a>
               </li>
             </ul>
-          </div>
+          </div> ----------------------------------------------------------- old breadcrumb -->
           {% if user.is_authenticated%}
           <div class="col d-flex justify-content-center">
             <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-success btn-lg">Add new post</button></a>
@@ -30,27 +44,27 @@
           <div class="col d-flex justify-content-center">
             <div class="container my-5" style="max-width: 1200px;">
             <div class="row">
-              {% for post in posts %}         
-              <div class="card row-hover pos-relative py-2 px-3 mb-1">               
-                <div class="row align-items-center">                  
-                  <div class="col-md-5 mb-0 mb-sm-0">
-                    <h2>                     
-                      <a href="{% url 'post_detail' post.category.slug post.slug %}" class="text-primary ">{{post.title}}</a>
-                    </h2>
-                    <a href="{% url 'post_detail' post.category.slug post.slug %}"> <img src="{{ post.image.url }}" width="300" height="200" alt="" class="img-fluid"></a>
-                    <h5>Author: {{ post.author}} </h5>
-                    <!-- <p class="text-sm">Description: {{post.body}}</p> -->
-                  </div>
-                  <div class="col-md-4 op-7">
-                    <div class="row text-center op-7">
-                      <div class="col px-1"> <i class="ion-ios-eye-outline icon-1x"></i> <span class="d-block text-sm">{{post.intro}}</span> </div>
-                      <div class="col px-1"> <i class="ion-ios-chatboxes-outline icon-1x"></i> <span class="d-block text-sm">Comments: {{post.comments.count}}</span> </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-
+                          <div class="column is-8 is-offset-2 align-items-center">
+                            <h1>{{category.title}}</h1>
+                            <hr>
+                            {% for post in posts %}
+                            <div class="card" style="width:35rem; margin: auto;">
+                                <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top" alt="..."></a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ post.title }}</h5>
+                                    <p class="card-text">{{ post.intro }}</p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">{{ post.created_at|timesince }} ago</li>
+                                    <li class="list-group-item">Comments: {{post.comments.count}}</li>
+                                </ul>
+                            </div>
+                            {% empty %}
+                                <div class="content">
+                                    <p>There is no posts in this category...</p>
+                                </div>
+                            {% endfor %}
+                        </div>
             </div>
             </div>
           </div>

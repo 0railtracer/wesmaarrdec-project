@@ -130,7 +130,7 @@ section {
   height: 90px;
   transition: all 0.5s;
   z-index: 997;
-  background: #43B14B;
+  background: #66b366;
 }
 
 .header.sticked {
@@ -413,7 +413,7 @@ section {
 
   .mobile-nav-toggle {
     display: inline-block;
-    color: var(--color-secondary);
+    color: #191919;
     font-size: 28px;
     cursor: pointer;
     line-height: 0;
@@ -1322,4 +1322,11 @@ section {
 
 .footer .credits a {
   color: var(--color-white);
+}
+
+/* breadcrumb */
+.about-breadcrumb{
+  display: flex;
+  background-color: #43b14a2d;
+  padding: 10px;
 }

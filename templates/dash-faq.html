@@ -4,7 +4,7 @@
 {% block content%}
 <div class="hero">
 <div class="container my-5">
- <div class="album py-5 bg-light">
+ <div class="album py-5">
     <div class="container">
       <h2 style="color: rgb(0, 75, 50); font-style: italic;">ALL FAQ</h2>
       <a href="{% url 'createfaq' %}"><button type="button" class="btn btn-primary"> Add FAQ </button></a>
@@ -18,8 +18,8 @@
               <p class="card-text">Answer: {{ faq.answer }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="{%url 'deletefaq' faq.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: brown;"> Delete FAQ </button> </a>
-                  <a href="{%url 'UpdateFaq' faq.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: green;"> Update FAQ </button> </a> 
+                  <a href="{%url 'deletefaq' faq.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-danger">Delete FAQ </button> </a>
+                  <a href="{%url 'UpdateFaq' faq.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-info"> Update FAQ </button> </a> 
                 </div>
                 <!-- <small class="text-muted">{{ post.created_at}}</small> -->
               </div>

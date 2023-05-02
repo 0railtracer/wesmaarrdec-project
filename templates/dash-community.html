@@ -18,7 +18,7 @@
       {% for category in categories %}
     <tr>
     <td>Category: {{ category.title|title }}</td>
-    <td><a href="{% url 'deletecategory' category.slug %}" style="color: brown;"> Delete Category </a></td>
+    <td><a href="{% url 'deletecategory' category.slug %}" style="color: brown;"><button type="button" class="btn btn-danger"> Delete Category </button>  </a></td>
      
     </tr>
     {% endfor %}
@@ -27,7 +27,7 @@
 </div>
 </div>
 </div>
- <div class="album py-5 bg-light">
+ <div class="album py-5">
     <div class="container">
       <h2 style="color: rgb(0, 75, 50); font-style: italic;">ALL POST</h2>
       <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-primary"> Add Post </button></a>      
@@ -36,15 +36,15 @@
         <div class="col">
           <div class="card shadow-sm">
             <img src="{{post.image.url}}">
-            <div class="card-body">
+            <div class="card-body"><small class="text-muted">{{ post.created_at|date:"Y-m-d"}}</small>
               <p class="card-text">Name: {{ post.title|title }}</p>
               <p class="card-text">Detail: {{ post.body|truncatechars:100 }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="{% url 'deletepost' post.slug %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: brown;"> Delete Post </button> </a>
-                  <a href="{% url 'post_update' post.slug %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-sm btn-outline-secondary" style="color: green;"> Update Post </button> </a> 
+                  <a href="{% url 'deletepost' post.slug %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-danger">Delete Post </button> </a>
+                  <a href="{% url 'post_update' post.slug %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-info"> Update Post </button> </a> 
                 </div>
-                <small class="text-muted">{{ post.created_at}}</small>
+                
               </div>
             </div>
           </div>

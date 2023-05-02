@@ -62,7 +62,7 @@
                 <div class="card-group" style="width: 80rem; border: none;">
                   {% for album in albums %}
                     <div class="card" style="width: 10rem; border: none; width: 100px; margin-left: 10px;">
-                      <a href="{% url 'album' album.id %}"><img class="card-img-top" src="{{album.get_cover_image_url}}" alt="Card image cap" style="width: 400px; height: 400px;"></a>
+                      <a href="{% url 'album' album.id %}"><img class="card-img-top" src="{{album.get_cover_image_url}}" alt="Card image cap" style="width: 400px; height: 400px; object-fit: cover;"></a>
                       <div class="card-body">
                         <h5 class="card-title">{{album.name}}</h5>
                         <p class="card-text">{{album.caption}}</p>

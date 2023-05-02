@@ -66,7 +66,7 @@ class About(models.Model):
         # db_table = 'consortium'
 
     def __str__(self):
-        return self.consortium_code
+        return self.About_name
     
     def save(self, *args, **kwargs):
         if self.pk is None and About.objects.exists():

@@ -2,27 +2,23 @@
 {% load static %}
 
 {% block content %}
+  <section class="about-breadcrumb">
+      <div class="container d-flex flex-column">
+          <nav class="justify-content-start">
+              <ol class="breadcrumb">
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'community' %}">Categories</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'allpost' %}">All Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a href="{% url 'mypost' %}">My Posts</a></li>
+                  <li class="breadcrumb-item fs-5"><a active href="{% url 'facts' %}">FAQs</a></li>
+              </ol>
+          </nav>
+      </div>
+    </section>
+
   <section>
         <div class="container" data-aos="fade-in">
     <div class="col d-flex justify-content-center">
-        <div class="card text-center">
-          <div class="card-header" style="width: 80rem;">
-            <ul class="nav nav-tabs card-header-tabs">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'community' %}">Categories</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'allpost' %}">All Posts</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'mypost' %}">My Posts</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'facts' %}">FAQs</a>
-              </li>
-            </ul>
-          </div>
-
+      <div class="card text-center" style="border: none;">
           <div class="col d-flex justify-content-center">
             <div class="card text-center" style="border: none;">
                 <h1>Frequently Asked Questions</h1>
@@ -33,27 +29,26 @@
             <div class="card text-center" style="width: 60rem;">
                 <div class="row">
                     <div class="list-group w-100">
-                      {% for faq in faqs %}
-                        <a href="#shortExampleAnswer1collapse" data-mdb-toggle="collapse" aria-expanded="false"
-                          aria-controls="shortExampleAnswer1collapse" class="list-group-item list-group-item-action">
-                          <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{faq.question}}</h5>
-                          </div>
-                          <img src="{{faq.img.url}}"  style="max-width: 200px;">
-                          <p class="mb-1">
-                            {{faq.answer}}
-                          </p>
-                        </a>
-                        {% endfor %}
+                    {% for faq in faqs %}
+                    <a href="#faq{{forloop.counter}}" data-bs-toggle="collapse" aria-expanded="false"
+                      aria-controls="faq{{forloop.counter}}" class="list-group-item list-group-item-action">
+                      <div class="d-flex w-100 justify-content-between border-bottom">
+                        <h5 class="bi bi-chevron-down mb-1 text-center">{{faq.question}}</h5>
                       </div>
+                      <img src="{{faq.img.url}}" style="max-width: 200px; margin-top: 10px;">
+                      <div id="faq{{forloop.counter}}" class="collapse border-bottom">
+                        <p class="mb-1">{{faq.answer}}</p>
+                      </div>
+                    </a>
+                    {% endfor %}
+                    </div>
                 </div>
             </div>
           </div>
           
         </div>
       </div>
-        </div>
-  </section>
+        </div> 
   <style>
     .btn{
       margin: 20px;
