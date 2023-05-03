@@ -19,7 +19,7 @@
               </a>
               <div>
                 <div class="post-meta"><span class="date">Since</span> <span class="mx-1">&bullet;</span> <span>{{project.start_date}}</span></div>
-                <h3><a href="">{{project.title}}</a></h3>
+                <h3><a href="{% url 'onprojectdetail' proj_id=project.proj_id %}">{{project.title}}</a></h3>
                 <p>{{project.proj_description}}</p>
                 <div class="d-flex align-items-center author">
                   <div class="name">
@@ -59,7 +59,7 @@
               </a>
               <div>
                 <div class="post-meta"><span class="date">Completed On</span> <span class="mx-1">&bullet;</span> <span>{{project.end_date}}</span></div>
-                <h3><a href="">{{project.title}}</a></h3>
+                <h3><a href="{% url 'onprojectdetail' proj_id=project.proj_id %}">{{project.title}}</a></h3>
                 <p>{{ project.proj_description }}</p>
                 <div class="d-flex align-items-center author">
                   <div class="name">

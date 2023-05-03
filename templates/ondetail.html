@@ -6,28 +6,31 @@
       <div class="container" data-aos="fade-up" id="onGoing">
 
         <div class="section-header d-flex justify-content-between align-items-center mb-5">
-          <h2>{{onnprojects.tile}}</h2>
-          <div><a href="{% url 'onproject' %}" class="more">See All Completed Projects</a></div>
+          <h2>{{onproject.title}}</h2>
+          <div><a href="{% url 'project' %}" class="more">See All Projects</a></div>
         </div>
 
         <div class="row">
-        <div class="col-md-9">
-        <div class="d-lg-flex post-entry-2 align-items-center">
-        <a href="{{ onprojects.image1.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
-            <img src="{{ onprojects.image1.url }}" alt="" class="img-fluid">
-        </a>
-        <a href="{{ onnprojects.image2.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
-            <img src="{{ onprojects.image2.url }}" alt="" class="img-fluid">
-        </a>
-        </div>
-        </div>
+          <div class="col-md-9">
+            <div class="d-lg-flex post-entry-2 align-items-center">
+              <a href="{{ onprojects.image1.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                  <img src="{{ onprojects.image1.url }}" alt="" class="img-fluid">
+              </a>
+              <a href="{{ onnprojects.image2.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                  <img src="{{ onprojects.image2.url }}" alt="" class="img-fluid">
+              </a>
+            </div>
+          </div>
 
-            <div class="post-meta"><span class="date">Since</span> <span class="mx-1">&bullet;</span> <span>{{onprojects.created_at}}</span></div>
-                    <h3>{{onprojects.title}}</h3>
-                    <p>{{onprojects.description}}</p>
+            <div class="post-meta"><span class="date">Since</span> <span class="mx-1">&bullet;</span> <span>{{onproject.start_date}}</span></div>
+                    <h3 style="margin: auto;">{{onproject.title}}</h3>
+                    <h4 style="margin: auto;" >{{onproject.proj_description}}</h4>
                     <div class="d-flex align-items-center author">
                     <div class="name">
-                    <h3 class="m-0 p-0">Researcher: {{onprojects.researcher}}</h3>
+                      <h6>Researchers:</h6>
+                    {% for researcher in onproject.proj_team %}
+                        <li> {{ researcher.fname }} {{ researcher.lname }}</li>
+                    {% endfor %}
                     </div>
                     </div>
                 </div>

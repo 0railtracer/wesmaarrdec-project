@@ -452,7 +452,8 @@ def commodetail(request, com_id):
 #     return redirect('/dashboard')
     
 class Project:
-    def __init__(self, title, proj_description, status, proj_team, start_date, end_date, Researcher):
+    def __init__(self, proj_id, title, proj_description, status, proj_team, start_date, end_date, Researcher):
+        self.proj_id = proj_id
         self.title = title
         self.proj_description = proj_description
         self.status = status
@@ -490,7 +491,7 @@ def project(request):
         for row in cursor.fetchall():
             project_id = row[0]
             if project_id != current_project_id:
-                current_project = Project(row[1], row[2], row[3], [], row[7], row[8], None)
+                current_project = Project(row[0], row[1], row[2], row[3], [], row[7], row[8], None)
                 projects.append(current_project)
                 current_project_id = project_id
             researcher_id = row[4]
@@ -512,7 +513,7 @@ def project(request):
             proj_id = row[0]
             if proj_id != current_proj_id:
                 # Add a new project to the list
-                projecton = Project(row[1], row[2], row[3], [], row[7], row[8], row[0])
+                projecton = Project(row[0],row[1], row[2], row[3], [], row[7], row[8], row[0])
                 onprojects.append(projecton)
                 current_proj_id = proj_id
 
@@ -538,7 +539,7 @@ def project(request):
             proj_id = row[0]
             if proj_id != current_proj_id:
                 # Add a new project to the list
-                projecton = Project(row[1], row[2], row[3], [], row[7], row[8], row[0])
+                projecton = Project(row[0],row[1], row[2], row[3], [], row[7], row[8], row[0])
                 finprojects.append(projecton)
                 current_proj_id = proj_id
 
@@ -599,7 +600,7 @@ def onproject(request):
             proj_id = row[0]
             if proj_id != current_proj_id:
                 # Add a new project to the list
-                projecton = Project(row[1], row[2], row[3], [], row[7], row[8], row[0])
+                projecton = Project(row[0], row[1], row[2], row[3], [], row[7], row[8], row[0])
                 onprojects.append(projecton)
                 current_proj_id = proj_id
 
@@ -651,7 +652,7 @@ def finproject(request):
             proj_id = row[0]
             if proj_id != current_proj_id:
                 # Add a new project to the list
-                projecton = Project(row[1], row[2], row[3], [], row[7], row[8], row[0])
+                projecton = Project(row[0], row[1], row[2], row[3], [], row[7], row[8], row[0])
                 finprojects.append(projecton)
                 current_proj_id = proj_id
 
@@ -677,9 +678,46 @@ def finproject(request):
         context = {}
     return render(request, 'finproject.html', context)
 
-# def onprojectdetail(request, project_slug):
-#     onprojects = get_object_or_404(Project, slug=project_slug)
-#     return render(request, 'ondetail.html', {'onprojects': onprojects})
+def onprojectdetail(request, proj_id):
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connector.connect(user='root', password='', host='localhost', database='testo')
+        cursor = conn.cursor()
+
+        query = """
+        SELECT p.proj_id, p.title, p.proj_description, p.status, r.researcher_id, r.fname, r.lname, p.start_date, p.end_date
+        FROM project p
+        LEFT JOIN project_proj_team ppt ON p.proj_id = ppt.project_id
+        LEFT JOIN researcher r ON ppt.researcher_id = r.researcher_id
+        WHERE p.proj_id = %s
+        """
+        cursor.execute(query, (proj_id,))
+        rows = cursor.fetchall()
+        if rows:
+            onproject = Project(rows[0][0], rows[0][1], rows[0][2], rows[0][3], [], rows[0][7], rows[0][8], [])
+            current_project_id = rows[0][0]
+            for row in rows:
+                researcher_id = row[4]
+                if researcher_id is not None:
+                    researcher = Researcher(row[4], row[5], row[6])
+                    onproject.proj_team.append(researcher)
+        else:
+            onproject = None
+
+    except mysql.connector.errors.Error as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+    context = {
+        'onproject':onproject,
+    }
+    return render(request, 'ondetail.html', context)
+
 
 # def finprojectdetail(request, project_slug):
 #     finprojects = get_object_or_404(Project, slug=project_slug)
