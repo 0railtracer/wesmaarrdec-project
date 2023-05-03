@@ -4,12 +4,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .forms import CommentForm, CategoryForm, FactForm
 from .models import Post, Category, Fact
 from cmscore.models import Album, AlbumPhoto
+from cmi_models.models import Commodity, Project, Program
 from django.utils.text import slugify
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db import connection
 
 def detail(request, category_slug, slug):
     post = get_object_or_404(Post, slug=slug, status=Post.ACTIVE)
@@ -41,15 +43,15 @@ def search(request):
     query = request.GET.get('query', '')
 
     posts = Post.objects.filter(status=Post.ACTIVE).filter(Q(title__icontains=query) | Q(intro__icontains=query) | Q(body__icontains=query))
-    # commodities = Commodity.objects.filter(Q(name__icontains=query) | Q(detail__icontains=query))
+    commodities = Commodity.objects.filter(Q(name__icontains=query) | Q(detail__icontains=query))
     photo = AlbumPhoto.objects.filter(Q(name__icontains=query) | Q(caption__icontains=query))
-    # project = Project.objects.filter(Q(title__icontains=query))
+    project = Project.objects.filter(Q(title__icontains=query))
     category = Category.objects.filter(Q(title__icontains=query) | Q(slug__icontains=query))
 
 
 
 
-    return render(request, 'cmsblg/search.html', {'posts': posts, 'category': category, 'photo': photo, 'query': query})
+    return render(request, 'cmsblg/search.html', {'posts': posts, 'project': project, 'commodities': commodities, 'category': category, 'photo': photo, 'query': query})
 
 def facts(request):
     faqs = Fact.objects.all()

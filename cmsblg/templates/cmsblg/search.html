@@ -36,7 +36,7 @@
                             <p>Result: {{ commodities.count }}</p>
                             {% for com in commodities %}
                                 <div class="content is-medium">
-                                    <a href="#">
+                                    <a href="{% url 'commodetail' com_id=com.com_id %}">
                                         <h1>{{ com.name }}</h1>
                                         <p>{{ com.detail }}</p>
                                     </a>
@@ -72,7 +72,7 @@
                             <p>Result: {{project.count}}</p>
                             {% for pro in project %}
                                 <div class="content is-medium">
-                                    <a href="#">
+                                    <a href="{% url 'onprojectdetail' proj_id=pro.proj_id %}">
                                         <h1>{{pro.title}}</h1>                 
                                         <p>{{pro.description}}</p>
                                     </a>

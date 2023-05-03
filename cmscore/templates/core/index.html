@@ -36,46 +36,26 @@
     </section><!-- End Hero Slider Section -->
 
     <!-- ======= news ======= -->
-    <section id="hero-slider" class="hero-slider">
-      <div class="container" data-aos="fade-in">
-          <div class="row">
-              <div class="d-flex justify-content-end">
-                  <a href="#">
-                      <i class="fa fa-arrow-left"></i>
-                  </a>
-                  <a href="#">
-                      <i class="fa fa-arrow-right"></i>
-                  </a>
-              </div>
-
-              <div class="swiper2 sliderFeaturedPosts2">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    
-                    <div class="carousel-item active">
-                      <div class="row">
-                        {% for news in news_posts|slice:"3" %}
-                          <div class="col-md-4 mb-3">
-                              <div class="card">
-                                  <img class="img-fluid" style="object-fit: cover; width: 100%; height: 280px;" alt="100%x280" src="{{news.image.url}}">
-                                  <div class="card-body">
-                                      <h4 class="card-title">{{news.title}}</h4>
-                                      <p class="card-text">{{news.body}}</p>
-
-                                  </div>
-                              </div>
-                          </div>
-                          {% endfor %}
+    <section>
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+          <div class="row small">
+          <div class="imagegroup" style="animation-delay: 1s;">
+            {% for news in news_posts|slice:"5" %}
+              <div class="col-md-4 mb-3">
+                 <div class="card mx-2">
+                     <a href="{% url 'post_detail' news.category.slug news.slug %}"><img class="img-fluid" style="object-fit: cover; width: 100%; height: 280px;" alt="100%x280" src="{{news.image.url}}"></a>
+                        <div class="card-body">
+                          <h4 class="card-title">{{news.title}}</h4>
+                             <p class="card-text">{{news.body}}</p>
                         </div>
-
-                      </div>
                   </div>
-
               </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
+    </div>
   </section>
   <!-- news -->
 
@@ -112,10 +92,10 @@
 
           <div class="col">
             <div class="post-entry-1 lg">
-              {% if news_events.category.slug %}
+              {% if new_events.category.slug %}
               <h2><a href="{% url 'category_detail' new_events.category.slug %}">Events this month</a></h2>
               <a href="{  % url 'category_detail' new_events.category.slug %}"><img src="{{new_events.image.url}}" alt="" class="img-fluid"></a>
-              <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_events.created_at}}</span></div>
+              <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_events.created_at|date:"Y-m-d"}}</span></div>
               <p class="mb-4 d-block">{{new_events.body}}</p>
 
               <div class="d-flex align-items-center author">

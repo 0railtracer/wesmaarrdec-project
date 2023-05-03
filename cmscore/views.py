@@ -6,13 +6,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import *
+from django.conf import settings
 from auth_user.models import User
 from django.utils.text import slugify
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 # from django.contrib.auth.models import User
 from django.contrib import messages
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView
 from .models import *
 from cmsblg.models import *
 from datetime import datetime
@@ -24,6 +25,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import connection
 from django.core.paginator import Paginator, EmptyPage
 from django.core.files.storage import default_storage
+
+db_settings = settings.DATABASES['default']
 
 class CMI:
     def __init__(self, cmi_id, name, detail, logo):
@@ -67,14 +70,20 @@ def index(request):
     conn = None 
     m = None
     try:
-        conn = mysql.connector.connect(user='root', password='',host='localhost', database='testo')
+        conn = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
         
         cursor = conn.cursor()
 
                 # query data from database and load into a DataFrame
         query = "SELECT geolat, geolong, name FROM cmi"
         df = pd.read_sql_query(query, conn)
-
+        
                 # create map
         m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
         
@@ -148,8 +157,11 @@ def community(request):
 @login_required(login_url='/login')
 def mypost(request):
     posts = Post.objects.filter(author=request.user)
+    paginator = Paginator(posts, 5)  # Show 5 posts per page.
 
-    return render(request, 'single-post.html', {'posts': posts})
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'single-post.html', {'page_obj': page_obj})
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
@@ -161,10 +173,14 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user.is_staff or self.request.user.is_superuser
 
 def allpost(request):
-    posts = Post.objects.filter(status=Post.ACTIVE)
-    posts = Post.objects.order_by('-created_at')
+    post_list = Post.objects.filter(status=Post.ACTIVE).order_by('-created_at')
+    paginator = Paginator(post_list, 5)  # Show 5 posts per page.
 
-    return render(request, 'allposts.html', {'posts': posts})
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'allposts.html', {'page_obj': page_obj})
+
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -267,7 +283,13 @@ def cmi(request):
     conn = None
     cursor = None
     try:
-        conn = mysql.connector.connect(user='root', password='', host='localhost', database='testo')
+        conn = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
         cursor = conn.cursor()
 
         query = "SELECT * FROM cmi"
@@ -303,8 +325,13 @@ def cmidetail(request, cmi_id):
     conn = None
     cursor = None
     try:
-        conn = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='testo')
+        conn = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
         cursor = conn.cursor()
 
         query = "SELECT * FROM cmi WHERE agency_id = %s"
@@ -351,7 +378,13 @@ def commodities(request):
     conn = None
     cursor = None
     try:
-        conn = mysql.connector.connect(user='root', password='', host='localhost', database='test101')
+        conn = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
         cursor = conn.cursor()
 
         query = "SELECT * FROM commodity"
@@ -390,8 +423,13 @@ def commodetail(request, com_id):
     conn = None
     cursor = None
     try:
-        conn = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='test101')
+        conn = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
         # create a cursor to execute SQL queries
         cursor = conn.cursor()
 
@@ -471,8 +509,13 @@ def project(request):
     cnx = None
     cursor = None
     try:
-        cnx = mysql.connector.connect(user='root', password='',
-                                host='localhost', database='testo')
+        cnx = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
 
         # create a cursor to execute SQL queries
         cursor = cnx.cursor()
@@ -577,8 +620,13 @@ def onproject(request):
     cnx = None
     cursor = None
     try:
-        cnx = mysql.connector.connect(user='root', password='',
-                                host='localhost', database='testo')
+        cnx = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
 
         # create a cursor to execute SQL queries
         cursor = cnx.cursor()
@@ -629,8 +677,13 @@ def finproject(request):
     cnx = None
     cursor = None
     try:
-        cnx = mysql.connector.connect(user='root', password='',
-                                host='localhost', database='testo')
+        cnx = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
 
         # create a cursor to execute SQL queries
         cursor = cnx.cursor()
@@ -682,7 +735,13 @@ def onprojectdetail(request, proj_id):
     conn = None
     cursor = None
     try:
-        conn = mysql.connector.connect(user='root', password='', host='localhost', database='testo')
+        conn = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
         cursor = conn.cursor()
 
         query = """
@@ -1055,8 +1114,13 @@ def dashfaq(request):
     return render(request, 'dash-faq.html', context)
 
 def dashcommodity(request):
-    cnx = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='test101')
+    cnx = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
 
     # create a cursor to execute SQL queries
     cursor = cnx.cursor()
@@ -1075,8 +1139,13 @@ def dashcommunity(request):
     return render(request, 'dash-community.html', context)
 
 def dashproject(request):
-    cnx = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='test101')
+    cnx = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
 
     # create a cursor to execute SQL queries
     cursor = cnx.cursor()
@@ -1089,8 +1158,13 @@ def dashproject(request):
     return render(request, 'dash-projects.html', context)
 
 def dashservices(request):
-    cnx = mysql.connector.connect(user='root', password='',
-                              host='localhost', database='test101')
+    cnx = mysql.connector.connect(
+                    user=db_settings['USER'],
+                    password=db_settings['PASSWORD'],
+                    host=db_settings['HOST'],
+                    database=db_settings['NAME'],
+                    port=db_settings['PORT']
+                )
 
     # create a cursor to execute SQL queries
     cursor = cnx.cursor()

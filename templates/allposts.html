@@ -47,9 +47,9 @@
                           <div class="column is-8 is-offset-2 align-items-center">
                             <h1>{{category.title}}</h1>
                             <hr>
-                            {% for post in posts %}
-                            <div class="card" style="width:35rem; margin: auto;">
-                                <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top" alt="..."></a>
+                            {% for post in page_obj %}
+                            <div class="card mb-5" style="width:35rem; margin: auto; text-align-last: center;">
+                                <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top mt-3" alt="..." style=" max-width: 80%;"></a>
                                 <div class="card-body">
                                     <h5 class="card-title">{{ post.title }}</h5>
                                     <p class="card-text">{{ post.intro }}</p>
@@ -61,10 +61,34 @@
                             </div>
                             {% empty %}
                                 <div class="content">
-                                    <p>There is no posts in this category...</p>
+                                    <p>There is currently no post</p>
                                 </div>
                             {% endfor %}
                         </div>
+                        <!-- Display pagination links -->
+                            <div class="card text-center" style="border: none;">
+                              <nav aria-label="Page navigation example">
+                                  <ul class="pagination justify-content-end">
+                                      <div class="text-start py-4">
+                                          <div class="custom-pagination">
+                                              {% if page_obj.has_previous %}
+                                                  <a href="?page={{ page_obj.previous_page_number }}" class="prev">Previous</a>
+                                              {% endif %}
+                                              {% for num in page_obj.paginator.page_range %}
+                                                  {% if num == page_obj.number %}
+                                                      <a href="?page={{ num }}" class="active">{{ num }}</a>
+                                                  {% elif num > page_obj.number|add:'-10' and num < page_obj.number|add:'10' %}
+                                                      <a href="?page={{ num }}">{{ num }}</a>
+                                                  {% endif %}
+                                              {% endfor %}
+                                              {% if page_obj.has_next %}
+                                                  <a href="?page={{ page_obj.next_page_number }}" class="next">Next</a>
+                                              {% endif %}
+                                          </div>
+                                      </div>
+                                  </ul>
+                              </nav>
+                          </div>         
             </div>
             </div>
           </div>

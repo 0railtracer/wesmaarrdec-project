@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'auth_user',
     'cmsblg',
     'cmscore',
+    'cmi_models',
     # 'Chat'
 ]
 AUTH_USER_MODEL = 'auth_user.User'
@@ -85,8 +86,8 @@ WSGI_APPLICATION = 'cmsweb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
         
 
         # postgres
@@ -106,12 +107,12 @@ DATABASES = {
         # 'PORT': '5432',
 
         #mysql localhost
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'testo',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': 'localhost',
-        # 'PORT': '3306'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tests',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306'
 
         # mysql live
         # 'ENGINE': 'django.db.backends.mysql',

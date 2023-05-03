@@ -22,22 +22,47 @@
         <div class="row">
           <div class=" post-content" data-aos="fade-up">
             <!-- ======= Single Post Content ======= -->
-            {% for post in posts %}
-            <div class="card text-center">
-            <div class="card-header">
-              {{post.title}}
-            </div>
-            <div class="card-body">
-              <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" style="max-width: 400px;"></a>
-              <h5 class="card-title">{{ post.body }}</h5>
-              <p class="card-text">Comments: {{post.comments.count}}</p>
-              <a href="{% url 'post_update' post.slug %}" style="color: green ;"> <button type="button" class="btn btn-sm btn-outline-secondary">EDIT POST</button> </a>
-            </div>
-            <div class="card-footer text-body-secondary">
-              {{post.created_at}}
-            </div>
-          </div>
-            {% endfor %}
+            {% for post in page_obj %}
+                              <div class="card text-center mb-5">
+                                  <div class="card-header">
+                                      {{post.title}}
+                                  </div>
+                                  <div class="card-body">
+                                      <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" style=" max-width: 75%;"></a>
+                                      <h5 class="card-title">{{ post.body }}</h5>
+                                      <p class="card-text">Comments: {{post.comments.count}}</p>
+                                      <a href="{% url 'post_update' post.slug %}" style="color: green ;"> <button type="button" class="btn btn-sm btn-success">EDIT POST</button> </a>
+                                  </div>
+                                  <div class="card-footer text-body-secondary">
+                                      {{post.created_at}}
+                                  </div>
+                              </div>
+                          {% endfor %}
+
+                          <!-- Display pagination links -->
+                            <div class="card text-center" style="border: none;">
+                              <nav aria-label="Page navigation example">
+                                  <ul class="pagination justify-content-end">
+                                      <div class="text-start py-4">
+                                          <div class="custom-pagination">
+                                              {% if page_obj.has_previous %}
+                                                  <a href="?page={{ page_obj.previous_page_number }}" class="prev">Previous</a>
+                                              {% endif %}
+                                              {% for num in page_obj.paginator.page_range %}
+                                                  {% if num == page_obj.number %}
+                                                      <a href="?page={{ num }}" class="active">{{ num }}</a>
+                                                  {% elif num > page_obj.number|add:'-10' and num < page_obj.number|add:'10' %}
+                                                      <a href="?page={{ num }}">{{ num }}</a>
+                                                  {% endif %}
+                                              {% endfor %}
+                                              {% if page_obj.has_next %}
+                                                  <a href="?page={{ page_obj.next_page_number }}" class="next">Next</a>
+                                              {% endif %}
+                                          </div>
+                                      </div>
+                                  </ul>
+                              </nav>
+                          </div>          
             <hr class="hr" />
           </div>
         </div>

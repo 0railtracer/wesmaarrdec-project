@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-
+from cmi_models.models import *
 # Create your models here.
 
 class Slide(models.Model):
@@ -13,9 +13,8 @@ class Slide(models.Model):
     modified_at = models.DateTimeField(blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
-    # class Meta:
-    #     # managed = False
-    #     # db_table = 'cmscore_slide'
+    class Meta:
+        db_table = 'cmscore_slide'
 
     def __str__(self):
         return self.name
@@ -61,9 +60,8 @@ class About(models.Model):
     modified_by = models.CharField(max_length=50, blank=True, null=True)
    
    
-    # class Meta:
-    #     managed = False
-        # db_table = 'consortium'
+    class Meta:
+        db_table = 'about'
 
     def __str__(self):
         return self.About_name
@@ -143,14 +141,15 @@ class Album(models.Model):
     event_id = models.IntegerField(blank=True, null=True)
     proj_id = models.IntegerField(blank=True, null=True)
     prog_id = models.IntegerField(blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project')
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='program')
     created_at = models.DateTimeField( auto_now_add=True, blank=True, null=True)
     created_by = models.CharField(max_length=50, blank=True, null=True)
     modified_at = models.DateTimeField( auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
-    # class Meta:
-    #     managed = False
-        # db_table = 'album'
+    class Meta:
+        db_table = 'album'
 
     def __str__(self):
         return self.name
@@ -174,19 +173,18 @@ class AlbumPhoto(models.Model):
     modified_at = models.DateTimeField( auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
-    # class Meta:
-    #     managed = False
-        # db_table = 'album_photo'
+    class Meta:
+        db_table = 'album_photo'
 
     def __str__(self):
         return self.name
     
-class Content(models.Model):
-    content_title = models.CharField(max_length=255)
-    content_type = models.CharField(max_length=255)
-    content_detail = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+# class Content(models.Model):
+#     content_title = models.CharField(max_length=255)
+#     content_type = models.CharField(max_length=255)
+#     content_detail = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     modified_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.content_title
+#     def __str__(self):
+#         return self.content_title

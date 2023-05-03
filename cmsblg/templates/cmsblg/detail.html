@@ -24,7 +24,7 @@
             </div>
 
             <div class="single-post">
-              <div class="post-meta"><span class="date">Posted</span> <span class="mx-1">&bullet;</span> <span>{{post.created_at}}</span></div>
+              <div class="post-meta"><span class="date">Posted</span> <span class="mx-1">&bullet;</span> <span>{{post.created_at|date:"Y-m-d"}}</span></div>
               <h1 class="mb-5">{{post.title}}</h1>
               <img src="{{ post.image.url}}" style="max-width: 500px;">
               <p><span class="firstcharacter">{{post.intro|slice:":1"}}</span>{{post.intro}}</p>
@@ -116,9 +116,9 @@
 
                   <div class="post-entry-1 border-bottom">
                     {% for post in posts %}
-                    <div class="post-meta"><span class="date">Post</span> <span class="mx-1">&bullet;</span> <span>{{post.created_at}}</span></div>
+                    <div class="post-meta"><span class="date">Post</span> <span class="mx-1">&bullet;</span> <span>{{post.created_at|date:"Y-m-d"}}</span></div>
                     <h2 class="mb-2"><a href="#">{{post.title}}</a></h2>
-                    <span class="author mb-3 d-block">Author : {{ post.author}}</span>
+                    <span class="author mb-3 d-block">User : {{ post.author}}</span>
                     {% endfor %}
                   </div>
                 </div> <!-- End Popular -->
