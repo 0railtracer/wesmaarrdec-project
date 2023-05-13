@@ -43,7 +43,7 @@
   <!-- ======= Header ======= -->
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-      
+
       <a href="{% url 'index' %}" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
@@ -51,15 +51,16 @@
         <h1>WESMAARRDEC</h1>
       </a>
 
-      <nav id="navbar" class="navbar"> 
+      <nav id="navbar" class="navbar">
         <ul>
+
             <li class="dropdown"><a href="{% url 'consortium' %}"><span>ABOUT</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul>
               <li><a href="{% url 'consortium' %}">Consortium</a></li>
               <li><a href="{% url 'organization' %}">Organization</a></li>
             </ul>
           </li>
-          
+
           <li><a href="{% url 'cmi' %}"><span>CMI</span></a>
           </li>
           <li class="dropdown"><a href="{% url 'community' %}"><span>COMMUNITY</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
@@ -84,22 +85,23 @@
           </li>
           {% if user.is_superuser %}
           <a href="{% url 'dashboard' %}"><span>DASHBOARD</span></a>
-          
+
           {% endif %}
+            {% if user.is_authenticated %}
+             <a href= "{% url 'logout' %}" class="mx-2">
+            <span class="bi-person-circle">LOGOUT</span>
+             </a>
+            {%else%}
+              <a href= "{% url 'login' %}" class="mx-2">
+              <span class="bi-person-circle">LOGIN</span>
+            </a>
+            {%endif%}
         </ul>
       </nav><!-- .navbar -->
-      
+
 
       <div class="position-relative">
-        {% if user.is_authenticated %}
-         <a href= "{% url 'logout' %}" class="mx-2">
-        <span class="bi-person-circle">LOGOUT</span>
-         </a>
-      {%else%}
-          <a href= "{% url 'login' %}" class="mx-2">
-          <span class="bi-person-circle">LOGIN</span>
-        </a>
-      {%endif%}
+
         <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
         <i class="bi bi-list mobile-nav-toggle"></i>
 
@@ -108,7 +110,7 @@
           <form method="get" action="{% url 'search' %}" class="search-form">
             <span class="icon bi-search"></span>
             <input name="query" type="text"  placeholder="Search" class="form-control">
-          </form> 
+          </form>
           <button class="btn js-search-close"></button>
         </div><!-- End Search Form -->
     </div>
@@ -118,7 +120,7 @@
   <main id="main">
     <!-- ======= Hero Slider Section ======= -->
 {% block content %}
-    
+
 {% endblock %}
   </main>
 
@@ -149,30 +151,30 @@
               <li><a href="{% url 'contact' %}"><i class="bi bi-chevron-right"></i> Contact Us</a></li>
             </ul>
           </div>
-          
+
           <div class="container" style="width: 50%; margin-top: 48px;">
           <div class="row">
             <div class="col-9"><h3 class="footer-heading" style="color: #43B14B;">CONSORTIUM MEMBER INSTITUTION</h3></div>
             <div class="col-4">
                     <ul class="footer-links list-unstyled">
                        {% for cmi in cmi_list|slice:":5" %}
-                      <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.name }}</a></li>
+                      <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.agency_code }}</a></li>
                       {% endfor %}
-                    </ul> 
+                    </ul>
             </div>
             <div class="col-3">
               <ul class="footer-links list-unstyled">
                     {% for cmi in cmi_list|slice:"5:"|slice:":5" %}
-                    <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.name }}</a></li>
+                    <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.agency_code }}</a></li>
                     {% endfor %}
               </ul>
             </div>
             <div class="col-3">
                     <ul class="footer-links list-unstyled">
                       {% for cmi in cmi_list|slice:"10:"|slice:":5" %}
-                      <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.name }}</a></li>
+                      <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.agency_code }}</a></li>
                       {% endfor %}
-                    </ul>         
+                    </ul>
             </div>
           </div>
         </div>
@@ -189,7 +191,7 @@
               <li><a href="#"> BFAR IX</a></li>
             </ul>
           </div>
-          
+
           <div class="col-2">
             <h3 class="footer-heading" style="color: #43B14B;">MEMBER</h3>
             <ul class="footer-links list-unstyled">
@@ -247,11 +249,11 @@
 
           <div class="col-md-6">
             <div class="social-links mb-3 mb-lg-0 text-center text-md-end">
-              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-              <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
-              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              <!--<a href="#" class="twitter"><i class="bi bi-twitter"></i></a>-->
+              <!--<a href="#" class="facebook"><i class="bi bi-facebook"></i></a>-->
+              <!--<a href="#" class="instagram"><i class="bi bi-instagram"></i></a>-->
+              <!--<a href="#" class="google-plus"><i class="bi bi-skype"></i></a>-->
+              <!--<a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>-->
             </div>
 
           </div>

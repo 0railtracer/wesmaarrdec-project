@@ -1358,3 +1358,12 @@ section {
       transform: translate3d(-60%,0,0);
     }
  }
+
+.indextext{
+  
+}
+@media (max-width: 768px) {
+  .indextext{
+    font-size: 10px;
+  }
+}

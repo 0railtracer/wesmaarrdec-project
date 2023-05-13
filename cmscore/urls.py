@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import views 
+from . import views
 from cmscore.views import *
 
 urlpatterns = [
@@ -38,17 +38,19 @@ urlpatterns = [
     path('organizationcreateview/', OrganizationCreateView.as_view(), name='organizationcreateview'),
     path('organization/<str:pk>/update/', OrganizationUpdateView.as_view(), name='organization_update'),
     path('deleteorganization/<str:pk>/', deleteorganization, name='deleteorganization'),
-    path('cmi/', cmi, name='cmi'),  
-    path('cmidetail/<int:cmi_id>/', cmidetail, name='cmidetail'),  
+    path('cmi/', cmi, name='cmi'),
+    path('cmidetail/<int:cmi_id>/', cmidetail, name='cmidetail'),
     path('community/', community, name='community'),
     path('allpost/', allpost, name='allpost'),
     path('mypost/', mypost, name='mypost'),
-    path('postsection/', postman, name='postman'), 
+    path('postsection/', postman, name='postman'),
     path('postcreateview/', PostCreateView.as_view(), name='postcreateview'),
+    path('postcreateviewuser/', PostCreateViewUser.as_view(), name='postcreateviewuser'),
     path('mypost/<slug:slug>/update/', PostUpdateView.as_view(), name='post_update'),
     path('deleteuser/<int:id>/', deleteuser, name='deleteuser'),
     path('deletepost/<slug:slug>/', deletepost, name='deletepost'),
-    path('deletecategory/<slug:slug>/', deletecategory, name='deletecategory'), 
+    path('deletepostuser/<slug:slug>/', deletepostuser, name='deletepostuser'),
+    path('deletecategory/<slug:slug>/', deletecategory, name='deletecategory'),
     path('commodities/', commodities, name='commodities'),
     path('commodetail/<int:com_id>/', views.commodetail, name='commodetail'),
     # path('commoditylist/', commoditylist.as_view(), name='commoditylist'),
@@ -64,4 +66,9 @@ urlpatterns = [
     # path('project/<slug:slug>/update/', ProjectUpdateView.as_view(), name='project_update'),
     # path('deleteproject/<slug:project_slug>/', projectdelete, name='projectdelete'),
     path('services/', services, name='services'),
+    path('contentcreate/', ContentCreate.as_view(), name = 'contentcreate'),
+    path('contentdelete/<int:id>/', contentdelete, name='contentdelete'),
+    path('dashcontent/', dashcontent, name = 'dashcontent'),
+    path('aboutus/', aboutus, name = 'aboutus'),
+    path('manual/', manual, name = 'manual'),
 ]

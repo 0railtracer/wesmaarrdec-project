@@ -29,14 +29,14 @@
                                                 </div>
                                                 {% endfor %}
                                             </div>
-                                
+
                                             <div class="custom-swiper-button-next">
                                                 <span class="bi-chevron-right"></span>
                                             </div>
                                             <div class="custom-swiper-button-prev">
                                                 <span class="bi-chevron-left"></span>
                                             </div>
-                                
+
                                             <div class="swiper-pagination"></div>
                                         </div>
                                     </div>
@@ -62,7 +62,15 @@
                 <div class="card-group" style="width: 80rem; border: none;">
                   {% for album in albums %}
                     <div class="card" style="width: 10rem; border: none; width: 100px; margin-left: 10px;">
-                      <a href="{% url 'album' album.id %}"><img class="card-img-top" src="{{album.get_cover_image_url}}" alt="Card image cap" style="width: 400px; height: 400px; object-fit: cover;"></a>
+                      {% if album.get_cover_image_url %}
+                            <a href="{% url 'album' album.id %}">
+                                <img class="card-img-top" src="{{album.get_cover_image_url}}" alt="Card image cap" style="width: 400px; height: 400px; object-fit: cover;">
+                            </a>
+                        {% else %}
+                            <a href="{% url 'album' album.id %}">
+                                <img class="card-img-top" src="/static/assets/img/noimg.png" alt="Card image cap" style="width: 400px; height: 400px; object-fit: cover;">
+                            </a>
+                        {% endif %}
                       <div class="card-body">
                         <h5 class="card-title">{{album.name}}</h5>
                         <p class="card-text">{{album.caption}}</p>

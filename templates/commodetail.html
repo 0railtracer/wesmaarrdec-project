@@ -22,10 +22,10 @@
                     <div class="col-lg-6">
                       <div class="row">
                         <div class="col-6">
-                          <img src="{{ commodities.image.url }}" alt="" class="img-fluid mb-4">
+                          <img src="{{ commodite.img_url }}" alt="" class="img-fluid mb-4">
                         </div>
                         <div class="col-6 mt-4">
-                          <img src="{{ commodities.image.url }}" alt="" class="img-fluid mb-4">
+                          <img src="{{ commodite.img_url }}" alt="" class="img-fluid mb-4">
                         </div>
                       </div>
                     </div>
@@ -34,37 +34,106 @@
             </section>
 
             <hr class="hr" />
-            
+
             <h1 class="page-title">How can we help?</h1>
 
             <div class="row gy-4" style="margin-bottom: 10px;">
 
                 <div class="col-md-4">
                   <div class="info-item">
-                    <button type="button" class="btn btn-success btn-lg">Find an Expert</button>
+                    <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal1">Find an Expert</button>
                   </div>
                 </div>
-      
+
                 <div class="col-md-4">
                   <div class="info-item info-item-borders">
-                    <button type="button" class="btn btn-success btn-lg">Find a Farm</button>
+                    <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal2">Find a Farm</button>
                   </div>
                 </div>
-      
+
                 <div class="col-md-4">
                   <div class="info-item">
-                    <button type="button" class="btn btn-success btn-lg">Find Financial Support</button>
+                    <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal3">Find Financial Support</button>
                   </div>
                 </div>
-      
+
             </div>
 
             </div>
           </div>
-          
+
         </div>
       </div>
     </section>
+
+    <!-- EXPERT MODAL -->
+        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Find an Expert</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <div class="modal-body">
+                          <ul>
+                          {% for i in expertcontent%}
+                          <li class="list-unstyled btn btn-success">{{ i.name }}</li>
+                          {% endfor %}
+                        </ul>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- FARM MODAL  -->
+          <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Find a Farm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <div class="modal-body">
+                         <ul>
+                          {% for i in farmcontent%}
+                          <li class="list-unstyled btn btn-success">{{ i.name }}</li>
+                          {% endfor %}
+                        </ul>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- FINANCE MODAL -->
+          <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Find Financial Support</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <div class="modal-body">
+                       <ul>
+                          {% for i in supportcontent%}
+                          <li class="list-unstyled btn btn-success">{{ i.name }}</li>
+                          {% endfor %}
+                        </ul>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+        </div>
+    </div>
+  </div>
 <!-- <div class="col d-flex justify-content-center" data-aos="fade-in">
         <div class="card text-center">
           <div class="card-header" >
@@ -100,19 +169,19 @@
                         <button type="button" class="btn btn-success btn-lg">Find an Expert</button>
                       </div>
                     </div>< End Info Item -->
-          
+
                     <!-- <div class="col-md-4">
                       <div class="info-item info-item-borders">
                         <button type="button" class="btn btn-success btn-lg">Find a Farm</button>
                       </div>
                     </div> End Info Item -->
-          
+
                     <!-- <div class="col-md-4">
                       <div class="info-item">
                         <button type="button" class="btn btn-success btn-lg">Find Financial Support</button>
                       </div>
                     </div> End Info Item -->
-<!--           
+<!--
                 </div> -->
       {% endblock %}
   <style>

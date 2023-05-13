@@ -22,10 +22,10 @@
               <p class="card-text">Detail: {{ slide.detail|truncatechars:100 }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                <a href="{% url 'deleteslide' slide.id %}" style="color: brown;"><button type="button" class="btn btn-danger">Delete Slide </button>  </a>
+                <a href="{% url 'deleteslide' slide.id %}" onclick="return confirm('WARNING!! Press OK to continue DELETING')" style="color: brown;"><button type="button" class="btn btn-danger">Delete Slide </button>  </a>
 
                 <a href="{% url 'sliderupdate' slide.id %}" style="color: rgb(106, 202, 85);"><button type="button" class="btn btn-info"> Update Slide </button></a>
-                
+
                 </div>
               </div>
             </div>

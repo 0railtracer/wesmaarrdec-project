@@ -156,9 +156,10 @@ class Album(models.Model):
     
     def get_cover_image_url(self):
         try:
-            return self.photos.first().image.url
+            latest_photo = self.photos.latest('created_at')
+            return latest_photo.image.url
         except AttributeError:
-            return None
+            return 'static\assets\img\noimg.png'
     
 class AlbumPhoto(models.Model):
     # photo_id = models.AutoField(primary_key=True)
@@ -179,12 +180,22 @@ class AlbumPhoto(models.Model):
     def __str__(self):
         return self.name
     
-# class Content(models.Model):
-#     content_title = models.CharField(max_length=255)
-#     content_type = models.CharField(max_length=255)
-#     content_detail = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     modified_at = models.DateTimeField(auto_now=True)
+    
+class Content(models.Model):
+    EXPERT = 'expert'
+    FARM = 'farm'
+    SUPPORT = 'support'
 
-#     def __str__(self):
-#         return self.content_title
+    CHOICES_STATUS = (
+        (EXPERT, 'expert'),
+        (FARM, 'farm'),
+        (SUPPORT, 'support')
+    )
+    name = models.CharField(max_length=255)
+    content_type = models.CharField(max_length=255, choices=CHOICES_STATUS)
+    content_detail = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name

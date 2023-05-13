@@ -16,25 +16,39 @@ from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from .models import *
 from cmsblg.models import *
+from cmi_models.models import CMI
 from datetime import datetime
 from django.urls import reverse_lazy, reverse
 import pandas as pd
+import numpy as np
 import mysql.connector
 import folium
+from folium.features import CustomIcon
 from django.contrib.auth import authenticate, login, logout
 from django.db import connection
 from django.core.paginator import Paginator, EmptyPage
 from django.core.files.storage import default_storage
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
+
 
 db_settings = settings.DATABASES['default']
 
 class CMI:
-    def __init__(self, cmi_id, name, detail, logo):
+    def __init__(self, cmi_id, agency_code, name, detail, logo):
         self.cmi_id = cmi_id
+        self.agency_code = agency_code
         self.name = name
         self.detail = detail
         self.logo_url = default_storage.url(logo)
 
+# class CMIMAP:
+#     def __init__(self, cmi_id, agency_code, name, detail, logo):
+#         self.cmi_id = cmi_id
+#         self.agency_code = agency_code
+#         self.name = name
+#         self.detail = detail
+#         self.logo_url = logo
 
 def index(request):
     slides = Slide.objects.all()
@@ -67,7 +81,7 @@ def index(request):
             # # connect to database
     # conn = psycopg2.connect(database="databs", user="root", password="", host="localhost", port="3306")
     cursor = None
-    conn = None 
+    conn = None
     m = None
     try:
         conn = mysql.connector.connect(
@@ -77,23 +91,54 @@ def index(request):
                     database=db_settings['NAME'],
                     port=db_settings['PORT']
                 )
-        
+
         cursor = conn.cursor()
 
-                # query data from database and load into a DataFrame
+        # Standard no Icon
+        # query data from database and load into a DataFrame
         query = "SELECT geolat, geolong, name FROM cmi"
         df = pd.read_sql_query(query, conn)
-        
+
                 # create map
-        m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
-        
-                # loop through DataFrame rows and add markers to the map
-        for index, row in df.iterrows():
-            folium.Marker(
-                location=[row['geolat'], row['geolong']],
-                popup=row['name'],
-                icon=folium.Icon(icon='icon')
-            ).add_to(m)
+        # check if geolat and geolong columns have any null values
+        if df['geolat'].isnull().values.any() or df['geolong'].isnull().values.any():
+            m = None
+        else:
+            # create map
+            m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
+
+            # loop through DataFrame rows and add markers to the map
+            for index, row in df.iterrows():
+                # check if geolat and geolong have valid values
+                if not np.isnan(row['geolat']) and not np.isnan(row['geolong']):
+                    folium.Marker(
+                        location=[row['geolat'], row['geolong']],
+                        popup=row['name'],
+                        icon=folium.Icon(icon='icon')
+                    ).add_to(m)
+
+        # query = "SELECT geolat, geolong, name, CONCAT('cmi_profiling/media/', logo) AS logo FROM cmi"
+        # df = pd.read_sql_query(query, conn)
+
+        #                 # create map
+        # m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
+
+        #                 # loop through DataFrame rows and add markers to the map
+        # for index, row in df.iterrows():
+        #     logo_url = row['logo']
+        #     if logo_url is not None:
+        #         icon = CustomIcon(
+        #             icon_image=logo_url,
+        #             icon_size=(50,50),
+        #         )
+        #     else:
+        #         icon = None
+
+        #     folium.Marker(
+        #         location=[row['geolat'], row['geolong']],
+        #         popup=row['name'],
+        #         icon=icon
+        #     ).add_to(m)
     except mysql.connector.errors.Error as e:
         print(f"An error occurred: {e}")
     finally:
@@ -112,7 +157,7 @@ def index(request):
 
         # context = {
         #     'my_map': m._repr_html_(),
-            
+
         # m = folium.Map(location=[7.635,124.854], zoom_start=7)
 
         # folium.Marker(
@@ -137,17 +182,16 @@ def index(request):
         'post': post,
         'new_events': new_events,
         'news_posts': news_posts,
-        'slides' : list(slides) + list(photo), 
-        'random_post' : random_post, 
-        'random_slides' : random_slides, 
-        'random_slide_mini' : random_slide_mini, 
+        'slides' : list(slides) + list(photo),
+        'random_post' : random_post,
+        'random_slides' : random_slides,
+        'random_slide_mini' : random_slide_mini,
         # 'map': m._repr_html_(),
     }
     if m is not None:
         context['map'] = m._repr_html_()
-    
-    return render(request, 'core/index.html', context)
 
+    return render(request, 'core/index.html', context)
 
 def community(request):
     categories = Category.objects.all()
@@ -167,10 +211,18 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['category', 'title', 'intro', 'body', 'image']
     success_url = reverse_lazy('mypost')
-    template_name = 'post_update.html'
 
     def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
+        if self.request.user.is_superuser:
+            return self.request.user.is_superuser
+        else:
+            return self.request.user
+
+    def get_template_names(self):
+        if self.request.user.is_superuser:
+            return ['createcommodity.html']
+        else:
+            return ['post_update.html']
 
 def allpost(request):
     post_list = Post.objects.filter(status=Post.ACTIVE).order_by('-created_at')
@@ -183,6 +235,22 @@ def allpost(request):
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'createcommodity.html'
+    success_url = reverse_lazy('dashcommunity')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        slug = slugify(form.cleaned_data['title'])
+        count = 1
+        while Post.objects.filter(slug=slug).exists():
+            slug = f"{slug}-{count}"
+            count += 1
+        form.instance.slug = slug
+        return super().form_valid(form)
+
+class PostCreateViewUser(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     template_name = 'createpost.html'
@@ -206,8 +274,16 @@ def deletepost(request, slug):
         messages.success(request, 'Post deleted successfully')
     except Exception as e:
         messages.error(request, f'Error deleting Post: {str(e)}')
-    return redirect('/dashboard')
+    return redirect('/dashcommunity')
 
+def deletepostuser(request, slug):
+    slide = get_object_or_404(Post, slug=slug)
+    try:
+        slide.delete()
+        messages.success(request, 'Post deleted successfully')
+    except Exception as e:
+        messages.error(request, f'Error deleting Post: {str(e)}')
+    return redirect('/mypost')
 
 def about(request):
     try:
@@ -226,7 +302,7 @@ def consortium(request):
 
 @staff_member_required(login_url='/login')
 def createconsortium(request):
-    
+
     form = ConsortiumForm()
     if request.method == 'POST':
         form = ConsortiumForm(request.POST, request.FILES)
@@ -297,7 +373,7 @@ def cmi(request):
 
         cmi_list = []
         for row in cursor.fetchall():
-            cmi = CMI(row[0], row[2], row[8], row[7])
+            cmi = CMI(row[0], row[1], row[2], row[8], row[7])
             cmi_list.append(cmi)
             # print(row[3])
     except mysql.connector.errors.Error as e:
@@ -313,11 +389,11 @@ def cmi(request):
     if cmi_list is not None:
         context = {
             'cmi_list': cmi_list,
-        
+
         }
     else:
         context = {}
-        
+
     return render(request, 'CMI.html', context)
 
 
@@ -337,7 +413,7 @@ def cmidetail(request, cmi_id):
         query = "SELECT * FROM cmi WHERE agency_id = %s"
         cursor.execute(query, (cmi_id,))
         row = cursor.fetchone()
-        cmi = CMI(row[0], row[2], row[8], row[7])
+        cmi = CMI(row[0], row[1], row[2], row[8], row[7])
 
         # Make sure cursor is fully read before executing second query
         cursor.fetchall()
@@ -347,7 +423,7 @@ def cmidetail(request, cmi_id):
 
         cmis = []
         for rows in cursor.fetchall():
-            cmidetail = CMI(rows[17], rows[2], rows[8], rows[7])
+            cmidetail = CMI(rows[17], row[1], rows[2], rows[8], rows[7])
             cmis.append(cmidetail)
 
     except mysql.connector.errors.Error as e:
@@ -414,12 +490,17 @@ def commodities(request):
         }
     else:
         context = {}
-        
+
     return render(request, 'Commodities.html', context)
 
 
 
 def commodetail(request, com_id):
+
+    farmcontent = Content.objects.filter(content_type=Content.FARM)
+    expertcontent = Content.objects.filter(content_type=Content.EXPERT)
+    supportcontent = Content.objects.filter(content_type=Content.SUPPORT)
+
     conn = None
     cursor = None
     try:
@@ -439,8 +520,8 @@ def commodetail(request, com_id):
 
         row = cursor.fetchone()
         commodite = Commodity(row[0], row[1], row[2], row[3])
-        
-        
+
+
         # execute a SELECT query to fetch all the data from the commodity table
         query_all = "SELECT * FROM commodity"
         cursor.execute(query_all)
@@ -453,7 +534,7 @@ def commodetail(request, com_id):
         if conn:
             conn.close()
         # render the template with the fetched data
-    return render(request, 'commodetail.html', {'commodite': commodite, 'commodity': commodity})
+    return render(request, 'commodetail.html', {'commodite': commodite, 'commodity': commodity, 'farmcontent': farmcontent, 'expertcontent': expertcontent, 'supportcontent': supportcontent})
 
 # class CommodityCreateView(LoginRequiredMixin, CreateView):
 #     model = Commodity
@@ -469,7 +550,7 @@ def commodetail(request, com_id):
 #             count += 1
 #         form.instance.slug = slug
 #         return super().form_valid(form)
-    
+
 # class CommodityUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 #     model = Commodity
 #     fields = ['name', 'detail', 'image']
@@ -478,7 +559,7 @@ def commodetail(request, com_id):
 
 #     def test_func(self):
 #         return self.request.user.is_staff or self.request.user.is_superuser
-    
+
 # @staff_member_required(login_url='/login')
 # def deletecommodity(request, commodity_slug):
 #     commodity = get_object_or_404(Commodity, slug=commodity_slug)
@@ -488,7 +569,7 @@ def commodetail(request, com_id):
 #     except Exception as e:
 #         messages.error(request, f'Error deleting Commodity: {str(e)}')
 #     return redirect('/dashboard')
-    
+
 class Project:
     def __init__(self, proj_id, title, proj_description, status, proj_team, start_date, end_date, Researcher):
         self.proj_id = proj_id
@@ -538,7 +619,7 @@ def project(request):
                 projects.append(current_project)
                 current_project_id = project_id
             researcher_id = row[4]
-            if researcher_id is not None:   
+            if researcher_id is not None:
                 researcher = Researcher(row[4], row[5], row[6])
                 current_project.proj_team.append(researcher)
 
@@ -724,7 +805,7 @@ def finproject(request):
             cursor.close()
         if cnx:
             cnx.close()
-    
+
     if finprojects is not None:
         context = {'finprojects': finprojects}
     else:
@@ -821,7 +902,7 @@ def services(request):
 
 @staff_member_required(login_url='/login')
 def createslide(request):
-    
+
     form = SlideForm()
     if request.method == 'POST':
         form = SlideForm(request.POST, request.FILES)
@@ -834,7 +915,7 @@ def createslide(request):
 
 class SliderUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Slide
-    fields = '__all__'
+    fields = ['name', 'detail', 'image']
     success_url = reverse_lazy('dashboard')
     template_name = 'commodity_update.html'
 
@@ -852,7 +933,7 @@ def deleteslide(request, id):
     return redirect('/dashboard')
     # slides = Slide.objects.get(id=id)
     # slides.delete()
-  
+
     # context = {
     # 'slides': 'slides'
     # }
@@ -896,7 +977,7 @@ def dashboard(request):
     User = get_user_model()
     users = User.objects.all().order_by('-is_staff')
     # Get a QuerySet of all session objects
-    sessions = Session.objects.filter(expire_date__gte=timezone.now())  
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
     # Create a dictionary to hold the last activity time for each user
     logged_in_user_ids = set()
         # Loop over the sessions and add the user ID to the set
@@ -908,13 +989,13 @@ def dashboard(request):
     # Count the number of unique user IDs in the set
     num_logged_in_users = len(logged_in_user_ids)
     inactive_users_count = len(users) - num_logged_in_users
-    user_activity = {}  
+    user_activity = {}
     # Loop over the sessions and update the last activity time for each user
     for session in sessions:
         data = session.get_decoded()
         user_id = data.get('_auth_user_id')
         if user_id:
-            user_activity[user_id] = session.expire_date - datetime.now(timezone.utc)   
+            user_activity[user_id] = session.expire_date - datetime.now(timezone.utc)
     # Loop over the users and update their active status
     for user in users:
         last_activity = user_activity.get(str(user.id), None)
@@ -925,9 +1006,9 @@ def dashboard(request):
             # User does not have an active session
             active_status = 'Logged Off'
         # Update the active status for the user
-        user.active_status = active_status   
+        user.active_status = active_status
     # Create a list of user dictionaries to hold the user data
-    user_data_list = []    
+    user_data_list = []
     # Loop over the users and add their data to the user data list
     for user in users:
         user_data = {
@@ -949,7 +1030,7 @@ def dashboard(request):
                 'num_logged_in_users': num_logged_in_users,
                 'inactive_users_count': inactive_users_count,
 
-}     
+}
     return render(request, 'dashboard.html', context)
 
 def postman(request):
@@ -985,7 +1066,7 @@ def gallery(request):
 
 @staff_member_required(login_url='/login')
 def createalbum(request):
-    
+
     form = AlbumForm()
     if request.method == 'POST':
         form = AlbumForm(request.POST, request.FILES)
@@ -1027,7 +1108,7 @@ def album(request, pk):
 
 @staff_member_required(login_url='/login')
 def createphoto(request):
-    
+
     form = PhotoForm()
     if request.method == 'POST':
         form = PhotoForm(request.POST, request.FILES)
@@ -1063,8 +1144,23 @@ def deletePhoto(request, pk):
 #     return render(request, 'singlephoto.html', {'photo': photo})
 
 def contact(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        message = request.POST['message']
+
+        send_mail(
+            'New Contact Form Submission',
+            f'Name: {name}\nEmail: {email}\nMessage: {message}',
+            email,
+            ['fournomber@gmail.com'],
+            fail_silently=False,
+        )
+
+        return HttpResponseRedirect('/contact/')
 
     return render(request, 'contact.html')
+
 
 def map(request):
 
@@ -1180,15 +1276,15 @@ def dashuser(request):
     User = get_user_model()
     users = User.objects.all().order_by('-is_staff')
     # Get a QuerySet of all session objects
-    sessions = Session.objects.filter(expire_date__gte=timezone.now())  
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
     # Create a dictionary to hold the last activity time for each user
-    user_activity = {}  
+    user_activity = {}
     # Loop over the sessions and update the last activity time for each user
     for session in sessions:
         data = session.get_decoded()
         user_id = data.get('_auth_user_id')
         if user_id:
-            user_activity[user_id] = session.expire_date - datetime.now(timezone.utc)   
+            user_activity[user_id] = session.expire_date - datetime.now(timezone.utc)
     # Loop over the users and update their active status
     for user in users:
         last_activity = user_activity.get(str(user.id), None)
@@ -1199,9 +1295,9 @@ def dashuser(request):
             # User does not have an active session
             active_status = 'Logged Off'
         # Update the active status for the user
-        user.active_status = active_status   
+        user.active_status = active_status
     # Create a list of user dictionaries to hold the user data
-    user_data_list = []    
+    user_data_list = []
     # Loop over the users and add their data to the user data list
     for user in users:
         user_data = {
@@ -1221,7 +1317,7 @@ def dashslider(request):
         slides = None
 
     context = {
-        
+
         'slides': slides
     }
     return render(request, 'dash-slider.html', context)
@@ -1231,10 +1327,45 @@ def dashslider(request):
 #     context_object_name = 'commodity_list'
 #     queryset = Commodity.objects.all().order_by('-created_at')
 #     paginate_by = 5
-    
+
 #     def get_context_data(self, **kwargs):
 #         context = super().get_context_data(**kwargs)
 #         paginator = Paginator(context['commodity_list'], self.paginate_by)
 #         page = self.request.GET.get('page')
 #         context['commodity_list'] = paginator.get_page(page)
 #         return context
+
+def dashcontent(request):
+    farmcontent = Content.objects.filter(content_type=Content.FARM)
+    expertcontent = Content.objects.filter(content_type=Content.EXPERT)
+    supportcontent = Content.objects.filter(content_type=Content.SUPPORT)
+
+    context = {
+        'farmcontent': farmcontent,
+        'expertcontent': expertcontent,
+        'supportcontent': supportcontent,
+    }
+    return render(request, 'dash-content.html', context)
+
+class ContentCreate(LoginRequiredMixin, CreateView):
+    model = Content
+    form_class = ContentForm
+    template_name = 'createcommodity.html'
+    success_url = reverse_lazy('dashboard')
+
+def contentdelete(request, id):
+    content = get_object_or_404(Content, id=id)
+    try:
+        content.delete()
+        messages.success(request, 'Post deleted successfully')
+    except Exception as e:
+        messages.error(request, f'Error deleting Post: {str(e)}')
+    return redirect('/dashcontent')
+
+def aboutus(request):
+
+    return render(request, 'aboutcsd.html')
+
+def manual(request):
+
+    return render(request, 'manual.html')

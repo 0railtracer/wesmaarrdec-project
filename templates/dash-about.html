@@ -41,6 +41,7 @@
     <!-- <a href="{% url 'deleteorganization' org.pk %}" style="color: brown;"> <button type="button" class="btn btn-sm btn-outline-secondary">DELETE</button> </a> -->
     <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
       <div class="col">
+          <div class=" mx-auto"> DOST - PCAARRD<hr></div>
         <div class="card shadow-sm">
           {% if org.dostpcaarrd_ExDi_img %}
           <img src="{{org.dostpcaarrd_ExDi_img.url}}" alt="CEO Image">
@@ -57,7 +58,9 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <section>
+          <div class=" mx-auto"> RRDC / Executive Board<hr></div>
+          <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.wmsupres_rrdcchair_exdi_img %}
           <img src="{{org.wmsupres_rrdcchair_exdi_img.url}}" alt="Chairman Image">
@@ -76,13 +79,13 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
-          {% if org.depu_di_img %}
-          <img src="{{org.depu_di_img.url}}" alt="CEO Image">
-          {% else %}
-          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-          {% endif %}
+          <!--{% if org.depu_di_img %}-->
+          <!--<img src="{{org.depu_di_img.url}}" alt="CEO Image">-->
+          <!--{% else %}-->
+          <!--<img src="/static/assets/img/unknown.jpg" alt="Default Image">-->
+          <!--{% endif %}-->
           <div class="card-body">
             <p class="card-text">Name: {{ org.depu_di_name }}</p>
             <p class="card-text"> RRDCC-VICE-CHAIR/DEPUTY-DIRECTOR </p>
@@ -95,13 +98,13 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
-          {% if org.EXBM_ZSCMST_img %}
-          <img src="{{org.EXBM_ZSCMST_img.url}}" alt="Chairman Image">
-          {% else %}
-          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-          {% endif %}
+          <!--{% if org.EXBM_ZSCMST_img %}-->
+          <!--<img src="{{org.EXBM_ZSCMST_img.url}}" alt="Chairman Image">-->
+          <!--{% else %}-->
+          <!--<img src="/static/assets/img/unknown.jpg" alt="Default Image">-->
+          <!--{% endif %}-->
           <div class="card-body">
             <p class="card-text">Name: {{ org.EXBM_ZSCMST_name }}</p>
             <p class="card-text"> EXECUTIVE-BOARD-MEMBER-ZSCMST </p>
@@ -114,13 +117,13 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
-          {% if org.EXBM_DA_RFO_IX_img %}
-          <img src="{{org.EXBM_DA_RFO_IX_img.url}}" alt="CEO Image">
-          {% else %}
-          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-          {% endif %}
+          <!--{% if org.EXBM_DA_RFO_IX_img %}-->
+          <!--<img src="{{org.EXBM_DA_RFO_IX_img.url}}" alt="CEO Image">-->
+          <!--{% else %}-->
+          <!--<img src="/static/assets/img/unknown.jpg" alt="Default Image">-->
+          <!--{% endif %}-->
           <div class="card-body">
             <p class="card-text">Name: {{ org.EXBM_DA_RFO_IX_name }}</p>
             <p class="card-text"> EXECUTIVE-BOARD-MEMBER-DA_RFO_IX </p>
@@ -133,13 +136,13 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
-          {% if org.EXBM_DA_BAR_img %}
-          <img src="{{org.EXBM_DA_BAR_img.url}}" alt="Chairman Image">
-          {% else %}
-          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-          {% endif %}
+          <!--{% if org.EXBM_DA_BAR_img %}-->
+          <!--<img src="{{org.EXBM_DA_BAR_img.url}}" alt="Chairman Image">-->
+          <!--{% else %}-->
+          <!--<img src="/static/assets/img/unknown.jpg" alt="Default Image">-->
+          <!--{% endif %}-->
           <div class="card-body">
             <p class="card-text">Name: {{ org.EXMB_DA_BAR_name }}</p>
             <p class="card-text"> EXECUTIVE-BOARD-MEMBER-DA_BAR </p>
@@ -152,13 +155,13 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
-          {% if org.EXBM_JHCSC_img %}
-          <img src="{{org.EXBM_JHCSC_img.url}}" alt="CEO Image">
-          {% else %}
-          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-          {% endif %}
+          <!--{% if org.EXBM_JHCSC_img %}-->
+          <!--<img src="{{org.EXBM_JHCSC_img.url}}" alt="CEO Image">-->
+          <!--{% else %}-->
+          <!--<img src="/static/assets/img/unknown.jpg" alt="Default Image">-->
+          <!--{% endif %}-->
           <div class="card-body">
             <p class="card-text">Name: {{ org.EXBM_JHCSC_name }}</p>
             <p class="card-text"> EXECUTIVE-BOARD-MEMBER-JHCSC </p>
@@ -171,13 +174,13 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
-          {% if org.EXBM_PHILFIDA_img %}
-          <img src="{{org.EXBM_PHILFIDA_img.url}}" alt="Chairman Image">
-          {% else %}
-          <img src="/static/assets/img/unknown.jpg" alt="Default Image">
-          {% endif %}
+          <!--{% if org.EXBM_PHILFIDA_img %}-->
+          <!--<img src="{{org.EXBM_PHILFIDA_img.url}}" alt="Chairman Image">-->
+          <!--{% else %}-->
+          <!--<img src="/static/assets/img/unknown.jpg" alt="Default Image">-->
+          <!--{% endif %}-->
           <div class="card-body">
             <p class="card-text">Name: {{ org.EXBM_PHILFIDA_name }}</p>
             <p class="card-text"> EXECUTIVE-BOARD-MEMBER-PHILFIDA </p>
@@ -190,7 +193,11 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      </section>
+
+      <section>
+          <div class=" mx-auto"> Consortium Secretariat<hr></div>
+          <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.WESMAARRDEC_Dir_img %}
           <img src="{{org.WESMAARRDEC_Dir_img.url}}" alt="CEO Image">
@@ -209,7 +216,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.Clus_Coord_R_and_D_img %}
           <img src="{{org.Clus_Coord_R_and_D_img.url}}" alt="Chairman Image">
@@ -228,7 +235,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.Clus_Coord_Tech_Trans_img %}
           <img src="{{org.Clus_Coord_Tech_Trans_img.url}}" alt="CEO Image">
@@ -247,7 +254,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.Clus_Coord_ICT_img %}
           <img src="{{org.Clus_Coord_ICT_img.url}}" alt="Chairman Image">
@@ -266,7 +273,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.Clus_Coord_Sci_Com_img %}
           <img src="{{org.Clus_Coord_Sci_Com_img.url}}" alt="CEO Image">
@@ -285,7 +292,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.Management_sup1_img %}
           <img src="{{org.Management_sup1_img.url}}" alt="Chairman Image">
@@ -304,7 +311,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.Management_sup2_img %}
           <img src="{{org.Management_sup2_img.url}}" alt="CEO Image">
@@ -323,7 +330,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.Management_sup3_img %}
           <img src="{{org.Management_sup3_img.url}}" alt="Chairman Image">
@@ -342,7 +349,7 @@
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="card shadow-sm">
           {% if org.Management_sup4_img %}
           <img src="{{org.Management_sup4_img.url}}" alt="Chairman Image">
@@ -361,6 +368,8 @@
           </div>
         </div>
       </div>
+      </section>
+
       <!-- repeat for other fields in the Organization model -->
     </div>
     {% endif %}

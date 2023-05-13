@@ -26,7 +26,7 @@
     <td>{{ user_data.active_status }}</td>
     <td>{{ user_data.user.date_joined|date:"Y-m-d"}}</td>
     <td>{{ user_data.user.is_superuser|yesno:"Admin, Regular"}}</td>
-    <td>{% if user_data.user.is_superuser%} Unavailable {% else%} <a href="{% url 'deleteuser' user_data.user.id %}" style="color: brown;"> Delete User</a> {% endif%}</td>
+    <td>{% if user_data.user.is_superuser%} Unavailable {% else%} <a href="{% url 'deleteuser' user_data.user.id %}" onclick="return confirm('WARNING!! Press OK to continue DELETING')" style="color: brown;"> Delete User</a> {% endif%}</td>
     </tr>
     {% endfor %}
     </tbody>

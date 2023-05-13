@@ -27,10 +27,10 @@
                 <p class="card-text">Caption: {{album.caption}}</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
-                    <a href="{% url 'deletealbum' album.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-danger">Delete Album </button> </a>
+                    <a href="{% url 'deletealbum' album.pk %}" onclick="return confirm('WARNING!! Press OK to continue DELETING')" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-danger">Delete Album </button> </a>
                     <a href="{% url 'albumupdate' album.pk %}" style="color: rgb(4, 255, 0);"> <button type="button" class="btn btn-info"> Update Album </button> </a>
                   </div>
-                  
+
                 </div>
               </div>
             </div>
@@ -38,7 +38,7 @@
       {% endfor %}
   </div>
   <hr>
-  <h2 style="color: rgb(0, 75, 50); font-style: italic;">Gallery Photo</h2>    
+  <h2 style="color: rgb(0, 75, 50); font-style: italic;">Gallery Photo</h2>
 <a href="{% url 'createphoto' %}"><button type="button" class="btn btn-primary"> Add Photo </button></a>
   <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
         {% for photo in photos %}
@@ -51,10 +51,10 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <!-- <a href="{% url 'deletephoto' photo.pk %}" style="color: brown;"> Delete Post</a> -->
-                  <a href="{% url 'deletephoto' photo.pk %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-danger">Delete Photo </button> </a>
+                  <a href="{% url 'deletephoto' photo.pk %}" onclick="return confirm('WARNING!! Press OK to continue DELETING')" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-danger">Delete Photo </button> </a>
                   <a href="{% url 'photoupdate' photo.pk %}" style="color: rgb(4, 255, 0);"> <button type="button" class="btn btn-info"> Update Photo </button> </a>
                 </div>
-                
+
               </div>
             </div>
           </div>

@@ -24,19 +24,19 @@
                   <a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}"><img class="card-img-top" src="{{cmi.logo_url}}" alt="Card image cap"></a>
                   {% endif %}
                   <div class="card-body">
-                    <h5 class="card-title">{{cmi.name}}</h5>
-                    <p class="card-text">{{cmi.detail}}</p>
+                    <h5 class="card-title">{{cmi.agency_code}}</h5>
+                    <p class="card-text">{{cmi.name}}</p>
                   </div>
                 </div>
               {% endfor %}
             </div>
           </div>
-           
+
       </div>
     </div>
   </div>
 </section>
-    
+
  {% endblock %}
 
   <style>

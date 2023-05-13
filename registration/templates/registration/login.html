@@ -14,9 +14,9 @@
         <div class="card bg-dark text-white" style="border-radius: 1rem; opacity: 0.9;">
           <div class="card-body text-center mb-5">
             {% if messages %}
-              {% for message in messages %}
-                <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
-              {% endfor %}
+                {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
             {% endif %}
 
             <form action="" method="POST">
@@ -41,8 +41,7 @@
             </div>
 
             <div>
-              <p class="mb-0">Don't have an account? <a href="{% url 'register' %}" class="text-white-50 fw-bold">Sign Up</a>
-              </p>
+          
             </div>
             </form>
           </div>

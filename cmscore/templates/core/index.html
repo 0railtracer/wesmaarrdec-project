@@ -37,26 +37,96 @@
 
     <!-- ======= news ======= -->
     <section>
-      <div class="container" data-aos="fade-up">
+      <div class="container-md" data-aos="fade-in">
         <div class="row">
-          <div class="row small">
-          <div class="imagegroup" style="animation-delay: 1s;">
-            {% for news in news_posts|slice:"5" %}
-              <div class="col-md-4 mb-3">
-                 <div class="card mx-2">
-                     <a href="{% url 'post_detail' news.category.slug news.slug %}"><img class="img-fluid" style="object-fit: cover; width: 100%; height: 280px;" alt="100%x280" src="{{news.image.url}}"></a>
-                        <div class="card-body">
-                          <h4 class="card-title">{{news.title}}</h4>
-                             <p class="card-text">{{news.body}}</p>
-                        </div>
-                  </div>
+          <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="row">
+              {% for news in news_posts|slice:":3" %}
+              <div class="col">
+                {% if news.image%}
+                <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{news.image.url}}" class="d-block w-100" alt="..."></a>
+                {% else %}
+                <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></a>
+                {% endif%}
+                <div class="card-body">
+                                      <h4 class="card-title indextext">{{news.title}}</h4>
+                                         <p class="card-text indextext">{{news.intro|truncatechars:100}}</p>
+                                    </div>
               </div>
-            {% endfor %}
+              {% endfor %}
+              {% if news_posts|length == 2 %}
+                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></div>
+                {%elif news_posts|length == 1 %}
+                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></div>
+                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></div>
+                {% else %}
+                {% endif %}
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              {% if news_posts|length >= 6 %}
+                {% for news in news_posts|slice:"3:"|slice:":3" %}
+                  <div class="col">
+                    {% if news.image %}
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{news.image.url}}" class="d-block w-100" alt="..."></a>
+                      {% else %}
+                        <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></a>
+                    {% endif %}
+                    <div class="card-body">
+                      <h4 class="card-title indextext">{{news.title}}</h4>
+                      <p class="card-text indextext">{{news.intro|truncatechars:100}}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% elif news_posts|length == 5 %}
+                {% for news in news_posts|slice:"2:"|slice:":3" %}
+                  <div class="col">
+                    {% if news.image %}
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{news.image.url}}" class="d-block w-100" alt="..."></a>
+                      {% else %}
+                <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></a>
+                    {% endif %}
+                    <div class="card-body">
+                      <h4 class="card-title indextext">{{news.title}}</h4>
+                      <p class="card-text indextext">{{news.intro|truncatechars:100}}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% elif news_posts|length == 4 %}
+                {% for news in news_posts|slice:"1:"|slice:":3" %}
+                  <div class="col">
+                    {% if news.image %}
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{news.image.url}}" class="d-block w-100" alt="..."></a>
+                      {% else %}
+                    <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></a>
+                    {% endif %}
+                    <div class="card-body">
+                      <h4 class="card-title indextext">{{news.title}}</h4>
+                      <p class="card-text indextext">{{news.intro|truncatechars:100}}</p>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+            {% if news_posts|length > 3 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          {% endif %}
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section><!-- End Hero Slider Section -->
   <!-- news -->
 
     <!-- ======= events ======= -->
@@ -92,11 +162,13 @@
 
           <div class="col">
             <div class="post-entry-1 lg">
-              {% if new_events.category.slug %}
-              <h2><a href="{% url 'category_detail' new_events.category.slug %}">Events this month</a></h2>
-              <a href="{  % url 'category_detail' new_events.category.slug %}"><img src="{{new_events.image.url}}" alt="" class="img-fluid"></a>
+              {% if new_events.slug %}
+              <h2><a href="{% url 'post_detail' new_events.category.slug new_events.slug %}">Events this month</a></h2>
+              {% if new_events.image %}
+              <a href="{% url 'post_detail' new_events.category.slug new_events.slug %}"><img src="{{new_events.image.url}}" alt="" class="img-fluid"></a>
+              {% endif %}
               <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_events.created_at|date:"Y-m-d"}}</span></div>
-              <p class="mb-4 d-block">{{new_events.body}}</p>
+              <p class="mb-4 d-block"><a href="{% url 'post_detail' new_events.category.slug new_events.slug %}">{{new_events.intro}}</a></p>
 
               <div class="d-flex align-items-center author">
                 <div class="name">
@@ -114,15 +186,17 @@
     </section> <!-- events -->
     <!-- ======= cmi map ======= -->
     <section id="posts" class="posts">
-      
+
       <div class="container" data-aos="fade-up">
             <div class="section-header d-flex justify-content-between align-items-center mb-5">
             <div><a href="{% url 'cmi' %}" class="more"></a></div>
             </div>
             <div class="text-center mb-md-5"><a href="{% url 'cmi' %}"><h1>Consortium Member Institutions</h1></a></div>
+            {% if map %}
             <div class="justify-content-center" id="map">{{ map|safe }}</div>
+            {% endif %}
       </div>
     </section> <!-- cmi map -->
 
-    
+
 {% endblock %}

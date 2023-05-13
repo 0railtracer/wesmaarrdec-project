@@ -28,10 +28,14 @@
                                       {{post.title}}
                                   </div>
                                   <div class="card-body">
-                                      <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" style=" max-width: 75%;"></a>
-                                      <h5 class="card-title">{{ post.body }}</h5>
+                                        {% if post.image %}
+                                        <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top mt-3" alt="..." style=" max-width: 65%;"></a>
+                                        {% endif%}
+                                      <a href="{% url 'post_detail' post.category.slug post.slug %}"><h5 class="card-title">{{ post.body|slice:':200' }}</h5></a>
                                       <p class="card-text">Comments: {{post.comments.count}}</p>
-                                      <a href="{% url 'post_update' post.slug %}" style="color: green ;"> <button type="button" class="btn btn-sm btn-success">EDIT POST</button> </a>
+                                      <a href="{% url 'post_update' post.slug %}" style="color: green ;"> <button type="button" class="btn btn-sm btn-success mb-5">EDIT POST</button> </a>
+                                      <br>
+                                      <a href="{% url 'deletepostuser' post.slug %}" onclick="return confirm('WARNING!! Press OK to continue DELETING')" style="color: green ;"> <button type="button" class="btn btn-sm btn-danger">DELETE POST</button> </a>
                                   </div>
                                   <div class="card-footer text-body-secondary">
                                       {{post.created_at}}
@@ -62,7 +66,7 @@
                                       </div>
                                   </ul>
                               </nav>
-                          </div>          
+                          </div>
             <hr class="hr" />
           </div>
         </div>

@@ -16,9 +16,11 @@
                             <hr>
                             {% for post in posts %}
                             <div class="card mb-5" style="width:35rem; margin: auto; text-align-last: center;">
+                                {% if post.image %}
                                 <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top mt-3" style=" max-width: 80%;" alt="..."></a>
+                                {% endif %}
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ post.title }}</h5>
+                                    <a href="{% url 'post_detail' post.category.slug post.slug %}"><h5 class="card-title">{{ post.title }}</h5></a>
                                     <p class="card-text">{{ post.intro }}</p>
                                 </div>
                                 <ul class="list-group list-group-flush">

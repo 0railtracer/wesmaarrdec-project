@@ -1,0 +1,144 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+
+  <main id="main">
+    <section class="about-breadcrumb">
+        <div class="container d-flex flex-column">
+            <nav class="justify-content-start">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item fs-5"><a href="#client">Client</a></li>
+                    <li class="breadcrumb-item fs-5"><a href="#system">System</a></li>
+                    <li class="breadcrumb-item fs-5"><a href="#devs">Developers</a></li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <section id="client"> <!-- cleint -->
+      <div class="container" data-aos="fade-up">
+        
+          <div class="col-lg-12 text-center mb-5 mt-5">
+            <h3 class="page-title">About the Client</h3>
+          </div>
+        
+          <div class="d-md-flex post-entry-2 half shadow-sm p-3 mb-5 bg-body rounded">
+            <a href="#" class="me-4 thumbnail">
+              <img src="/static/assets/img/Ms. Lucy F. Sadiwa.png" alt="" class="img-fluid">
+            </a>
+            <div class="ps-md-5 mt-4 mt-md-0">
+              <h2 class="mb-4 display-4">The Client</h2>
+
+              <p class="lh-base fs-4" style="text-indent: 70px;">Our client’s name is Ms. Lucy Felix-Sadiwa. She was appointed in 2022 during the 1st
+                semester as an ICT cluster coordinator of Western Mindanao Agriculture, Aquatic and Natural
+                Resources, Research, and Development Consortium “WESMAARRDEC” and the Department Head of
+                Computer Science. She is also the Technical Consultant of SERDACC.</p>
+                <p class="lh-base fs-4" style="text-indent: 70px;">Ms. Lucy finished her Bachelor’s Degree (BSCS) at Ateneo de Zamboanga University in 1999
+                  and had her Master’s Degree in Computer Science in 2021. She taught at Universidad de Zamboanga
+                  from 1999 to 2003 as a Computer Science teacher. Since 2009 until now, she's been a teacher at
+                  Western Mindanao State University. WESMAARRDEC website was created last year 2022 in a web
+                  builder platform called WIX.</p>
+            </div>
+          </div>
+
+      </div>
+    </section> <!-- end client -->
+
+    <section id="system" style="background-color: #43b14a2d; display: flex;"> <!-- system -->
+        <div class="container" data-aos="fade-up">
+          
+            <div class="col-lg-12 text-center mb-5 mt-5">
+              <h3 class="page-title">About the System</h3>
+            </div>
+  
+          <div class="row mb-5" style="text-align: center;">
+
+            <p class="lh-base fs-4" style="text-indent: 70px;">WESMAARRDEC Website with Content Management System is a web-based system that is used to 
+              manage content, allowing multiple contributors to create, edit, view, and delete content in the system.</p>
+  
+          </div>
+  
+        </div>
+    </section> <!-- end system -->
+
+    <section id="devs"> <!-- devs -->
+        <div class="container" data-aos="fade-up">
+          
+            <div class="col-lg-12 text-center mb-5 mt-5">
+              <h3 class="page-title mb-4">About the Developers</h3>
+              <h3 class="mb-4">IT 132 - SOFTWARE ENGINEERING</h3>
+              <h4 class="mb-4">Class Adviser: Catadman, Jason A.</h4>
+            </div>
+          
+            <div class="row d-flex justify-content-around mb-5">
+
+                <div class="card mb-4 p-3 mb-5 bg-body rounded border-0" style="width:300px;">
+                    <img class="card-img-center" src="/static/assets/img/log.png" alt="Card image">
+                </div>
+
+                <div class="card mb-4 shadow-sm p-3 mb-5 bg-body rounded border-top-0 border-start-0 border-end-0" style="width:300px; border-bottom-color: #43B14B;">
+                  <img class="card-img-top" src="/static/assets/img/PM.png" alt="Card image">
+                  <div class="card-body">
+                      <h4 class="card-title text-center">Jovanie R. Tatoy</h4>
+                      <p class="card-text text-center">Project Manager</p>
+                  </div>
+                </div>
+
+                <div class="card mb-4 shadow-sm p-3 mb-5 bg-body rounded border-top-0 border-start-0 border-end-0" style="width:300px; border-bottom-color: #43B14B;">
+                    <img class="card-img-top" src="/static/assets/img/LP.png" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Hesam K. Dawami</h4>
+                        <p class="card-text text-center">Lead Programmer</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4 shadow-sm p-3 mb-5 bg-body rounded border-top-0 border-start-0 border-end-0" style="width:300px; border-bottom-color: #43B14B;">
+                    <img class="card-img-top" src="/static/assets/img/UI UX.png" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Rachey Joyce G. Manalo</h4>
+                        <p class="card-text text-center">UI/UX Designer</p>
+                    </div>
+                </div> <hr style="color: #fff;"/>
+
+                <div class="card mb-4 shadow-sm p-3 mb-5 bg-body rounded border-top-0 border-start-0 border-end-0" style="width:300px; border-bottom-color: #43B14B;">
+                    <img class="card-img-top" src="/static/assets/img/BA1.png" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Paul Anthony K. Bazan</h4>
+                        <p class="card-text text-center">Business Analyst</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4 shadow-sm p-3 mb-5 bg-body rounded border-top-0 border-start-0 border-end-0" style="width:300px; border-bottom-color: #43B14B;">
+                    <img class="card-img-top" src="/static/assets/img/BA2.png" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Rosa Mae M. Inion</h4>
+                        <p class="card-text text-center">Business Analyst</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4 shadow-sm p-3 mb-5 bg-body rounded border-top-0 border-start-0 border-end-0" style="width:300px; border-bottom-color: #43B14B;">
+                    <img class="card-img-top" src="/static/assets/img/QAE1.png" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Raquel L. Alunsagay</h4>
+                        <p class="card-text text-center">Quality Assurance Engineer</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4 shadow-sm p-3 mb-5 bg-body rounded border-top-0 border-start-0 border-end-0" style="width:300px; border-bottom-color: #43B14B;">
+                    <img class="card-img-top" src="/static/assets/img/QAE2.png" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Ed Joshua B. Ladores</h4>
+                        <p class="card-text text-center">Quality Assurance Engineer</p>
+                    </div>
+                </div>
+  
+            </div>
+  
+        </div>
+    </section> <!-- end devs -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+ {% endblock %}

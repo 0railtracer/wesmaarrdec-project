@@ -38,7 +38,7 @@
           </div> ----------------------------------------------------------- old breadcrumb -->
           {% if user.is_authenticated%}
           <div class="col d-flex justify-content-center">
-            <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-success btn-lg">Add new post</button></a>
+            <a href="{% url 'postcreateviewuser' %}"><button type="button" class="btn btn-success btn-lg">Add new post</button></a>
           </div>
           {% endif %}
           <div class="col d-flex justify-content-center">
@@ -48,10 +48,12 @@
                             <h1>{{category.title}}</h1>
                             <hr>
                             {% for post in page_obj %}
-                            <div class="card mb-5" style="width:35rem; margin: auto; text-align-last: center;">
+                            <div class="card mb-5" style="max-width: 40rem; margin: auto; text-align-last: center;">
+                              {% if post.image %}
                                 <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top mt-3" alt="..." style=" max-width: 80%;"></a>
+                              {% endif%}
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ post.title }}</h5>
+                                    <a href="{% url 'post_detail' post.category.slug post.slug %}"><h5 class="card-title">{{ post.title }}</h5></a>
                                     <p class="card-text">{{ post.intro }}</p>
                                 </div>
                                 <ul class="list-group list-group-flush">
@@ -88,13 +90,13 @@
                                       </div>
                                   </ul>
                               </nav>
-                          </div>         
+                          </div>
             </div>
             </div>
           </div>
         </div>
         </div>
-      </div>   
+      </div>
     </div>
         </div>
   </section>

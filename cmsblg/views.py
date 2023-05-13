@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .forms import CommentForm, CategoryForm, FactForm
 from .models import Post, Category, Fact
 from cmscore.models import Album, AlbumPhoto
-from cmi_models.models import Commodity, Project, Program
+from cmi_models.models import Commodity, Project, Program, CMI
 from django.utils.text import slugify
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -47,11 +47,10 @@ def search(request):
     photo = AlbumPhoto.objects.filter(Q(name__icontains=query) | Q(caption__icontains=query))
     project = Project.objects.filter(Q(title__icontains=query))
     category = Category.objects.filter(Q(title__icontains=query) | Q(slug__icontains=query))
+    cmis = CMI.objects.filter(Q(agency_id__icontains=query) | Q(name__icontains=query) | Q(agency_code__icontains=query))
 
 
-
-
-    return render(request, 'cmsblg/search.html', {'posts': posts, 'project': project, 'commodities': commodities, 'category': category, 'photo': photo, 'query': query})
+    return render(request, 'cmsblg/search.html', {'posts': posts, 'project': project, 'commodities': commodities, 'category': category, 'photo': photo, 'cmis': cmis, 'query': query})
 
 def facts(request):
     faqs = Fact.objects.all()

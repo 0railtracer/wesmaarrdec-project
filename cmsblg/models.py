@@ -95,7 +95,7 @@ class Fact(models.Model):
     # faq_id = models.AutoField(primary_key=True)
     question = models.TextField()
     answer = models.TextField()
-    img = models.ImageField(upload_to='Fact', blank=False, null=True)
+    img = models.ImageField(upload_to='Fact', blank=True, null=True)
     category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     created_by = models.CharField(max_length=50, blank=True, null=True)

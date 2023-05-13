@@ -20,7 +20,7 @@
                                 <div class="content is-medium">
                                     <a href="{% url 'post_detail' post.category.slug post.slug %}">
                                         <h3>Author: {{ post.author }} </h3>
-                                        <h1 class="title">Title: {{ post.title }}</h1>
+                                        <h6 class="title">Title: {{ post.title }}</h6>
                                     </a>
                                 </div>
                                 <hr>
@@ -50,11 +50,30 @@
                             <div class="section-header d-flex justify-content-between align-items-center mb-5">
                             <div><a href="" class="more"></a></div>
                             </div>
+                            <div class="text-center"><h1>{{cmis.count}} CMI </h1></div>
+                            <p>Result: {{ cmis.count }}</p>
+                            {% for cmi in cmis %}
+                                <div class="content is-medium">
+                                    {% if cmi.agency_id%}
+                                    <a href="{% url 'cmidetail' cmi_id=cmi.agency_id %}">
+                                    {% endif%}
+                                        <p>{{cmi.name }}</p>
+                                    </a>
+                                </div>
+                                <hr>
+                            {% empty %}
+                                <div class="content">
+                                    <p>No result for the given query...</p>
+                                </div>
+                            {% endfor %}
+                            <div class="section-header d-flex justify-content-between align-items-center mb-5">
+                            <div><a href="" class="more"></a></div>
+                            </div>
                             <div class="text-center"><h1>{{photo.count}} Photos </h1></div>
                             <p>Result: {{ photo.count }}</p>
                             {% for pic in photo %}
                                 <div class="content is-medium">
-                                    <a href="#">
+                                    <a href="{% url 'album' %}">
                                         <h1>{{pic.name }}</h1>
                                         <p>{{ pic.caption }}</p>
                                     </a>
@@ -73,7 +92,7 @@
                             {% for pro in project %}
                                 <div class="content is-medium">
                                     <a href="{% url 'onprojectdetail' proj_id=pro.proj_id %}">
-                                        <h1>{{pro.title}}</h1>                 
+                                        <h6>{{pro.title}}</h6>
                                         <p>{{pro.description}}</p>
                                     </a>
                                 </div>
@@ -91,7 +110,7 @@
                             {% for cat in category %}
                                 <div class="content is-medium">
                                     <a href="{% url 'category_detail' cat.slug %}">
-                                        <h1>{{cat.title}}</h1>
+                                        <h3>{{cat.title}}</h3>
                                     </a>
                                 </div>
                                 <hr>
@@ -99,7 +118,7 @@
                                 <div class="content">
                                     <p>No result for the given query...</p>
                                 </div>
-                            {% endfor %}                                                                                                                
+                            {% endfor %}
                         </div>
                     </div>
                 </section>

@@ -13,7 +13,7 @@ class PostForm(ModelForm):
             'title': 'Title',
             'category': 'Category',
             'intro': 'Introduction',
-            'body': 'Body',
+            'body': 'Content',
             'image': 'Image'
         }
     
@@ -107,3 +107,9 @@ class PhotoForm(forms.ModelForm):
                 'slide': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_slide'}),
                 'carousel': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_carousel'}),
         }
+
+class ContentForm(forms.ModelForm):
+    class Meta:
+        model = Content
+        fields = '__all__'
+        labels = '__all__'

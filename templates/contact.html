@@ -44,29 +44,27 @@
           <div class="col-4">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.8075928888434!2d122.05917855016214!3d6.913594194980082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x325041dd7a24816f%3A0x51af215fb64cc81a!2sWestern%20Mindanao%20State%20University!5e0!3m2!1sen!2sph!4v1676617862324!5m2!1sen!2sph" width="440" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
-          <div class="col-8">
+          <div class="col-8 contform">
             <div class="form mt-0">
-              <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-                <div class="row">
-                  <div class="form-group col-md-6">
+              <form method="post" action="{% url 'contact' %}">
+                  {% csrf_token %}
+                  <div class="row">
+                  <label for="name">_</label>
+                  <div class="form-group col-md-6 mx-2">
                     <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
                   </div>
-                  <div class="form-group col-md-6">
+
+                  <label for="email">_</label>
+                  <div class="form-group col-md-6 mx-2">
                     <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
                   </div>
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-                </div>
-                <div class="form-group">
+
+                  <label for="message">_</label>
+                  <div class="form-group mx-2">
                   <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-                </div>
-                <div class="my-3">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-                </div>
-                <div class="text-center"><button type="submit">Send Message</button></div>
+                  </div>
+
+                  <div class="text-center mt-3"><button type="submit" class=" btn btn-primary">Send Message</button></div>
               </form>
             </div><!-- End Contact Form -->
           </div>

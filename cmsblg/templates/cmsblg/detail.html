@@ -26,7 +26,9 @@
             <div class="single-post">
               <div class="post-meta"><span class="date">Posted</span> <span class="mx-1">&bullet;</span> <span>{{post.created_at|date:"Y-m-d"}}</span></div>
               <h1 class="mb-5">{{post.title}}</h1>
+              {% if post.image %}
               <img src="{{ post.image.url}}" style="max-width: 500px;">
+              {% endif %}
               <p><span class="firstcharacter">{{post.intro|slice:":1"}}</span>{{post.intro}}</p>
               <p>{{post.body}}</p>
               </div><!-- End Single Post Content -->
@@ -37,7 +39,7 @@
             <div class="comments">
               <h5 class="comment-title py-4">Comments: {{ post.comments.all|length|default:"0" }}</h5>
               {% for comment in post.comments.all %}
-              <div class="comment d-flex mb-4">               
+              <div class="comment d-flex mb-4">
                 <div class="flex-shrink-0">
                   <div class="avatar avatar-sm rounded-circle">
                     <!-- <img class="avatar-img" src="/static/assets/img/.jpg" alt="" class="img-fluid"> -->
@@ -92,7 +94,7 @@
                         {{ field|add_class:"form-control" }}
                       </div>
                     {% endfor %}
-                    <button class="btn btn-success btn-lg">Post comment</button>
+                    <button class="btn btn-success btn-lg mt-4">Post comment</button>
                   </form>
                 </div>
               </div>
@@ -149,11 +151,11 @@
                         <img src="{{ post.image.url }}">
                     </figure>
                 {% endif %}
-                
+
                 <div class="columns">
                     <div class="column is-8 is-offset-2">
                         <div class="content is-medium">
-                            
+
                             <h2 class="subtitle is-4">{{ post.created_at|timesince }} ago</h2>
                             <h1 class="title">{{ post.title }}</h1>
                             <p><strong>{{ post.intro }}</strong></p>
