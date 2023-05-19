@@ -10,9 +10,10 @@ class CommentForm(forms.ModelForm):
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ('title', )
+        fields = ('title', 'caption', )
 
 class FactForm(forms.ModelForm):
     class Meta:
         model = Fact
-        fields = '__all__'
+        fields = ['question', 'answer', 'img', 'category']
+        labels = '__all__'

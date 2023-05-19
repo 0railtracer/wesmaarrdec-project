@@ -15,6 +15,7 @@ class SlideAdmin(admin.ModelAdmin):
 #     prepopulated_fields = {'slug': ('name',)}
 
 admin.site.register(Slide, SlideAdmin)
+admin.site.register(Loginbg)
 # admin.site.register(Commodity, CommodityAdmin)
 admin.site.register(About)
 admin.site.register(Organization)

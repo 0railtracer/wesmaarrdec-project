@@ -14,14 +14,14 @@
 
           <div class="container">
             <div class="row justify-content-center">
-              {% for cmi in cmi_list %}
+              {% for cmi in cmilist %}
                 {% if forloop.counter0|divisibleby:5 %}
                   </div>
                   <div class="card-group justify-content-center" >
                 {% endif %}
                 <div class="card" style="width: 10rem; border: none; margin: 10px; max-width: 200px;">
                   {% if cmi.cmi_id %}
-                  <a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}"><img class="card-img-top" src="{{cmi.logo_url}}" alt="Card image cap"></a>
+                  <a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}"><img class="card-img-top" src="{{cmi.logo_url}}" style=" width: 200px; max-width: 200px; height: 200px; max-height: 200px; object-fit: scale-down;" alt="Card image cap"></a>
                   {% endif %}
                   <div class="card-body">
                     <h5 class="card-title">{{cmi.agency_code}}</h5>

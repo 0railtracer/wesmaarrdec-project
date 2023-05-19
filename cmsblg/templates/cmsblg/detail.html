@@ -26,10 +26,26 @@
             <div class="single-post">
               <div class="post-meta"><span class="date">Posted</span> <span class="mx-1">&bullet;</span> <span>{{post.created_at|date:"Y-m-d"}}</span></div>
               <h1 class="mb-5">{{post.title}}</h1>
-              {% if post.image %}
-              <img src="{{ post.image.url}}" style="max-width: 500px;">
-              {% endif %}
-              <p><span class="firstcharacter">{{post.intro|slice:":1"}}</span>{{post.intro}}</p>
+              <div id="carouselExampleFade" class="carousel slide">
+                <div class="carousel-inner">
+                  {% for post_image in post.postimages_set.all %}
+                    {% if post_image.images %}
+                      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <a href="{{ post_image.images.url }}"><img src="{{ post_image.images.url }}" style="max-height: 700px; object-fit: scale-down;" class="d-block w-100" alt="..."></a> 
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+              <p>{{post.intro|slice:":1"}}{{post.intro}}</p>
               <p>{{post.body}}</p>
               </div><!-- End Single Post Content -->
 

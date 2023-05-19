@@ -43,24 +43,33 @@
             <div class="carousel-inner">
           <div class="carousel-item active">
             <div class="row">
-              {% for news in news_posts|slice:":3" %}
+            {% for news in news_posts|slice:":3" %}
               <div class="col">
-                {% if news.image%}
-                <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{news.image.url}}" class="d-block w-100" alt="..."></a>
-                {% else %}
-                <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></a>
-                {% endif%}
+
                 <div class="card-body">
-                                      <h4 class="card-title indextext">{{news.title}}</h4>
-                                         <p class="card-text indextext">{{news.intro|truncatechars:100}}</p>
-                                    </div>
+                  {% for post_image in news.postimages_set.all %}
+                  {% if forloop.first %}
+                    {% if post_image.images %}
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}">
+                        <img src="{{ post_image.images.url }}" class="d-block w-100 indexnews" alt="...">
+                      </a>
+                    {% else %}
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}">
+                        <img src="/static/assets/img/NEWS.png" class="d-block w-100 indexnews" alt="...">
+                      </a>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+                  <h6 style="text-align: center" class="card-title indextext">{{ news.title }}</h6>
+                  <!-- <p style="font-size: 13px;" class="card-text indextext">{{ news.intro|truncatechars:100 }}</p> -->
+                </div>
               </div>
-              {% endfor %}
+            {% endfor %}
               {% if news_posts|length == 2 %}
-                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></div>
+                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100 indexnews" alt="..."></div>
                 {%elif news_posts|length == 1 %}
-                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></div>
-                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></div>
+                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100 indexnews" alt="..."></div>
+                <div class="col"><img src="/static/assets/img/NEWS.png" class="d-block w-100 indexnews" alt="..."></div>
                 {% else %}
                 {% endif %}
             </div>
@@ -70,42 +79,57 @@
               {% if news_posts|length >= 6 %}
                 {% for news in news_posts|slice:"3:"|slice:":3" %}
                   <div class="col">
-                    {% if news.image %}
-                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{news.image.url}}" class="d-block w-100" alt="..."></a>
-                      {% else %}
-                        <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></a>
-                    {% endif %}
+
                     <div class="card-body">
-                      <h4 class="card-title indextext">{{news.title}}</h4>
-                      <p class="card-text indextext">{{news.intro|truncatechars:100}}</p>
+                                          {% for post_image in news.postimages_set.all %}
+                    {% if forloop.first %}
+                    {% if post_image.images %}
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{post_image.images.url}}" class="d-block w-100 indexnews" alt="..."></a>
+                      {% else %}
+                        <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100 indexnews" alt="..."></a>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                      <h6 style="text-align: center" class="card-title indextext">{{news.title}}</h6>
+                      <!-- <p style="font-size: 13px;" class="card-text indextext">{{news.intro|truncatechars:100}}</p> -->
                     </div>
                   </div>
                 {% endfor %}
               {% elif news_posts|length == 5 %}
                 {% for news in news_posts|slice:"2:"|slice:":3" %}
                   <div class="col">
-                    {% if news.image %}
-                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{news.image.url}}" class="d-block w-100" alt="..."></a>
-                      {% else %}
-                <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></a>
-                    {% endif %}
+
                     <div class="card-body">
-                      <h4 class="card-title indextext">{{news.title}}</h4>
-                      <p class="card-text indextext">{{news.intro|truncatechars:100}}</p>
+                                          {% for post_image in news.postimages_set.all %}
+                    {% if forloop.first%}
+                    {% if post_image.images %}
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{post_image.images.url}}" class="d-block w-100 indexnews" alt="..."></a>
+                      {% else %}
+                <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100 indexnews" alt="..."></a>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                      <h6 style="text-align: center" class="card-title indextext">{{news.title}}</h6>
+                      <!-- <p style="font-size: 13px;" class="card-text indextext">{{news.intro|truncatechars:100}}</p> -->
                     </div>
                   </div>
                 {% endfor %}
               {% elif news_posts|length == 4 %}
                 {% for news in news_posts|slice:"1:"|slice:":3" %}
                   <div class="col">
-                    {% if news.image %}
-                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{news.image.url}}" class="d-block w-100" alt="..."></a>
-                      {% else %}
-                    <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100" alt="..."></a>
-                    {% endif %}
+
                     <div class="card-body">
-                      <h4 class="card-title indextext">{{news.title}}</h4>
-                      <p class="card-text indextext">{{news.intro|truncatechars:100}}</p>
+                                          {% for post_image in news.postimages_set.all %}
+                    {% if forloop.first %}
+                    {% if post_image.images %}
+                      <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="{{post_image.images.url}}" class="d-block w-100 indexnews" alt="..."></a>
+                      {% else %}
+                    <a href="{% url 'post_detail' news.category.slug news.slug %}"><img src="/static/assets/img/NEWS.png" class="d-block w-100 indexnews" alt="..."></a>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                      <h6 style="text-align: center" class="card-title indextext">{{news.title}}</h6>
+                      <!-- <p style="font-size: 13px;" class="card-text indextext">{{news.intro|truncatechars:100}}</p> -->
                     </div>
                   </div>
                 {% endfor %}
@@ -136,7 +160,7 @@
           <hr class="hr" />
 
           <!-- Trending Section -->
-          <div class="col-lg-4">
+          <div class="col-lg-5">
 
             <div class="trending">
               <h3>Latest News</h3>
@@ -145,7 +169,7 @@
                 {% if news.category and news.category.slug %}
                 <li>
                   <a href="{% url 'post_detail' news.category.slug news.slug %}">
-                    <span class="number">1</span>
+                    <span class="number">{{forloop.counter}}</span>
                     <h3>{{news.title}}</h3>
                     <span class="author">{{news.author}}</span>
                   </a>
@@ -164,9 +188,13 @@
             <div class="post-entry-1 lg">
               {% if new_events.slug %}
               <h2><a href="{% url 'post_detail' new_events.category.slug new_events.slug %}">Events this month</a></h2>
-              {% if new_events.image %}
-              <a href="{% url 'post_detail' new_events.category.slug new_events.slug %}"><img src="{{new_events.image.url}}" alt="" class="img-fluid"></a>
+              {% for image in new_events.postimages_set.all %}
+              {% if forloop.first %}
+              {% if image.images %}
+              <a href="{% url 'post_detail' new_events.category.slug new_events.slug %}"><img src="{{image.images.url}}" style="max-height: 400px; object-fit: contain;" alt="" class="img-fluid"></a>
               {% endif %}
+              {% endif %}
+              {% endfor %}
               <div class="post-meta"><span class="date">Event</span> <span class="mx-1">&bullet;</span> <span>{{new_events.created_at|date:"Y-m-d"}}</span></div>
               <p class="mb-4 d-block"><a href="{% url 'post_detail' new_events.category.slug new_events.slug %}">{{new_events.intro}}</a></p>
 
@@ -194,6 +222,9 @@
             <div class="text-center mb-md-5"><a href="{% url 'cmi' %}"><h1>Consortium Member Institutions</h1></a></div>
             {% if map %}
             <div class="justify-content-center" id="map">{{ map|safe }}</div>
+                <script>
+                    {{ popup_script|safe }}
+                </script>
             {% endif %}
       </div>
     </section> <!-- cmi map -->

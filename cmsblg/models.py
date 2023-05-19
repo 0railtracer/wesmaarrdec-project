@@ -1,10 +1,32 @@
 from django.conf import settings
 from django.db import models
+from multiselectfield import MultiSelectField
 from auth_user.models import User
+import os
+import random
+from random import choice
+# Create your models here.
+def get_existing_file_name(instance, filename):
+    """
+    Returns the filename with a suffix (e.g. "_1") if a file with the same name
+    already exists in the media root directory.
+    """
+    path = os.path.join(settings.MEDIA_ROOT, filename)
+    if os.path.exists(path):
+        name, ext = os.path.splitext(filename)
+        i = 1
+        while os.path.exists(os.path.join(settings.MEDIA_ROOT, f"{name}_{i}{ext}")):
+            i += 1
+        # Check if the file with the original filename exists
+        if os.path.exists(os.path.join(settings.MEDIA_ROOT, instance.image.name)):
+            return instance.image.name
+        return f"{name}_{i}{ext}"
+    return filename
 
 class Category(models.Model):
     # blgcat_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
+    caption = models.CharField(max_length=255, blank=True, null=True)
     slug = models.SlugField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     created_by = models.CharField(max_length=50, blank=True, null=True)
@@ -40,9 +62,8 @@ class Post(models.Model):
     body = models.TextField()
     featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=CHOICES_STATUS, default=ACTIVE)
-    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    # image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
@@ -56,6 +77,13 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return '/%s/%s/' % (self.category.slug, self.slug)
+    
+class PostImages(models.Model):
+    post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE)
+    images = models.ImageField(upload_to=get_existing_file_name, verbose_name='Image', blank=True)
+
+    def __str__(self):
+        return self.post.title
 
 # class Comment(models.Model):
 #     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
@@ -75,7 +103,6 @@ class Comment(models.Model):
     # created_date = models.DateTimeField(auto_now_add=True)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.CharField(max_length=50, blank=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
@@ -98,7 +125,7 @@ class Fact(models.Model):
     img = models.ImageField(upload_to='Fact', blank=True, null=True)
     category = models.ForeignKey(Category, models.DO_NOTHING, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    created_by = models.CharField(max_length=50, blank=True, null=True)
+    created_by = models.CharField(max_length=255, null=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 

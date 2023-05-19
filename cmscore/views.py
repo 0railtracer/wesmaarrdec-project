@@ -1,3 +1,6 @@
+import os
+import re
+
 from django.http.response import HttpResponse
 from random import sample
 from django.http import HttpResponse
@@ -16,7 +19,6 @@ from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from .models import *
 from cmsblg.models import *
-from cmi_models.models import CMI
 from datetime import datetime
 from django.urls import reverse_lazy, reverse
 import pandas as pd
@@ -25,35 +27,71 @@ import mysql.connector
 import folium
 from folium.features import CustomIcon
 from django.contrib.auth import authenticate, login, logout
-from django.db import connection
+from django.db import connection, models, transaction
 from django.core.paginator import Paginator, EmptyPage
 from django.core.files.storage import default_storage
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
+from django.forms import modelformset_factory
+from itertools import chain
+from django.core.exceptions import ValidationError
+from django.utils.deconstruct import deconstructible
 
+# @deconstructible
+# class PathAndRename:
+#     def __init__(self, sub_path):
+#         self.path = sub_path
+
+#     def __call__(self, instance, filename):
+#         ext = filename.split('.')[-1]
+#         filename = f'{instance.pk}.{ext}'
+#         return os.path.join(self.path, filename)
+
+# def get_loginbg():
+#     return Loginbg.objects.first()
 
 db_settings = settings.DATABASES['default']
 
 class CMI:
-    def __init__(self, cmi_id, agency_code, name, detail, logo):
+    def __init__(self, cmi_id, agency_code, name, detail, logo, url, commodities, programs, projects):
         self.cmi_id = cmi_id
         self.agency_code = agency_code
         self.name = name
         self.detail = detail
         self.logo_url = default_storage.url(logo)
+        self.url = url
+        self.commodities = commodities
+        self.programs = programs
+        self.projects = projects
 
-# class CMIMAP:
-#     def __init__(self, cmi_id, agency_code, name, detail, logo):
-#         self.cmi_id = cmi_id
-#         self.agency_code = agency_code
-#         self.name = name
-#         self.detail = detail
-#         self.logo_url = logo
+
+class CMIMAP:
+    def __init__(self, cmi_id, agency_code, name, detail, logo):
+        self.cmi_id = cmi_id
+        self.agency_code = agency_code
+        self.name = name
+        self.detail = detail
+        self.logo_url = logo
+
+def sanitize_filename(filename):
+    """
+    Sanitizes the given filename by removing special characters and spaces.
+    """
+    # Remove special characters and spaces using regex
+    sanitized_filename = re.sub(r'[^a-zA-Z0-9.-]', '', filename)
+    return sanitized_filename
+
+def rename_image(image):
+    filename, extension = os.path.splitext(image.name)
+    new_filename = "new_name"  # Replace "new_name" with your desired naming logic
+    return new_filename + extension
 
 def index(request):
+    context = {}
     slides = Slide.objects.all()
     post = Post.objects.filter(featured=True)
-    photo = AlbumPhoto.objects.filter(slide=True)
+    albumphotos_events = AlbumPhoto.objects.filter(events=True).first()
+    albumphotos_news = AlbumPhoto.objects.filter(news=True)
     # commodity = Commodity.objects.filter(slide=True)
 
     news_category = Category.objects.filter(title__iexact='news').first()
@@ -96,49 +134,72 @@ def index(request):
 
         # Standard no Icon
         # query data from database and load into a DataFrame
-        query = "SELECT geolat, geolong, name FROM cmi"
-        df = pd.read_sql_query(query, conn)
-
-                # create map
-        # check if geolat and geolong columns have any null values
-        if df['geolat'].isnull().values.any() or df['geolong'].isnull().values.any():
-            m = None
-        else:
-            # create map
-            m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
-
-            # loop through DataFrame rows and add markers to the map
-            for index, row in df.iterrows():
-                # check if geolat and geolong have valid values
-                if not np.isnan(row['geolat']) and not np.isnan(row['geolong']):
-                    folium.Marker(
-                        location=[row['geolat'], row['geolong']],
-                        popup=row['name'],
-                        icon=folium.Icon(icon='icon')
-                    ).add_to(m)
-
-        # query = "SELECT geolat, geolong, name, CONCAT('cmi_profiling/media/', logo) AS logo FROM cmi"
+        # query = "SELECT geolat, geolong, name FROM cmi"
         # df = pd.read_sql_query(query, conn)
 
-        #                 # create map
-        # m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
+        #         # create map
+        # # check if geolat and geolong columns have any null values
+        # if df['geolat'].isnull().values.any() or df['geolong'].isnull().values.any():
+        #     m = None
+        # else:
+        #     # create map
+        #     m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True)
 
-        #                 # loop through DataFrame rows and add markers to the map
-        # for index, row in df.iterrows():
-        #     logo_url = row['logo']
-        #     if logo_url is not None:
-        #         icon = CustomIcon(
-        #             icon_image=logo_url,
-        #             icon_size=(50,50),
-        #         )
-        #     else:
-        #         icon = None
+        #     # loop through DataFrame rows and add markers to the map
+        #     for index, row in df.iterrows():
+        #         # check if geolat and geolong have valid values
+        #         if not np.isnan(row['geolat']) and not np.isnan(row['geolong']):
+        #             folium.Marker(
+        #                 location=[row['geolat'], row['geolong']],
+        #                 popup=row['name'],
+        #                 icon=folium.Icon(icon='icon')
+        #             ).add_to(m)
 
-        #     folium.Marker(
-        #         location=[row['geolat'], row['geolong']],
-        #         popup=row['name'],
-        #         icon=icon
-        #     ).add_to(m)
+        query = "SELECT geolat, geolong, name, CONCAT('cmi_profiling/media/', logo) AS logo, agency_id FROM cmi"
+        df = pd.read_sql_query(query, conn)
+
+        # create map
+        m = folium.Map(location=[7.561,124.233], zoom_start=8, control_scale=True,)
+
+        # define popup_script
+        popup_script = """
+            function goToCmiDetail(id) {
+                var url = '%s'.replace('cmi_id', id);
+                window.open(url, '_blank');
+            }
+        """ % reverse('cmidetail', args=[0])
+        print(reverse('cmidetail', args=[0]))
+        for index, row in df.iterrows():
+            print(f"Processing row {index}")
+            logo_url = row['logo']
+            if logo_url is not None and os.path.exists(logo_url):
+                icon = CustomIcon(
+                    icon_image=logo_url,
+                    icon_size=(50,50),
+                )
+            else:
+                icon = None
+
+            popup_script = """
+                function goToCmiDetail(id) {
+                    var url = '%s'.replace('cmi_id', id);
+                    window.open(url, '_blank');
+                }
+            """ % reverse('cmidetail', args=[row['agency_id']])
+            # print(reverse('cmidetail', args=[row['agency_id']]))
+            popup = folium.Popup(row['name'] + f'<br><a href="{reverse("cmidetail", args=[row["agency_id"]])}" target="_blank">Go to this CMI</a>')
+            
+            folium.Marker(
+                location=[row['geolat'], row['geolong']],
+                popup=popup,
+                icon=icon
+            ).add_to(m)
+            # get the map HTML and add it to the template context
+            map_html = m.get_root().render()
+            context['map'] = map_html
+
+            # add the popup script to the template context
+            context['popup_script'] = popup_script
     except mysql.connector.errors.Error as e:
         print(f"An error occurred: {e}")
     finally:
@@ -146,48 +207,17 @@ def index(request):
             cursor.close()
         if conn:
             conn.close()
-        # dynamic icon test
-        # markers = Marker.objects.all()
-        # for marker in markers:
-        #     folium.Marker(
-        #         location=[marker.geolat, marker.geolong],
-        #         popup=marker.name,
-        #         icon=folium.Icon(icon=marker.icon_path)
-        #     ).add_to(m)
-
-        # context = {
-        #     'my_map': m._repr_html_(),
-
-        # m = folium.Map(location=[7.635,124.854], zoom_start=7)
-
-        # folium.Marker(
-        #     location=[7.040, 122.075],
-        #     popup='Zamboanga',
-        #     icon=folium.Icon(icon='icon')
-        # ).add_to(m)
-
-        # folium.Marker(
-        #     location=[7.187, 124.214],
-        #     popup='Cotabato',
-        #     icon=folium.Icon(icon='icon')
-        # ).add_to(m)
-
-        # folium.Marker(
-        #     location=[8.172, 124.216],
-        #     popup='Cagayan de Oro',
-        #     icon=folium.Icon(icon='icon')
-        # ).add_to(m)
-
-    context = {
+    context.update({
         'post': post,
         'new_events': new_events,
-        'news_posts': news_posts,
-        'slides' : list(slides) + list(photo),
+        'news_posts': list(news_posts)+ list(albumphotos_news),
+        'slides' : slides,
         'random_post' : random_post,
         'random_slides' : random_slides,
         'random_slide_mini' : random_slide_mini,
+        # 'popup_script': popup_script
         # 'map': m._repr_html_(),
-    }
+    })
     if m is not None:
         context['map'] = m._repr_html_()
 
@@ -207,22 +237,62 @@ def mypost(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'single-post.html', {'page_obj': page_obj})
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Post
-    fields = ['category', 'title', 'intro', 'body', 'image']
-    success_url = reverse_lazy('mypost')
 
-    def test_func(self):
-        if self.request.user.is_superuser:
-            return self.request.user.is_superuser
-        else:
-            return self.request.user
+def updatepost(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    ImageFormSet = modelformset_factory(PostImages, form=PostImagesForm, extra=1, can_delete=True)
 
-    def get_template_names(self):
-        if self.request.user.is_superuser:
-            return ['createcommodity.html']
+    if request.method == 'POST':
+        post_form = PostForm(request.POST, instance=post)
+        post_images_formset = ImageFormSet(request.POST, request.FILES, queryset=post.postimages_set.all())
+
+        if post_form.is_valid() and post_images_formset.is_valid():
+            post = post_form.save(commit=False)
+            post_form.instance.author = request.user
+            post_form.instance.slug = generate_unique_slug(Post, post_form.cleaned_data['title'])
+            post.save()
+
+            # Delete images that were removed from the formset
+            for form in post_images_formset.deleted_forms:
+                if not form.instance.pk is None:
+                    form.instance.delete()
+
+            # Save the new images
+            for i, form in enumerate(post_images_formset.cleaned_data):
+                if form:
+                    for image in request.FILES.getlist(f'form-{i}-images'):
+                        post_images = PostImages.objects.create(post=post)
+
+                        # Check if an image with the same file name already exists in the media root directory
+                        filename, extension = os.path.splitext(image.name)
+                        path = os.path.join(settings.MEDIA_ROOT, filename)
+                        if os.path.exists(path + extension):
+                            post_images.images.name = filename + extension
+                        else:
+                            # Check if an image with the same file name exists in the PostImages model
+                            existing_image = PostImages.objects.filter(images__contains=filename).first()
+                            if existing_image:
+                                post_images.images = existing_image.images
+                            else:
+                                post_images.images = image
+
+                        post_images.save()
+
+        if request.user.is_staff or request.user.is_superuser:
+            return redirect('dashcommunity')
         else:
-            return ['post_update.html']
+            return redirect('mypost')
+
+    else:
+        post_form = PostForm(instance=post)
+        post_images_formset = ImageFormSet(queryset=post.postimages_set.all())
+
+    context = {
+        'post': post,
+        'post_form': post_form,
+        'post_images_formset': post_images_formset,
+    }
+    return render(request, 'multi-post-update.html', context)
 
 def allpost(request):
     post_list = Post.objects.filter(status=Post.ACTIVE).order_by('-created_at')
@@ -233,38 +303,67 @@ def allpost(request):
 
     return render(request, 'allposts.html', {'page_obj': page_obj})
 
+def createpost(request):
+    ImageFormSet = modelformset_factory(PostImages, form=PostImagesForm, extra=1)
 
-class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'createcommodity.html'
-    success_url = reverse_lazy('dashcommunity')
+    post_form = PostForm()
+    post_images_formset = ImageFormSet(queryset=PostImages.objects.none())
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        slug = slugify(form.cleaned_data['title'])
-        count = 1
-        while Post.objects.filter(slug=slug).exists():
-            slug = f"{slug}-{count}"
-            count += 1
-        form.instance.slug = slug
-        return super().form_valid(form)
+    if request.method == 'POST':
+        post_form = PostForm(request.POST)
+        post_images_formset = ImageFormSet(request.POST, request.FILES)
+        if post_form.is_valid() and post_images_formset.is_valid():
+            post = post_form.save(commit=False)
+            post_form.instance.author = request.user
+            post_form.instance.slug = generate_unique_slug(Post, post_form.cleaned_data['title'])
+            post.save()
 
-class PostCreateViewUser(LoginRequiredMixin, CreateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'createpost.html'
-    success_url = reverse_lazy('allpost')
+            for i, form in enumerate(post_images_formset.cleaned_data):
+                if form:
+                    for image in request.FILES.getlist(f'form-{i}-images'):
+                        post_images = PostImages.objects.create(post=post)
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        slug = slugify(form.cleaned_data['title'])
-        count = 1
-        while Post.objects.filter(slug=slug).exists():
-            slug = f"{slug}-{count}"
-            count += 1
-        form.instance.slug = slug
-        return super().form_valid(form)
+                        # Check if an image with the same file name already exists in the media root directory
+                        filename, extension = os.path.splitext(image.name)
+                        path = os.path.join(settings.MEDIA_ROOT, filename)
+                        if os.path.exists(path + extension):
+                            post_images.images.name = filename + extension
+                        else:
+                            # Check if an image with the same file name exists in the PostImages model
+                            existing_image = PostImages.objects.filter(images__contains=filename).first()
+                            if existing_image:
+                                post_images.images = existing_image.images
+                            else:
+                                post_images.images = image
+
+                        post_images.save()
+
+        if request.user.is_staff or request.user.is_superuser:
+            return redirect('dashcommunity')
+        else:
+            return redirect('mypost')
+
+    context = {
+        'post_form': post_form,
+        'post_images_formset': post_images_formset,
+    }
+    return render(request, 'multi-post.html', context)
+
+# class PostCreateViewUser(LoginRequiredMixin, CreateView):
+#     model = Post
+#     form_class = PostForm
+#     template_name = 'createpost.html'
+#     success_url = reverse_lazy('allpost')
+
+#     def form_valid(self, form):
+#         form.instance.author = self.request.user
+#         slug = slugify(form.cleaned_data['title'])
+#         count = 1
+#         while Post.objects.filter(slug=slug).exists():
+#             slug = f"{slug}-{count}"
+#             count += 1
+#         form.instance.slug = slug
+#         return super().form_valid(form)
 
 @staff_member_required(login_url='/login')
 def deletepost(request, slug):
@@ -307,7 +406,9 @@ def createconsortium(request):
     if request.method == 'POST':
         form = ConsortiumForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            album = form.save(commit=False)
+            album.created_by = request.user
+            album.save()
             return redirect('/dashboard')
 
     context = {'form': form}
@@ -371,14 +472,14 @@ def cmi(request):
         query = "SELECT * FROM cmi"
         cursor.execute(query)
 
-        cmi_list = []
+        cmilist = []
         for row in cursor.fetchall():
-            cmi = CMI(row[0], row[1], row[2], row[8], row[7])
-            cmi_list.append(cmi)
+            cmi = CMI(row[0], row[1], row[2], row[8], row[7], [], [], [], [])
+            cmilist.append(cmi)
             # print(row[3])
     except mysql.connector.errors.Error as e:
         print(f"An error occurred: {e}")
-        cmi_list = None
+        cmilist = None
         # commodity_list = None
     finally:
         if cursor:
@@ -386,9 +487,9 @@ def cmi(request):
         if conn:
             conn.close()
 
-    if cmi_list is not None:
+    if cmilist is not None:
         context = {
-            'cmi_list': cmi_list,
+            'cmilist': cmilist,
 
         }
     else:
@@ -396,35 +497,103 @@ def cmi(request):
 
     return render(request, 'CMI.html', context)
 
+class Com:
+    def __init__(self, com_id, name):
+        self.com_id = com_id
+        self.name = name
+
+class Prog:
+    def __init__(self, prog_id, title):
+        self.pgoj_id = prog_id
+        self.title = title
+
+class Proj:
+    def __init__(self, proj_id, title):
+        self.proj_id = proj_id
+        self.title = title
 
 def cmidetail(request, cmi_id):
     conn = None
     cursor = None
     try:
         conn = mysql.connector.connect(
-                    user=db_settings['USER'],
-                    password=db_settings['PASSWORD'],
-                    host=db_settings['HOST'],
-                    database=db_settings['NAME'],
-                    port=db_settings['PORT']
-                )
+            user=db_settings['USER'],
+            password=db_settings['PASSWORD'],
+            host=db_settings['HOST'],
+            database=db_settings['NAME'],
+            port=db_settings['PORT']
+        )
         cursor = conn.cursor()
 
-        query = "SELECT * FROM cmi WHERE agency_id = %s"
-        cursor.execute(query, (cmi_id,))
-        row = cursor.fetchone()
-        cmi = CMI(row[0], row[1], row[2], row[8], row[7])
+        # Retrieve CMI details from the "cmi" table
+        cmi_query = "SELECT * FROM cmi WHERE agency_id = %s"
+        cursor.execute(cmi_query, (cmi_id,))
+        cmi_row = cursor.fetchone()
 
-        # Make sure cursor is fully read before executing second query
-        cursor.fetchall()
+        # Create a CMI object with the retrieved data
+        cmi = CMI(cmi_row[0], cmi_row[1], cmi_row[2], cmi_row[8], cmi_row[7], cmi_row[11], [], [], [])
 
-        query_all = "SELECT * FROM cmi"
-        cursor.execute(query_all)
+        # Retrieve Commodity details related to the CMI
+        commodity_query = "SELECT * FROM commodity WHERE cmi_name_id = %s"
+        cursor.execute(commodity_query, (cmi_id,))
+        commodity_rows = cursor.fetchall()
 
-        cmis = []
-        for rows in cursor.fetchall():
-            cmidetail = CMI(rows[17], row[1], rows[2], rows[8], rows[7])
-            cmis.append(cmidetail)
+        # Process commodity rows and create Commodity objects
+        commodities = []
+        for commodity_row in commodity_rows:
+            commodity = Com(commodity_row[0], commodity_row[1])
+            commodities.append(commodity)
+            print(commodity.name)
+
+        # Retrieve Program details related to the CMI
+        program_query = "SELECT * FROM program WHERE impl_agency_id = %s"
+        cursor.execute(program_query, (cmi_id,))
+        program_rows = cursor.fetchall()
+
+        # Process program rows and create Program objects
+        programs = []
+        for program_row in program_rows:
+            program = Prog(program_row[0], program_row[1])
+            programs.append(program)
+            print(program.title)
+
+        # Retrieve Project details related to the CMI
+        project_query = "SELECT * FROM project WHERE impl_agency_id = %s"
+        cursor.execute(project_query, (cmi_id,))
+        project_rows = cursor.fetchall()
+
+        # Process project rows and create Project objects
+        projects = []
+        for project_row in project_rows:
+            project = Proj(project_row[0], project_row[1])
+            projects.append(project)
+            print(project.title)
+
+        querymap = "SELECT geolat, geolong, name, CONCAT('cmi_profiling/media/', logo) AS logo FROM cmi"
+        df = pd.read_sql_query(querymap, conn)
+
+        # get the location of the selected CMI agency
+        cmi_location = (cmi_row[4], cmi_row[5])
+
+        # create map centered on the selected CMI agency
+        m = folium.Map(location=cmi_location, zoom_start=19, control_scale=True)
+
+        # loop through DataFrame rows and add markers to the map
+        for index, cmi_row in df.iterrows():
+            logo_url = cmi_row['logo']
+            if logo_url is not None and os.path.exists(logo_url):
+                icon = CustomIcon(
+                    icon_image=logo_url,
+                    icon_size=(50,50),
+                )
+            else:
+                icon = None
+
+            folium.Marker(
+                location=[cmi_row['geolat'], cmi_row['geolong']],
+                popup=cmi_row['name'],
+                icon=icon
+            ).add_to(m)
 
     except mysql.connector.errors.Error as e:
         print(f"An error occurred: {e}")
@@ -433,12 +602,77 @@ def cmidetail(request, cmi_id):
             cursor.close()
         if conn:
             conn.close()
+
     context = {
-        'cmi':cmi,
-        # 'cmis':cmis
+        'cmi': cmi,
+        'commodities': commodities,
+        'programs': programs,
+        'projects': projects,
     }
+    if m is not None:
+        context['map'] = m._repr_html_()
     return render(request, 'CMI-detail.html', context)
 
+# def cmidetail(request, cmi_id):
+#     conn = None
+#     cursor = None
+#     try:
+#         conn = mysql.connector.connect(
+#                     user=db_settings['USER'],
+#                     password=db_settings['PASSWORD'],
+#                     host=db_settings['HOST'],
+#                     database=db_settings['NAME'],
+#                     port=db_settings['PORT']
+#                 )
+#         cursor = conn.cursor()
+
+#         query = "SELECT * FROM cmi WHERE agency_id = %s"
+#         cursor.execute(query, (cmi_id,))
+#         row = cursor.fetchone()
+#         cmi = CMI(row[0], row[1], row[2], row[8], row[7])
+
+#         # Make sure cursor is fully read before executing second query
+#         # cursor.fetchall()
+#         querymap = "SELECT geolat, geolong, name, CONCAT('cmi_profiling/media/', logo) AS logo FROM cmi"
+#         df = pd.read_sql_query(querymap, conn)
+
+#         # get the location of the selected CMI agency
+#         cmi_location = (row[4], row[5])
+
+#         # create map centered on the selected CMI agency
+#         m = folium.Map(location=cmi_location, zoom_start=19, control_scale=True)
+
+#         # loop through DataFrame rows and add markers to the map
+#         for index, row in df.iterrows():
+#             logo_url = row['logo']
+#             if logo_url is not None and os.path.exists(logo_url):
+#                 icon = CustomIcon(
+#                     icon_image=logo_url,
+#                     icon_size=(50,50),
+#                 )
+#             else:
+#                 icon = None
+
+#             folium.Marker(
+#                 location=[row['geolat'], row['geolong']],
+#                 popup=row['name'],
+#                 icon=icon
+#             ).add_to(m)
+#     except mysql.connector.errors.Error as e:
+#         print(f"An error occurred: {e}")
+#     finally:
+#         if cursor:
+#             cursor.close()
+#         if conn:
+#             conn.close()
+
+#     context = {
+#         'cmi': cmi,
+#     }
+#     if m is not None:
+#         context['map'] = m._repr_html_()
+
+#     return render(request, 'CMI-detail.html', context)
 
 # def category(request):
 #     return render(request, 'category.html')
@@ -967,6 +1201,7 @@ def dashboard(request):
     slides = Slide.objects.all()
     posts = Post.objects.all()
     categories = Category.objects.all()
+    loginbg = get_object_or_404(Loginbg)
     # projects = Project.objects.all()
     try:
         consortium = About.objects.get(id=1)
@@ -1022,7 +1257,7 @@ def dashboard(request):
                 'user_data_list': user_data_list,
                 'slides': slides,
                 'posts': posts,
-                # 'commodity': commodity,
+                'loginbg': loginbg,
                 'categories': categories,
                 # 'projects' : projects,
                 'consortium' : consortium,
@@ -1039,10 +1274,12 @@ def postman(request):
     return render(request, 'post-section.html', context)
 
 def galleryman(request):
+    loginbg = get_object_or_404(Loginbg)
     photos = AlbumPhoto.objects.all()
     albums = Album.objects.all()
     context = {
         'photos': photos,
+        'loginbg': loginbg,
         'albums': albums
         }
     return render(request, 'dash-gallery.html', context)
@@ -1071,7 +1308,9 @@ def createalbum(request):
     if request.method == 'POST':
         form = AlbumForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            album = form.save(commit=False)
+            album.created_by = request.user
+            album.save()
             return redirect('/dashboard')
 
     context = {'form': form}
@@ -1106,27 +1345,265 @@ def album(request, pk):
 
     return render(request, 'albumphoto.html', context)
 
+def albumimgs(request, pk):
+    albumphotos = get_object_or_404(AlbumPhoto, pk=pk)
+    photoimages = albumphotos.albumphotoimages_set.all()
+
+    context = {
+        'albumphotos': albumphotos,
+        'photoimages': photoimages,
+
+    }
+    return render(request, 'albumphotoimg.html', context)
+
 @staff_member_required(login_url='/login')
 def createphoto(request):
+    PhotoFormSet = modelformset_factory(AlbumPhotoImages, form=AlbumPhotoImagesForm, extra=1)
 
-    form = PhotoForm()
+    photo_form = PhotoForm()
+    photo_images_formset = PhotoFormSet(queryset=AlbumPhotoImages.objects.none())
+
     if request.method == 'POST':
-        form = PhotoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('/dashboard')
+        photo_form = PhotoForm(request.POST, request.FILES)
+        photo_images_formset = PhotoFormSet(request.POST, request.FILES)
+        if photo_form.is_valid() and photo_images_formset.is_valid():
+            album = photo_form.save(commit=False)
+            album.created_by = request.user
+            album.save()
 
-    context = {'form': form}
-    return render(request, 'createcategory.html', context)
+            for i, form in enumerate(photo_images_formset.cleaned_data):
+                if form:
+                    for image in request.FILES.getlist(f'form-{i}-images'):
+                        album_photo_images = AlbumPhotoImages.objects.create(albumphoto=album)
 
-class photoupdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = AlbumPhoto
-    form_class = PhotoForm
-    success_url = reverse_lazy('dashboard')
-    template_name = 'createcategory.html'
+                        # Check if an image with the same file name already exists in the media root directory
+                        filename, extension = os.path.splitext(image.name)
+                        path = os.path.join(settings.MEDIA_ROOT, filename)
+                        if os.path.exists(path + extension):
+                            album_photo_images.images.name = filename + extension
+                        else:
+                            # Check if an image with the same file name exists in the AlbumPhotoImages model
+                            existing_image = AlbumPhotoImages.objects.filter(images__contains=filename).first()
+                            if existing_image:
+                                album_photo_images.images = existing_image.images
+                            else:
+                                album_photo_images.images = image
 
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
+                        album_photo_images.save()
+
+            return redirect('galleryman')
+
+    context = {
+        'photo_form': photo_form,
+        'photo_images_formset': photo_images_formset,
+    }
+    return render(request, 'multi-image.html', context)
+
+def photoupdate(request, albumphoto_id):
+    albumphoto = get_object_or_404(AlbumPhoto, pk=albumphoto_id)
+    PhotoFormSet = modelformset_factory(
+        AlbumPhotoImages, form=AlbumPhotoImagesForm, extra=1, can_delete=True)
+
+    if request.method == 'POST':
+        photo_form = PhotoForm(request.POST, request.FILES, instance=albumphoto)
+        photo_images_formset = PhotoFormSet(request.POST, request.FILES, queryset=albumphoto.albumphotoimages_set.all())
+        if photo_form.is_valid() and photo_images_formset.is_valid():
+            albumphoto = photo_form.save(commit=False)
+            albumphoto.modified_by = request.user.username # Update with username instead of user instance
+            albumphoto.save()
+
+            for form in photo_images_formset.deleted_forms:
+
+                if form.instance.id:
+                    form.instance.delete()
+
+            for i, form in enumerate(photo_images_formset.cleaned_data):
+                if form:
+                    # Check if the "Clear" checkbox is selected
+                    if form.get('images-clear'):
+                        albumphoto.albumphotoimages_set.filter(id=form['id']).delete()
+                    else:
+                        for image in request.FILES.getlist(f'form-{i}-images'):
+                            album_photo_images = AlbumPhotoImages(albumphoto=albumphoto)
+
+                            # Check if an image with the same file name already exists in the media root directory
+                            filename, extension = os.path.splitext(image.name)
+                            path = os.path.join(settings.MEDIA_ROOT, filename)
+                            if os.path.exists(path + extension):
+                                album_photo_images.images.name = filename + extension
+                            else:
+                                # Check if an image with the same file name exists in the AlbumPhotoImages model
+                                existing_image = AlbumPhotoImages.objects.filter(images__contains=filename).first()
+                                if existing_image:
+                                    album_photo_images.images.name = existing_image.images.name
+                                else:
+                                    album_photo_images.images = image
+
+                            album_photo_images.save()
+
+
+        for form in photo_images_formset:
+            if form.cleaned_data.get('DELETE') and form.cleaned_data.get('images'):
+                form.instance.images.delete()
+            form.fields['images'].widget.initial = ''
+
+
+            return redirect('galleryman')
+
+    else:
+        photo_form = PhotoForm(instance=albumphoto)
+        photo_images_formset = PhotoFormSet(queryset=albumphoto.albumphotoimages_set.all())
+
+    context = {
+        'photo_form': photo_form,
+        'photo_images_formset': photo_images_formset,
+    }
+
+    return render(request, 'multi-img-update.html', context)
+
+
+# UPDATE ONLY AND NO CLEAR
+# def photoupdate(request, albumphoto_id):
+#     albumphoto = get_object_or_404(AlbumPhoto, pk=albumphoto_id)
+#     PhotoFormSet = modelformset_factory(
+#         AlbumPhotoImages, form=AlbumPhotoImagesForm, extra=1)
+
+#     if request.method == 'POST':
+#         photo_form = PhotoForm(request.POST, request.FILES, instance=albumphoto)
+#         photo_images_formset = PhotoFormSet(request.POST, request.FILES, queryset=albumphoto.albumphotoimages_set.all())
+#         if photo_form.is_valid() and photo_images_formset.is_valid():
+#             albumphoto = photo_form.save(commit=False)
+#             albumphoto.modified_by = request.user.username # Update with username instead of user instance
+#             albumphoto.save()
+
+#             for i, form in enumerate(photo_images_formset.cleaned_data):
+#                 if form:
+#                     # Check if the "Clear" checkbox is selected
+#                     if form.get('images-clear'):
+#                         albumphoto.albumphotoimages_set.filter(id=form['id']).delete()
+#                     else:
+#                         for image in request.FILES.getlist(f'form-{i}-images'):
+#                             album_photo_images = AlbumPhotoImages(albumphoto=albumphoto)
+
+#                             # Check if an image with the same file name already exists in the media root directory
+#                             filename, extension = os.path.splitext(image.name)
+#                             path = os.path.join(settings.MEDIA_ROOT, filename)
+#                             if os.path.exists(path + extension):
+#                                 album_photo_images.images.name = filename + extension
+#                             else:
+#                                 # Check if an image with the same file name exists in the AlbumPhotoImages model
+#                                 existing_image = AlbumPhotoImages.objects.filter(images__contains=filename).first()
+#                                 if existing_image:
+#                                     album_photo_images.images.name = existing_image.images.name
+#                                 else:
+#                                     album_photo_images.images = image
+
+#                             album_photo_images.save()
+
+#             return redirect('/dashboard')
+
+#     else:
+#         photo_form = PhotoForm(instance=albumphoto)
+#         initial = [{'images': image} for image in albumphoto.albumphotoimages_set.all()]
+#         photo_images_formset = PhotoFormSet(queryset=albumphoto.albumphotoimages_set.all(), initial=initial)
+
+#     context = {
+#         'photo_form': photo_form,
+#         'photo_images_formset': photo_images_formset,
+#     }
+
+#     return render(request, 'multi-img-update.html', context)
+
+# DELETE ONLY AND NO UPDATE OR ADD
+# class photoupdate(UpdateView):
+#     model = AlbumPhoto
+#     form_class = PhotoForm
+#     template_name = 'multi-img-update.html'
+#     success_url = reverse_lazy('galleryman')
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         if self.request.POST:
+#             context['photo_formset'] = AlbumPhotoImagesFormSet(self.request.POST, self.request.FILES, instance=self.object)
+#         else:
+#             context['photo_formset'] = AlbumPhotoImagesFormSet(instance=self.object)
+#         return context
+
+#     def form_valid(self, form):
+#         context = self.get_context_data()
+#         photo_formset = context['photo_formset']
+#         with transaction.atomic():
+#             self.object = form.save()
+
+#             if photo_formset.is_valid():
+#                 photo_formset.instance = self.object
+#                 photo_formset.save()
+
+#             # Handle multiple images
+#             for i, form in enumerate(photo_formset):
+#                 if form.cleaned_data.get('images', False):
+#                     for image in self.request.FILES.getlist(f'form-{i}-images'):
+#                         album_photo_image = form.save(commit=False)
+
+#                         # Check if an image with the same file name already exists in the media root directory
+#                         filename, extension = os.path.splitext(image.name)
+#                         path = os.path.join(settings.MEDIA_ROOT, filename)
+#                         if os.path.exists(path + extension):
+#                             album_photo_image.images.name = filename + extension
+#                         else:
+#                             # Check if an image with the same file name exists in the AlbumPhotoImages model
+#                             existing_image = AlbumPhotoImages.objects.filter(images__contains=filename).first()
+#                             if existing_image:
+#                                 album_photo_image.images = existing_image.images
+#                             else:
+#                                 album_photo_image.images = image
+
+#                         album_photo_image.albumphoto = self.object
+#                         album_photo_image.save()
+#         return super().form_valid(form)
+
+# OLD UPDATEVIEW class
+# class photoupdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = AlbumPhoto
+#     form_class = PhotoForm
+#     success_url = reverse_lazy('galleryman')
+#     template_name = 'multi-img-update.html'
+
+#     def get_context_data(self, **kwargs):
+#         PhotoFormSet = modelformset_factory(AlbumPhotoImages, form=AlbumPhotoImagesForm, extra=1)
+#         data = super().get_context_data(**kwargs)
+#         if self.request.POST:
+#             data['photo_images_formset'] = PhotoFormSet(self.request.POST, self.request.FILES, queryset=AlbumPhotoImages.objects.filter(albumphoto=self.object))
+#         else:
+#             data['photo_images_formset'] = PhotoFormSet(queryset=AlbumPhotoImages.objects.filter(albumphoto=self.object))
+#         return data
+
+#     def form_valid(self, form):
+#         context = self.get_context_data()
+#         photo_images_formset = context['photo_images_formset']
+#         with transaction.atomic():
+#             self.object = form.save()
+#             if photo_images_formset.is_valid():
+#                 photo_images_formset.instance = self.object
+#                 photo_images_formset.save()
+#                 for form in photo_images_formset:
+#                     if form.instance.pk:
+#                         # Form has an existing instance, update it
+#                         instance = form.save(commit=False)
+#                         if form.cleaned_data.get('images'):
+#                             instance.images = form.cleaned_data['images']
+#                         instance.save()
+#                     else:
+#                         # Form does not have an existing instance, create a new one
+#                         if form.cleaned_data.get('images'):
+#                             instance = form.save(commit=False)
+#                             instance.albumphoto = self.object
+#                             instance.images = form.cleaned_data['images']
+#                             instance.save()
+#             return super().form_valid(form)
+
+#     def test_func(self):
+#         return self.request.user.is_staff or self.request.user.is_superuser
 
 @staff_member_required(login_url='/logout')
 def deletePhoto(request, pk):
@@ -1136,7 +1613,7 @@ def deletePhoto(request, pk):
         messages.success(request, 'photo deleted successfully')
     except Exception as e:
         messages.error(request, f'Error deleting photo: {str(e)}')
-    return redirect('/dashboard')
+    return redirect('galleryman')
 
 # def photo(request, pk):
 #     photo = get_object_or_404(AlbumPhoto, pk=pk)
@@ -1177,6 +1654,7 @@ def map(request):
     return render(request, 'map.html', context)
 
 def dashabout(request):
+    loginbg = get_object_or_404(Loginbg)
     try:
         consortium = About.objects.get(id=1)
     except About.DoesNotExist:
@@ -1192,7 +1670,7 @@ def dashabout(request):
     except Organization.DoesNotExist:
         org = None
 
-    context = {'consortium': consortium, 'consortium_url': url, 'org': org}
+    context = {'consortium': consortium, 'consortium_url': url, 'loginbg': loginbg, 'org': org}
     return render(request, 'dash-about.html', context)
 
 def dashcmi(request):
@@ -1200,13 +1678,15 @@ def dashcmi(request):
     return render(request, 'dash-cmi.html', context)
 
 def dashslider(request):
+    loginbg = get_object_or_404(Loginbg)
     slides = Slide.objects.all
-    context = {'slides':slides}
+    context = {'loginbg': loginbg, 'slides':slides}
     return render(request, 'dash-slider.html', context)
 
 def dashfaq(request):
+    loginbg = get_object_or_404(Loginbg)
     faq = Fact.objects.all()
-    context = {'faq': faq}
+    context = {'loginbg': loginbg, 'faq': faq}
     return render(request, 'dash-faq.html', context)
 
 def dashcommodity(request):
@@ -1229,9 +1709,10 @@ def dashcommodity(request):
     return render(request, 'dash-commodities.html', context)
 
 def dashcommunity(request):
+    loginbg = get_object_or_404(Loginbg)
     posts = Post.objects.all()
     categories = Category.objects.all()
-    context = {'posts': posts, 'categories': categories}
+    context = {'posts': posts, 'loginbg': loginbg, 'categories': categories}
     return render(request, 'dash-community.html', context)
 
 def dashproject(request):
@@ -1254,6 +1735,7 @@ def dashproject(request):
     return render(request, 'dash-projects.html', context)
 
 def dashservices(request):
+    loginbg = get_object_or_404(Loginbg)
     cnx = mysql.connector.connect(
                     user=db_settings['USER'],
                     password=db_settings['PASSWORD'],
@@ -1269,10 +1751,11 @@ def dashservices(request):
     query = "SELECT * FROM commodity"
     cursor.execute(query)
     commodity = cursor.fetchall()
-    context = {'services': services}
+    context = {'loginbg': loginbg, 'services': services}
     return render(request, 'dash-services.html', context)
 
 def dashuser(request):
+    loginbg = get_object_or_404(Loginbg)
     User = get_user_model()
     users = User.objects.all().order_by('-is_staff')
     # Get a QuerySet of all session objects
@@ -1306,18 +1789,19 @@ def dashuser(request):
         }
         user_data_list.append(user_data)
 
-    context = { 'user_data_list': user_data_list,
+    context = { 'user_data_list': user_data_list, 'loginbg': loginbg,
             }
     return render(request, 'dash-users.html', context)
 
 def dashslider(request):
+    loginbg = get_object_or_404(Loginbg)
     try:
         slides = Slide.objects.all
     except:
         slides = None
 
     context = {
-
+        'loginbg': loginbg,
         'slides': slides
     }
     return render(request, 'dash-slider.html', context)
@@ -1336,11 +1820,13 @@ def dashslider(request):
 #         return context
 
 def dashcontent(request):
+    loginbg = get_object_or_404(Loginbg)
     farmcontent = Content.objects.filter(content_type=Content.FARM)
     expertcontent = Content.objects.filter(content_type=Content.EXPERT)
     supportcontent = Content.objects.filter(content_type=Content.SUPPORT)
 
     context = {
+        'loginbg': loginbg,
         'farmcontent': farmcontent,
         'expertcontent': expertcontent,
         'supportcontent': supportcontent,
@@ -1352,6 +1838,10 @@ class ContentCreate(LoginRequiredMixin, CreateView):
     form_class = ContentForm
     template_name = 'createcommodity.html'
     success_url = reverse_lazy('dashboard')
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
 
 def contentdelete(request, id):
     content = get_object_or_404(Content, id=id)
@@ -1369,3 +1859,39 @@ def aboutus(request):
 def manual(request):
 
     return render(request, 'manual.html')
+
+def loginbgcreate(request):
+
+    form = LoginbgForm()
+    if request.method == 'POST':
+        form = LoginbgForm(request.POST, request.FILES)
+        if form.is_valid():
+            bg = form.save(commit=False)
+            bg.save()
+            return redirect('/dashboard')
+
+    context = {'form': form}
+    return render(request, 'createcategory.html', context)
+
+
+def delete_file(path):
+    with open(path, 'w'):
+        pass  # Open and immediately close the file
+    os.remove(path)
+
+class LoginbgUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Loginbg
+    fields = '__all__'
+    success_url = reverse_lazy('dashboard')
+    template_name = 'commodity_update.html'
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+    def form_valid(self, form):
+        # Delete old image
+        old_image = self.get_object().Login_BG
+        if old_image:
+            delete_file(old_image.path)
+
+        return super().form_valid(form)

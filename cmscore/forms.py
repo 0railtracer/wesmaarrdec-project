@@ -4,23 +4,55 @@ from .models import *
 from cmsblg.models import *
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
+from django.forms.models import inlineformset_factory
 
-class PostForm(ModelForm):
+
+def generate_unique_slug(model, title):
+    slug = slugify(title)
+    unique_slug = slug
+    num = 1
+    while model.objects.filter(slug=unique_slug).exists():
+        unique_slug = f"{slug}-{num}"
+        num += 1
+    return unique_slug
+
+class PostImagesForm(forms.ModelForm):
+    DELETE = forms.BooleanField(required=False, initial=False, widget=forms.CheckboxInput(attrs={'class': 'delete'}))
+
+    class Meta:
+        model = PostImages
+        fields = ['images']
+        widgets = {
+            'images': forms.FileInput(attrs={'multiple': True, 'accept': 'image/*'}),
+        }
+
+PostImagesFormSet = inlineformset_factory(Post, PostImages, form=PostImagesForm, extra=1, can_delete=True)
+
+class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['category', 'title', 'intro', 'body', 'image']
+        fields = ['category', 'title', 'intro', 'body']
         labels = {
             'title': 'Title',
             'category': 'Category',
             'intro': 'Introduction',
-            'body': 'Content',
-            'image': 'Image'
+            'body': 'Content'
         }
-    
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        slug = slugify(form.cleaned_data['title'])
+        count = 1
+        while Post.objects.filter(slug=slug).exists():
+            slug = f"{slug}-{count}"
+            count += 1
+        form.instance.slug = slug
+        return super().form_valid(form)
+
 class ConsortiumForm(ModelForm):
     class Meta:
         model = About
-        fields = '__all__'
+        fields = ['About_name','About_image','consortium_desc', 'consortium_objectives','vision','mission']
         labels = '__all__'
         
 class OrganizationForm(ModelForm):
@@ -95,21 +127,46 @@ class SlideForm(ModelForm):
 class AlbumForm(ModelForm):
     class Meta:
         model = Album
-        fields = '__all__'
-        labels = '__all__'
+        fields = ['name', 'caption', 'event_id', 'proj_id', 'prog_id', 'project', 'program']
+        labels = {
+            'name': 'Name',
+            'caption': 'Caption',
+            'event_id': 'Event Id',
+            'proj_id': 'Project Id',
+            'prog_id': 'Program Id',
+            'project': 'Related Project',
+            'program': 'Related Program',
+        }
+
+class AlbumPhotoImagesForm(forms.ModelForm):
+    class Meta:
+        model = AlbumPhotoImages
+        fields = ['images']
+        widgets = {
+            'images': forms.FileInput(attrs={'multiple': True, 'accept': 'image/*'}),
+        }
+        
+AlbumPhotoImagesFormSet = inlineformset_factory(AlbumPhoto, AlbumPhotoImages, form=AlbumPhotoImagesForm, extra=1, can_delete=True)
 
 class PhotoForm(forms.ModelForm):
     class Meta:
         model = AlbumPhoto
-        fields = '__all__'
+        fields = ['name','caption','carousel','events','news','album']
         labels = '__all__'
         widgets = {
-                'slide': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_slide'}),
                 'carousel': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_carousel'}),
+                'events': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_events'}),
+                'news': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_news'}),
         }
 
 class ContentForm(forms.ModelForm):
     class Meta:
         model = Content
+        fields = ['name', 'content_type', 'content_detail']
+        labels = '__all__'
+
+class LoginbgForm(forms.ModelForm):
+    class Meta:
+        model = Loginbg
         fields = '__all__'
         labels = '__all__'

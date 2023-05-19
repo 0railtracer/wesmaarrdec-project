@@ -18,16 +18,20 @@
                                     <div class="col-12">
                                         <div class="swiper sliderFeaturedPosts">
                                             <div class="swiper-wrapper">
-                                              {% for carousel in carousel %}
+                                            {% for carousel in carousel %}
+                                            {% for image in carousel.albumphotoimages_set.all %}
                                                 <div class="swiper-slide">
-                                                    <a href="#" class="img-bg d-flex align-items-end" style="background-image: url('{{carousel.image.url}}');">
-                                                        <div class="img-bg-inner">
-                                                            <h2>{{ carousel.name }}</h2>
-                                                            <p>{{ carousel.caption }}</p>
-                                                        </div>
+                                                {% if image.images %}
+                                                    <a href="#" class="img-bg d-flex align-items-end" style="background-image: url('{{ image.images.url }}');">
+                                                    <div class="img-bg-inner">
+                                                        <h2>{{ carousel.name }}</h2>
+                                                        <p>{{ carousel.caption }}</p>
+                                                    </div>
                                                     </a>
+                                                {% endif %}
                                                 </div>
-                                                {% endfor %}
+                                            {% endfor %}
+                                            {% endfor %}
                                             </div>
 
                                             <div class="custom-swiper-button-next">

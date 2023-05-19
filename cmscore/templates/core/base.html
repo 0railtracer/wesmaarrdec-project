@@ -83,9 +83,8 @@
               <li><a href="#">Comming Soon</a></li>
             </ul>
           </li>
-          {% if user.is_superuser %}
+          {% if user.is_superuser or user.is_staff %}
           <a href="{% url 'dashboard' %}"><span>DASHBOARD</span></a>
-
           {% endif %}
             {% if user.is_authenticated %}
              <a href= "{% url 'logout' %}" class="mx-2">
@@ -157,6 +156,7 @@
             <div class="col-9"><h3 class="footer-heading" style="color: #43B14B;">CONSORTIUM MEMBER INSTITUTION</h3></div>
             <div class="col-4">
                     <ul class="footer-links list-unstyled">
+                      {% if cmi_list %}
                        {% for cmi in cmi_list|slice:":5" %}
                       <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.agency_code }}</a></li>
                       {% endfor %}
@@ -174,6 +174,7 @@
                       {% for cmi in cmi_list|slice:"10:"|slice:":5" %}
                       <li><a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}">{{ cmi.agency_code }}</a></li>
                       {% endfor %}
+                      {% endif %}
                     </ul>
             </div>
           </div>
@@ -275,6 +276,7 @@
   <script src="/static/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/static/assets/js/main.js"></script>
 </body>
 

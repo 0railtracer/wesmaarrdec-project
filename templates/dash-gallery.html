@@ -5,15 +5,6 @@
  <div class="album py-5">
     <div class="container">
       <h2 style="color: rgb(0, 75, 50); font-style: italic;">Gallery Album</h2>
-                        <!-- {% for album in albums %}
-                    <div class="card" style="width: 10rem; border: none; width: 100px; margin-left: 10px;">
-                      <a href="{% url 'album' album.id %}"><img class="card-img-top" src="{{album.get_cover_image_url}}" alt="Card image cap" style="width: 400px; height: 400px;"></a>
-                      <div class="card-body">
-                        <h5 class="card-title">{{album.name}}</h5>
-                        <p class="card-text">{{album.caption}}</p>
-                       </div>
-                    </div>
-                    {% endfor %} -->
         <a href="{% url 'createalbum' %}"><button type="button" class="btn btn-primary"> Add Album </button></a>
         <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5" style="
               margin-bottom: 100px;
@@ -21,7 +12,6 @@
           {% for album in albums %}
           <div class="col">
             <div class="card shadow-sm mb-6">
-              <!-- <img src="{{album.get_cover_image_url}}"> -->
               <div class="card-body"><small class="text-muted">{{ album.created_at|date:"Y-m-d"}}</small>
                 <p class="card-text">Name: {{album.name}}</p>
                 <p class="card-text">Caption: {{album.caption}}</p>
@@ -43,8 +33,12 @@
   <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
         {% for photo in photos %}
         <div class="col">
-          <div class="card shadow-sm">
-            <img src="{{photo.image.url}}">
+          <div class="card shadow-sm"> 
+            {% if photo.albumphotoimages_set.all %}
+                {% if photo.albumphotoimages_set.first.images %}
+                    <img style="max-height: 100px; object-fit: cover;" src="{{photo.albumphotoimages_set.first.images.url}}">
+                {% endif %}
+            {% endif %}
             <div class="card-body"><small class="text-muted">{{ photo.created_at|date:"Y-m-d"}}</small>
               <p class="card-text">Name: {{ photo.name|title }}</p>
               <p class="card-text">Caption: {{ photo.caption|truncatechars:100 }}</p>

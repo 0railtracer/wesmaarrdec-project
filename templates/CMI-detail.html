@@ -7,9 +7,89 @@
   color: #43B14B;
 }
 
+.mapy{
+  width: 600px;
+}
+@media (max-width: 768px) {
+  .mapy {
+    width: auto;
+  }
+}
 </style>
 
-    <section>
+    <!-- Com -->
+    <div class="modal fade" id="Com" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Commodities</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                {% if commodities %}
+                {% for com in commodities %}
+                <h6>{{com.name}}</h6>
+                <hr>
+                {% endfor %}
+                {%else%}
+                <p>There Are No Commodities Related Here</p>
+                {%endif%}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+        <!-- Prog -->
+    <div class="modal fade" id="Prog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Programs</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% if programs %}
+                {% for prog in programs %}
+                <h6>{{prog.title}}</h6>
+                <hr>
+                {% endfor  %}
+                {% else %}
+                <p>There Are No Programs Related Here </p>
+                {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+        <!-- Proj -->
+    <div class="modal fade" id="Proj" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Projects</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% if projects %}
+                {% for proj in projects %}
+                <h6> {{ proj.title }}</h6>
+                <hr>
+                {% endfor %}
+                {% else %}
+                <p>There Are No Projects Related Here</p>
+                {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
       <div class="container" data-aos="fade-up">
             <div class="section-header d-flex justify-content-between align-items-center mb-5">
             <div><a href="{% url 'cmi' %}" class="more">Back to CMI</a></div>
@@ -17,25 +97,68 @@
         <div class="row">
           <div class="col-lg-12 text-center mb-5">
             <h1 class="page-title">{{cmi.agency_code}}</h1>
+            <h2 class="mb-4 display-4">{{cmi.name}}</h2>
           </div>
         </div>
 
         <div class="row mb-5">
 
           <div class="d-md-flex post-entry-2 half">
-            <a href="#" class="me-4 thumbnail">
-              <img src="{{cmi.logo_url}}" alt="" class="img-fluid">
-            </a>
-            <div class="ps-md-5 mt-4 mt-md-0">
-              <div class="post-meta mt-4">{{cmi.agency_code}}</div>
-              <h2 class="mb-4 display-4">{{cmi.name}}</h2>
 
-              <p>{{cmi.detail}}</p>
+            <div class="mapy" style="align-self: center; margin: auto; max-width: 600px ;">
+              {% if map %}
+              {{ map|safe }}
+              {% endif %}
             </div>
+            <!-- <a href="#" class="me-4 thumbnail"> -->
+              {% if cmi.url %}
+              <a href="{{ cmi.url }}" style="margin: auto;">
+              <img src="{{cmi.logo_url}}" style="    width: 400px;
+              max-width: 100%;
+              height: 400px;
+              margin: auto" alt="">
+              </a>
+              {% else %}
+              <img src="{{cmi.logo_url}}" style="    width: 400px;
+              max-width: 100%;
+              height: 400px;
+              margin: auto" alt="">
+              {% endif %}
           </div>
             <div class="section-header d-flex justify-content-between align-items-center mb-5">
             <!-- <div class="page-title"> Representative </div> -->
+
             </div>
+            <section>
+              <div class="post-meta mt-4">{{cmi.agency_code}}</div>
+              <p>{{cmi.detail}}</p>
+            </section>
+            <div class="container text-center">
+              <hr>
+            <div class="row align-items-start">
+              <div class="col ">
+<!-- Button trigger modal -->
+              <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Com">
+                Commodities
+              </button>
+
+              </div>
+              <div class="col ">
+<!-- Button trigger modal -->
+              <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Proj">
+                Projects
+              </button>
+                
+              </div>
+              <div class="col ">
+<!-- Button trigger modal -->
+              <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Prog">
+                Programs
+              </button>
+                
+              </div>
+            </div>
+          </div>
           <!-- <div class="album py-5 bg-light">
             <div class="container">
               <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">

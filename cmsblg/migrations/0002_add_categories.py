@@ -3,11 +3,11 @@ from django.db import migrations
 from cmsblg.models import Category
 
 def create_categories(apps, schema_editor):
-    cat1 = Category(title='Events', slug='events')
+    cat1 = Category(title='Events', caption='Explore Wesmaarrdec Events', slug='events')
     cat1.save()
-    cat2 = Category(title='Programs', slug='programs')
+    cat2 = Category(title='Programs', caption='Explore Wesmaarrdec Programs', slug='programs')
     cat2.save()
-    cat3 = Category(title='News', slug='news')
+    cat3 = Category(title='News', caption='Get Updates on Wesmaarrdec News', slug='news')
     cat3.save()
 
 class Migration(migrations.Migration):

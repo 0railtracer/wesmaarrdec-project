@@ -272,6 +272,13 @@
             <li class="nav-item">
             <a class="nav-link active mb-2" href="{% url 'dashfaq' %}" id="green">FAQ</button></a>
           </li>
+            <li class="nav-item">
+              {% if loginbg.id %}
+              <a class="nav-link active mb-2" href="{% url 'loginbgupdate' loginbg.id %}" id="green">Update Login-BG</a>
+              {% else %}
+              <a class="nav-link active mb-2" href="{% url 'createloginbg' %}" id="green">Add Login-BG</a>
+              {% endif %}
+          </li>
               <li class="nav-item">
         <a class="nav-link" href="{% url 'manual' %}"><button type="button" class="btn btn-outline-primary">Manual</button></a>
       </li>
@@ -328,7 +335,19 @@
                     </div>
               </div>
             </div>
+            <!-- <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Login background</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">Add/Update</h6>
+              <p class="card-text">Click Add if there is no Login BG<br> Click Update to Update Existing Login-BG</p>
+              {% if loginbg.id %}
+              <a href="{% url 'loginbgupdate' loginbg.id %}" class="card-link btn btn-success">Update Login-BG</a>
+              {% else %}
+              <a href="{% url 'createloginbg' %}" class="card-link btn btn-info">Add Login-BG</a>
+              {% endif %}
+            </div>
           </div>
+          </div> -->
           </div>
           </div>
         {% endblock%}

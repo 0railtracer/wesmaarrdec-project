@@ -38,7 +38,7 @@
           </div> ----------------------------------------------------------- old breadcrumb -->
           {% if user.is_authenticated%}
           <div class="col d-flex justify-content-center">
-            <a href="{% url 'postcreateviewuser' %}"><button type="button" class="btn btn-success btn-lg">Add new post</button></a>
+            <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-success btn-lg">Add new post</button></a>
           </div>
           {% endif %}
           <div class="col d-flex justify-content-center">
@@ -48,23 +48,39 @@
                             <h1>{{category.title}}</h1>
                             <hr>
                             {% for post in page_obj %}
-                            <div class="card mb-5" style="max-width: 40rem; margin: auto; text-align-last: center;">
-                              {% if post.image %}
-                                <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top mt-3" alt="..." style=" max-width: 80%;"></a>
-                              {% endif%}
+                              <div class="card mb-5" style="max-width: 40rem; margin: auto; text-align-last: center;">
+                                <div class="container text-center">
+                                  <div class="row">
+                                    {% for post_image in post.postimages_set.all %}
+                                      {% if post_image.images %}
+                                        <div class="col">
+                                          <a href="{% url 'post_detail' post.category.slug post.slug %}">
+                                            <img src="{{ post_image.images.url }}" class="card-img-top mt-3" alt="..." style="max-width:300px; height: 200px; max-height: 200px; object-fit: cover;">
+                                          </a>
+                                        </div>
+                                        {% if forloop.counter == 2 %}
+                                          </div>
+                                          <div class="row">
+                                        {% endif %}
+                                      {% endif %}
+                                    {% endfor %}
+                                  </div>
+                                </div>
                                 <div class="card-body">
-                                    <a href="{% url 'post_detail' post.category.slug post.slug %}"><h5 class="card-title">{{ post.title }}</h5></a>
-                                    <p class="card-text">{{ post.intro }}</p>
+                                  <a href="{% url 'post_detail' post.category.slug post.slug %}">
+                                    <h5 class="card-title">{{ post.title }}</h5>
+                                  </a>
+                                  <p class="card-text">{{ post.intro }}</p>
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">{{ post.created_at|timesince }} ago</li>
-                                    <li class="list-group-item">Comments: {{post.comments.count}}</li>
+                                  <li class="list-group-item">{{ post.created_at|timesince }} ago</li>
+                                  <li class="list-group-item">Comments: {{ post.comments.count }}</li>
                                 </ul>
-                            </div>
+                              </div>
                             {% empty %}
-                                <div class="content">
-                                    <p>There is currently no post</p>
-                                </div>
+                              <div class="content">
+                                <p>There is currently no post</p>
+                              </div>
                             {% endfor %}
                         </div>
                         <!-- Display pagination links -->

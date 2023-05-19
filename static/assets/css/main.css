@@ -211,7 +211,7 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Desktop Navigation 
+# Desktop Navigation
 --------------------------------------------------------------*/
 @media (min-width: 1280px) {
   .navbar {
@@ -1360,10 +1360,35 @@ section {
  }
 
 .indextext{
+
+}
+@media (max-width: 768px) {
+  .indextext{
+    font-size: 10px;
+  }
+}
+
+.contform{
+
+}
+
+@media (max-width: 1400px){
+    .contform{
+        width: 100%;
+    }
+}
+
+.indextext{
   
 }
 @media (max-width: 768px) {
   .indextext{
     font-size: 10px;
   }
+}
+
+.indexnews{
+  height: 300px;
+  max-height: 300px;
+  object-fit: cover;
 }

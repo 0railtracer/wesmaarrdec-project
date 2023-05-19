@@ -23,14 +23,28 @@
           <div class=" post-content" data-aos="fade-up">
             <!-- ======= Single Post Content ======= -->
             {% for post in page_obj %}
-                              <div class="card text-center mb-5">
+                              <div class="card text-center mb-5" style="max-width: 40rem; margin: auto; text-align-last: center;">
                                   <div class="card-header">
                                       {{post.title}}
                                   </div>
                                   <div class="card-body">
-                                        {% if post.image %}
-                                        <a href="{% url 'post_detail' post.category.slug post.slug %}"><img src="{{ post.image.url }}" class="card-img-top mt-3" alt="..." style=" max-width: 65%;"></a>
-                                        {% endif%}
+                                <div class="container text-center">
+                                        <div class="row">
+                                          {% for post_image in post.postimages_set.all %}
+                                            {% if post_image.images %}
+                                              <div class="col">
+                                                <a href="{% url 'post_detail' post.category.slug post.slug %}">
+                                                  <img src="{{ post_image.images.url }}" class="card-img-top mt-3" alt="..." style="max-width:300px; height: 200px; max-height: 200px; object-fit: cover;">
+                                                </a>
+                                              </div>
+                                              {% if forloop.counter == 2 %}
+                                                </div>
+                                                <div class="row">
+                                              {% endif %}
+                                            {% endif %}
+                                          {% endfor %}
+                                        </div>
+                                      </div>
                                       <a href="{% url 'post_detail' post.category.slug post.slug %}"><h5 class="card-title">{{ post.body|slice:':200' }}</h5></a>
                                       <p class="card-text">Comments: {{post.comments.count}}</p>
                                       <a href="{% url 'post_update' post.slug %}" style="color: green ;"> <button type="button" class="btn btn-sm btn-success mb-5">EDIT POST</button> </a>

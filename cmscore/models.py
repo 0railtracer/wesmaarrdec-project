@@ -1,7 +1,28 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from cmi_models.models import *
+from multiselectfield import MultiSelectField
+import os
+import random
+from random import choice
 # Create your models here.
+def get_existing_file_name(instance, filename):
+    """
+    Returns the filename with a suffix (e.g. "_1") if a file with the same name
+    already exists in the media root directory.
+    """
+    path = os.path.join(settings.MEDIA_ROOT, filename)
+    if os.path.exists(path):
+        name, ext = os.path.splitext(filename)
+        i = 1
+        while os.path.exists(os.path.join(settings.MEDIA_ROOT, f"{name}_{i}{ext}")):
+            i += 1
+        # Check if the file with the original filename exists
+        if os.path.exists(os.path.join(settings.MEDIA_ROOT, instance.image.name)):
+            return instance.image.name
+        return f"{name}_{i}{ext}"
+    return filename
+
 
 class Slide(models.Model):
     # slide_id = models.AutoField(primary_key=True)
@@ -55,9 +76,9 @@ class About(models.Model):
     consortium_desc = models.TextField(blank=True, null=True)
     consortium_objectives = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    created_by = models.CharField(max_length=50, blank=True, null=True)
+    created_by = models.CharField(max_length=255, blank=True, null=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-    modified_by = models.CharField(max_length=50, blank=True, null=True)
+    modified_by = models.CharField(max_length=255, blank=True, null=True)
    
    
     class Meta:
@@ -141,12 +162,12 @@ class Album(models.Model):
     event_id = models.IntegerField(blank=True, null=True)
     proj_id = models.IntegerField(blank=True, null=True)
     prog_id = models.IntegerField(blank=True, null=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project')
-    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='program')
-    created_at = models.DateTimeField( auto_now_add=True, blank=True, null=True)
-    created_by = models.CharField(max_length=50, blank=True, null=True)
-    modified_at = models.DateTimeField( auto_now=True, blank=True, null=True)
-    modified_by = models.CharField(max_length=50, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project', blank=True, null=True)
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='program', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    created_by = models.CharField(max_length=255, blank=True, null=True)
+    modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    modified_by = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table = 'album'
@@ -156,23 +177,26 @@ class Album(models.Model):
     
     def get_cover_image_url(self):
         try:
-            latest_photo = self.photos.latest('created_at')
-            return latest_photo.image.url
-        except AttributeError:
-            return 'static\assets\img\noimg.png'
+            random_photo = self.photos.order_by('?').first()
+            latest_photo_image = random_photo.albumphotoimages_set.latest('id')
+            if latest_photo_image.images:
+                return latest_photo_image.images.url
+        except (AttributeError, ValueError, AlbumPhoto.DoesNotExist, AlbumPhotoImages.DoesNotExist):
+            pass
+        return '/static/assets/img/album_default.png'
     
 class AlbumPhoto(models.Model):
     # photo_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     caption = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(upload_to='AlbumPhoto', blank=False, null=True)
-    slide = models.BooleanField(default=False)
     carousel = models.BooleanField(default=False)
+    events = models.BooleanField(default=False)
+    news = models.BooleanField(default=False)
     album = models.ForeignKey(Album, related_name='photos', blank=True, null=True, on_delete=models.CASCADE)
-    created_at = models.DateTimeField( auto_now_add=True, blank=True, null=True)
-    created_by = models.CharField(max_length=50, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    created_by = models.CharField(max_length=255, blank=True, null=True)
     modified_at = models.DateTimeField( auto_now=True, blank=True, null=True)
-    modified_by = models.CharField(max_length=50, blank=True, null=True)
+    modified_by = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table = 'album_photo'
@@ -180,6 +204,12 @@ class AlbumPhoto(models.Model):
     def __str__(self):
         return self.name
     
+class AlbumPhotoImages(models.Model):
+    albumphoto = models.ForeignKey(AlbumPhoto, default=None, on_delete=models.CASCADE)
+    images = models.ImageField(upload_to=get_existing_file_name, verbose_name='Image', blank=True)
+
+    def __str__(self):
+        return self.albumphoto.caption
     
 class Content(models.Model):
     EXPERT = 'expert'
@@ -194,8 +224,18 @@ class Content(models.Model):
     name = models.CharField(max_length=255)
     content_type = models.CharField(max_length=255, choices=CHOICES_STATUS)
     content_detail = models.TextField()
+    created_by = models. CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+    
+class Loginbg(models.Model):
+    Login_BG = models.ImageField(upload_to='loginbg')
+
+    def save(self, *args, **kwargs):
+        if not self.pk and Loginbg.objects.exists():
+            # if creating a new singleton instance and there is already a Loginbg object, raise an error
+            raise ValidationError('Loginbg Singleton already exists')
+        super().save(*args, **kwargs)

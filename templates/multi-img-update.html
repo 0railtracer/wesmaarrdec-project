@@ -1,0 +1,63 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content%}
+<div class="hero">
+  <div class="container my-5">
+    <div class="i-am-centered">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in photo_form %}
+          {% if field.widget.input_type == 'checkbox' %}
+            <div class="form-group form-check">
+              {{ field }}
+              <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            </div>
+          {% else %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field|add_class:"form-control" }}
+            </div>
+          {% endif %}
+        {% endfor %}
+        {{ photo_images_formset.management_form }}
+            {% for form in photo_images_formset %}
+                <p>
+                    <label for="{{ form.images.id_for_label }}">Image:</label>
+                    {% if form.instance.images %}
+                        Currently: <a href="{{ form.instance.images.url }}">{{ form.instance.images.name }}</a>
+                        {{ form.DELETE }}
+                    {% endif %}
+                    Clear:
+                    {{ form.images }}
+                    {{ form.id }}
+                </p>
+            {% endfor %}
+        <button type="submit">Update</button>
+    </form>
+    </div>
+  </div>
+</div>
+<style>
+    .form-group {
+        margin-bottom: 10px;
+    }
+    label {
+        font-weight: bold;
+    }
+    input[type="text"], input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+    button[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+    }
+</style>
+{% endblock %}

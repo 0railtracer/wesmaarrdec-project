@@ -107,7 +107,7 @@ DATABASES = {
 
         #mysql localhost
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'testss',
+        'NAME': 'wesmaarrdec',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
@@ -184,3 +184,5 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Your Company <noreply@yourcompany.com>'
 
 EMAIL_SUBJECT_PREFIX = '[Your Company] '
+
+X_FRAME_OPTIONS = 'ALLOWALL'

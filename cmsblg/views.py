@@ -36,8 +36,10 @@ def detail(request, category_slug, slug):
 def category(request, slug):
     category = get_object_or_404(Category, slug=slug)
     posts = category.posts.filter(status=Post.ACTIVE)
+    albumnews = AlbumPhoto.objects.filter(news=True)
+    albumevents = AlbumPhoto.objects.filter(events=True)
 
-    return render(request, 'cmsblg/category.html', {'category': category, 'posts': posts})
+    return render(request, 'cmsblg/category.html', {'category': category, 'posts': posts, 'albumnews': albumnews, 'albumevents': albumevents})
 
 def search(request):
     query = request.GET.get('query', '')
@@ -62,6 +64,10 @@ class CreateFact(LoginRequiredMixin, CreateView):
     form_class = FactForm
     template_name = 'createcommodity.html'
     success_url = reverse_lazy('dashboard')
+    
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
 
 class UpdateFaq(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Fact

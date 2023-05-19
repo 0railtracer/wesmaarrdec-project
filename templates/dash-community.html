@@ -18,7 +18,7 @@
       {% for category in categories %}
     <tr>
     <td>Category: {{ category.title|title }}</td>
-    <td><a href="{% url 'deletecategory' category.slug %}" style="color: brown;"><button type="button" class="btn btn-danger"> Delete Category </button>  </a></td>
+    <td><a href="{% url 'deletecategory' category.slug %}" onclick="return confirm('WARNING!! Press OK to continue DELETING')" style="color: brown;"><button type="button" class="btn btn-danger"> Delete Category </button>  </a></td>
 
     </tr>
     {% endfor %}
@@ -35,15 +35,19 @@
         {% for post in posts %}
         <div class="col">
           <div class="card shadow-sm">
-            {% if post.image %}
-            <img src="{{post.image.url}}">
-            {% endif %}
+            {% for post in post.postimages_set.all%}
+              {% if post.images %}
+                {% if forloop.first %}
+                <img style="max-height: 100px; object-fit: cover;" src="{{post.images.url}}">
+                {% endif %}
+              {% endif %}
+            {% endfor %}
             <div class="card-body"><small class="text-muted">{{ post.created_at|date:"Y-m-d"}}</small>
-              <p class="card-text">Name: {{ post.title|title }}</p>
+              <p class="card-text">Title: {{ post.title|title }}</p>
               <p class="card-text">Detail: {{ post.body|truncatechars:100 }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="{% url 'deletepost' post.slug %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-danger">Delete Post </button> </a>
+                  <a href="{% url 'deletepost' post.slug %}" onclick="return confirm('WARNING!! Press OK to continue DELETING')" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-danger">Delete Post </button> </a>
                   <a href="{% url 'post_update' post.slug %}" style="color: rgb(255, 0, 0);"> <button type="button" class="btn btn-info"> Update Post </button> </a>
                 </div>
 
