@@ -139,12 +139,12 @@
               <div class="col ">
 <!-- Button trigger modal -->
               <!-- <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Com"> -->
-                <h1>Commodities</h1>
+                <h1 class="cmdtitle">Commodities</h1>
                 <div class="shadow" style="max-height: 350px; overflow-y: auto;">
                 {% if commodities %}
                 {% for com in commodities %}
                 <a href="{% url 'commodetail' com_id=com.com_id %}"><h5 class="mt-5" style="text-decoration: underline; color: #66b366;">{{com.name}}</h5></a> 
-                <hr>
+                <hr style="color: #008001;">
                 {% endfor %}
                 {%else%}
                 <p>There Are No Commodities Related Here</p>
@@ -157,12 +157,12 @@
               <div class="col ">
 <!-- Button trigger modal -->
               <!-- <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Proj"> -->
-                <h1>Projects</h1>
+                <h1 class="cmdtitle">Projects</h1>
                 <div class="shadow" style="max-height: 350px; overflow-y: auto;">
                 {% if projects %}
                 {% for proj in projects %}
                 <a href="{% url 'onprojectdetail' proj_id=proj.proj_id %}"><h6 class="mt-5" style="text-decoration: underline; color: #66b366;"> {{ proj.title }}</h6></a>
-                <hr>
+                <hr style="color: #008001;">
                 {% endfor %}
                 {% else %}
                 <p>There Are No Projects Related Here</p>
@@ -175,12 +175,12 @@
               <div class="col ">
 <!-- Button trigger modal -->
               <!-- <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Prog"> -->
-                <h1>Programs</h1> 
+                <h1 class="cmdtitle">Programs</h1> 
                 <div class="shadow" style="max-height: 350px; overflow-y: auto;">
                 {% if programs %}
                 {% for prog in programs %}
                 <h6 class="mt-5">{{prog.title}}</h6>
-                <hr>
+                <hr style="color: #008001;">
                 {% endfor  %}
                 {% else %}
                 <p>There Are No Programs Related Here </p>

@@ -17,8 +17,8 @@
                         <div class="card-container">
                             {% for albumphoto in albumphotos %}
                             {% for image in albumphoto.image.all %}
-                                <div class="card" style="width: 15rem;">
-                                    <img id="img_{{ image.pk }}" src="{{ image.images.url }}" style="height: 250px; max-height: 250px; object-fit: cover;" class="d-block w-100 enlarge-image" alt="{{ image.alt_text }}"
+                                <div class="card border-0">
+                                    <img id="img_{{ image.pk }}" src="{{ image.images.url }}" style="height: 250px; max-height: 250px; object-fit: cover;" class="d-block w-100 enlarge-image m-4" alt="{{ image.alt_text }}"
                                         onclick="enlargeImg('img_{{ image.pk }}')" onmouseout="resetImg('img_{{ image.pk }}')">
                                     <div class="card-body">
                                         <a href="{{image.images.url}}"><h5 class="card-title shadows">{{ albumphoto.name }}</h5></a> 

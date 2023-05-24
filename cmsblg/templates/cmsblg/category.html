@@ -12,8 +12,8 @@
                             </div>
                     <div class="columns">
                         <div class="column is-8 is-offset-2 align-items-center">
-                            <h1>{{category.title}}</h1>
-                            <hr>
+                            <h1 class="page-title">{{category.title}}</h1>
+                            <hr style="color: #008001;">
                             {% for post in albumnews %}
                               <div class="card mb-5" style="max-width: 40rem; margin: auto; text-align-last: center;">
                                 <div class="container text-center">
@@ -77,7 +77,7 @@
                               </div>
                             {% endfor %}
                             {% for post in posts %}
-                              <div class="card mb-5" style="max-width: 40rem; margin: auto; text-align-last: center;">
+                              <div class="card mb-5 border-0" style="max-width: 40rem; margin: auto; text-align-last: center;">
                                 <div class="container text-center">
                                   <div class="row">
                                                                         {% if post.postimages_set.all %}
@@ -118,8 +118,8 @@
                                   <p class="card-text">{{ post.intro }}</p>
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                  <li class="list-group-item">{{ post.created_at|timesince }} ago</li>
-                                  <li class="list-group-item">Comments: {{ post.comments.count }}</li>
+                                  <li class="list-group-item" style="background-color: #008001; color: #ffffff;">{{ post.created_at|timesince }} ago</li>
+                                  <li class="list-group-item" style="background-color: #66b365; color: #ffffff;">Comments: {{ post.comments.count }}</li>
                                 </ul>
                               </div>
                             {% empty %}

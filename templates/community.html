@@ -41,19 +41,19 @@
 
                 <div class="col d-flex justify-content-center">
                     <div class="card text-center" style="border: none;">
-                        <h1>Community Forum</h1>
+                        <h1 class="page-title">Community Forum</h1>
                     </div>
                 </div>
-                <hr>
+                <hr style="color: #008001;">
                 <div class="col d-flex justify-content-center">
                     <div class="row">
                     {% for category in categories %}
               
-                        <div class="card row-hover pos-relative py-3 px-3 mb-3">
+                        <div class="card row-hover pos-relative py-3 px-3 mb-3 border-0">
                             <div class="row align-items-center">
                                 <div class="col-md-8 mb-3 mb-sm-0">
                                     <h5>
-                                    <a href="{% url 'category_detail' category.slug %}" class="text-primary" id="link">{{ category.title }}</a>
+                                    <a href="{% url 'category_detail' category.slug %}" class="cmdbody" id="link">{{ category.title }}</a>
                                     </h5>
                                     <p class="text-sm">{{category.caption}}</p>
                                 </div>
@@ -63,7 +63,7 @@
                                             <span class="d-block text-sm">Posts: {{ category.posts.count }}</span> 
                                         </div>
                                     </div>
-                                </div>
+                                </div> <hr style="color: #008001;">
                             </div>
                         </div>
                         {% endfor %}

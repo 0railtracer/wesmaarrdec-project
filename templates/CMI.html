@@ -7,7 +7,7 @@
       <div class="col d-flex justify-content-center">
         <div class="card text-center" style="border: none;">
             <div class="card-body">
-                <h1 class="card-title">Consortium Member Institutions</h1>
+                <h2 class="page-title">Consortium Member Institutions</h2>
                 <h5 class="card-text">These institutions are considered organic and/or regular members of the consortium. However, when appropriate, WESMAARRDEC may allow qualified research and development institutions, local government units, non-government organizations and private sectors in the region to become members as approved by the Regional Research and Development Coordinating Committee (RRDCC). The private sectors includes the companies and  profit-organizations that may be willing to fund R&D activities.</h5>
                 <p> <br> </p>
             </div>
@@ -24,7 +24,7 @@
                   <a href="{% url 'cmidetail' cmi_id=cmi.cmi_id %}"><img class="card-img-top" src="{{cmi.logo_url}}" style=" width: 200px; max-width: 200px; height: 200px; max-height: 200px; object-fit: scale-down;" alt="Card image cap"></a>
                   {% endif %}
                   <div class="card-body">
-                    <h5 class="card-title">{{cmi.agency_code}}</h5>
+                    <h5 class="card-title" style="color: #66b365;">{{cmi.agency_code}}</h5>
                     <p class="card-text">{{cmi.name}}</p>
                   </div>
                 </div>
@@ -52,4 +52,5 @@
     .card-img-top{
       margin: 2px;
     }
+
   </style>

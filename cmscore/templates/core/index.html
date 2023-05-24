@@ -238,7 +238,7 @@
           <!-- Trending Section -->
           <div class="col-lg-5">
 
-            <div class="trending">
+            <div class="trending border-0">
               <h3>Latest News</h3>
               <ul class="trending-post">
                 {% for news in news_posts%}
@@ -255,7 +255,7 @@
               </ul>
             </div>
             {% if news.category and news.category.slug %}
-            <a href="{% url 'category_detail' slug='news' %}"><p class="text-end">View all news</p></a>
+            <a href="{% url 'category_detail' slug='news' %}"><p class="view text-end">View all news</p></a>
             {% endif %}
 
           </div> <!-- End Trending Section -->
@@ -306,7 +306,7 @@
             <div class="section-header d-flex justify-content-between align-items-center mb-5">
             <div><a href="{% url 'cmi' %}" class="more"></a></div>
             </div>
-            <div class="text-center mb-md-5"><a href="{% url 'cmi' %}"><h1 id="link">Consortium Member Institutions</h1></a></div>
+            <div class="text-center mb-md-5"><a href="{% url 'cmi' %}"><h1 id="link" style="color: #66b365;">Consortium Member Institutions</h1></a></div>
             {% if map %}
             <div class="justify-content-center" id="map">{{ map|safe }}</div>
                 <script>
@@ -317,9 +317,111 @@
     </section> <!-- cmi map -->
 
 <style>
+  .hr{
+    color: #008001;
+  }
  #link:hover{
   color: #66b366;
   text-decoration: underline;
- }
+  }
+
+  .trending {
+  border: 1px solid rgba(var(--color-black-rgb), 0.1);
+}
+
+.trending>h3 {
+  color: #008001;
+  padding: 20px;
+  border-bottom: 2px solid #66b365;
+}
+
+.trending .trending-post {
+  padding: 0;
+  margin: 0;
+}
+
+.trending .trending-post li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: block;
+}
+
+.trending .trending-post li a {
+  display: block;
+  padding: 20px;
+  border-bottom: 1px solid #66b365;
+  position: relative;
+  overflow: hidden;
+}
+
+.trending .trending-post li a .number {
+  position: absolute;
+  z-index: -1;
+  font-size: 5rem;
+  left: -10px;
+  top: -20px;
+  font-weight: 700;
+  color: rgba(var(--color-black-rgb), 0.05);
+}
+
+.trending .trending-post li a h3 {
+  font-size: 18px;
+  color: #008001;
+}
+
+.trending .trending-post li a .author {
+  color: #66b365bd;
+  font-weight: 500;
+}
+
+.trending .trending-post li a:hover h3 {
+  color: rgba(var(--color-black-rgb), 1);
+}
+
+.trending .trending-post li:last-child a {
+  border-bottom: none;
+}
+
+
+.post-entry-1 {
+  margin-bottom: 30px;
+}
+
+.post-entry-1 img {
+  margin-bottom: 30px;
+}
+
+.post-entry-1 h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+
+.post-entry-1 h2 a {
+  color: #66b365;
+}
+
+.post-entry-1 .author {
+  color: #008001;
+}
+
+.post-entry-1.lg h2 {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.post-meta {
+  font-size: 11px;
+  letter-spacing: 0.07rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: var(--font-secondary);
+  color: #66b365bd;
+  margin-bottom: 10px;
+}
 </style>
 {% endblock %}

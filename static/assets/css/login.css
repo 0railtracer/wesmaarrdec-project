@@ -1,4 +1,7 @@
-body {font-family: Arial, Helvetica, sans-serif;}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #66b365;
+}
 
 /* Full-width input fields */
 input[type=text], input[type=password] {
@@ -11,6 +14,10 @@ input[type=text], input[type=password] {
 }
 
 /* Set a style for all buttons */
+.card .button{
+  background-color: #66b365;
+}
+
 button {
   background-color: #04AA6D;
   color: white;
