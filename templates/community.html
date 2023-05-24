@@ -53,7 +53,7 @@
                             <div class="row align-items-center">
                                 <div class="col-md-8 mb-3 mb-sm-0">
                                     <h5>
-                                    <a href="{% url 'category_detail' category.slug %}" class="text-primary">{{ category.title }}</a>
+                                    <a href="{% url 'category_detail' category.slug %}" class="text-primary" id="link">{{ category.title }}</a>
                                     </h5>
                                     <p class="text-sm">{{category.caption}}</p>
                                 </div>
@@ -133,6 +133,10 @@
       </div>
 
     <style>
+    #link:hover{
+      color: #66b366;
+      text-decoration: underline;
+    }
     .btn{
       margin: 20px;
       margin-left: auto;

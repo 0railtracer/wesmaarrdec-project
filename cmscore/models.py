@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from cmi_models.models import *
+from cmsblg.models import *
 from multiselectfield import MultiSelectField
 import os
 import random
@@ -9,7 +10,8 @@ from random import choice
 def get_existing_file_name(instance, filename):
     """
     Returns the filename with a suffix (e.g. "_1") if a file with the same name
-    already exists in the media root directory.
+    already exists in the media root directory. The filename will be prefixed with
+    the album photo name.
     """
     path = os.path.join(settings.MEDIA_ROOT, filename)
     if os.path.exists(path):
@@ -18,10 +20,11 @@ def get_existing_file_name(instance, filename):
         while os.path.exists(os.path.join(settings.MEDIA_ROOT, f"{name}_{i}{ext}")):
             i += 1
         # Check if the file with the original filename exists
-        if os.path.exists(os.path.join(settings.MEDIA_ROOT, instance.image.name)):
-            return instance.image.name
-        return f"{name}_{i}{ext}"
+        if os.path.exists(os.path.join(settings.MEDIA_ROOT, instance.albumphoto.name + ext)):
+            return instance.albumphoto.name + ext
+        return f"{instance.albumphoto.name}_{i}{ext}"
     return filename
+
 
 
 class Slide(models.Model):
@@ -159,9 +162,7 @@ class Album(models.Model):
     # album_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     caption = models.CharField(max_length=255, blank=True, null=True)
-    event_id = models.IntegerField(blank=True, null=True)
-    proj_id = models.IntegerField(blank=True, null=True)
-    prog_id = models.IntegerField(blank=True, null=True)
+    event_id = models.CharField(max_length=255, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project', blank=True, null=True)
     program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='program', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
@@ -178,12 +179,12 @@ class Album(models.Model):
     def get_cover_image_url(self):
         try:
             random_photo = self.photos.order_by('?').first()
-            latest_photo_image = random_photo.albumphotoimages_set.latest('id')
+            latest_photo_image = random_photo.album_photo_images.latest('id')
             if latest_photo_image.images:
                 return latest_photo_image.images.url
-        except (AttributeError, ValueError, AlbumPhoto.DoesNotExist, AlbumPhotoImages.DoesNotExist):
+        except (AttributeError, ValueError, AlbumPhoto.DoesNotExist):
             pass
-        return '/static/assets/img/album_default.png'
+        return '/static/assets/img/noimg.png'
     
 class AlbumPhoto(models.Model):
     # photo_id = models.AutoField(primary_key=True)
@@ -193,6 +194,7 @@ class AlbumPhoto(models.Model):
     events = models.BooleanField(default=False)
     news = models.BooleanField(default=False)
     album = models.ForeignKey(Album, related_name='photos', blank=True, null=True, on_delete=models.CASCADE)
+    image = models.ManyToManyField('cmsblg.PostImages', related_name='albumimg', blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     created_by = models.CharField(max_length=255, blank=True, null=True)
     modified_at = models.DateTimeField( auto_now=True, blank=True, null=True)
@@ -204,12 +206,20 @@ class AlbumPhoto(models.Model):
     def __str__(self):
         return self.name
     
-class AlbumPhotoImages(models.Model):
-    albumphoto = models.ForeignKey(AlbumPhoto, default=None, on_delete=models.CASCADE)
-    images = models.ImageField(upload_to=get_existing_file_name, verbose_name='Image', blank=True)
+# class AlbumPhotoImages(models.Model):
+#     albumphoto = models.ForeignKey(AlbumPhoto, default=None, on_delete=models.CASCADE)
+#     images = models.ImageField(upload_to=get_existing_file_name, verbose_name='Image', blank=True)
 
-    def __str__(self):
-        return self.albumphoto.caption
+#     def save(self, *args, **kwargs):
+#         if not self.pk:  # Only for new instances
+#             # Set the filename to the name of the album photo with the original file extension
+#             filename = f"{self.albumphoto.name}{os.path.splitext(self.images.name)[1]}"
+#             self.images.name = filename
+
+#         super().save(*args, **kwargs)
+
+#     def __str__(self):
+#         return self.albumphoto.name
     
 class Content(models.Model):
     EXPERT = 'expert'

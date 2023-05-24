@@ -1,14 +1,37 @@
-# from django.shortcuts import render, redirect
-# from django.http import HttpResponse
-# from django.contrib.auth.models import User, auth
-# from django.contrib import messages
-# from django.contrib.auth.forms import UserCreationForm
-# from django.core.mail import send_mail
-# from django.template.loader import render_to_string
-# from django.utils.html import strip_tags
-# from django.urls import reverse
-# from django.contrib.auth import authenticate, login as auth_login, logout
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
+from django.contrib import messages
+from cmscore.models import Loginbg
+from django.contrib.auth.forms import UserCreationForm
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.urls import reverse
+from auth_user.models import User
+from django.contrib.auth import authenticate, login, logout
 
+def login_view(request):
+    loginbg = get_object_or_404(Loginbg)
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            messages.info(request, 'Invalid Credentials!')
+            return redirect('login')
+    else:
+        
+        return render(request, 'registration/login.html', {'loginbg': loginbg})
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
 # # def register(request):
 # #     if request.method == 'POST':

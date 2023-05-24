@@ -30,18 +30,28 @@
  <div class="album py-5">
     <div class="container">
       <h2 style="color: rgb(0, 75, 50); font-style: italic;">ALL POST</h2>
-      <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-primary"> Add Post </button></a>
+      <a href="{% url 'postcreateview' %}"><button type="button" class="btn btn-primary mb-3"> Add Post </button></a>
       <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
         {% for post in posts %}
         <div class="col">
           <div class="card shadow-sm">
+            {% if post.postimages_set.all %}
             {% for post in post.postimages_set.all%}
               {% if post.images %}
                 {% if forloop.first %}
-                <img style="max-height: 100px; object-fit: cover;" src="{{post.images.url}}">
+                <img style="max-height: 100px; height: 100px; object-fit: cover;" src="{{post.images.url}}">
                 {% endif %}
               {% endif %}
             {% endfor %}
+            {% else %}
+            {% for post in post.image.all%}
+              {% if post.images %}
+                {% if forloop.first %}
+                <img style="max-height: 100px; height: 100px; object-fit: cover;" src="{{post.images.url}}">
+                {% endif %}
+              {% endif %}
+              {% endfor %}
+            {% endif %}
             <div class="card-body"><small class="text-muted">{{ post.created_at|date:"Y-m-d"}}</small>
               <p class="card-text">Title: {{ post.title|title }}</p>
               <p class="card-text">Detail: {{ post.body|truncatechars:100 }}</p>

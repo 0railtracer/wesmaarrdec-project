@@ -5,7 +5,7 @@
  <div class="album py-5">
     <div class="container">
       <h2 style="color: rgb(0, 75, 50); font-style: italic;">Gallery Album</h2>
-        <a href="{% url 'createalbum' %}"><button type="button" class="btn btn-primary"> Add Album </button></a>
+        <a href="{% url 'createalbum' %}"><button type="button" class="btn btn-primary mb-3"> Add Album </button></a>
         <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5" style="
               margin-bottom: 100px;
           ">
@@ -29,15 +29,27 @@
   </div>
   <hr>
   <h2 style="color: rgb(0, 75, 50); font-style: italic;">Gallery Photo</h2>
-<a href="{% url 'createphoto' %}"><button type="button" class="btn btn-primary"> Add Photo </button></a>
+<a href="{% url 'createphoto' %}"><button type="button" class="btn btn-primary mb-3"> Add Photo </button></a>
   <div class="row row-cols-1 row-cols-sm-4 row-cols-md-4 g-5">
         {% for photo in photos %}
         <div class="col">
-          <div class="card shadow-sm"> 
-            {% if photo.albumphotoimages_set.all %}
-                {% if photo.albumphotoimages_set.first.images %}
-                    <img style="max-height: 100px; object-fit: cover;" src="{{photo.albumphotoimages_set.first.images.url}}">
+          <div class="card shadow-sm" id="gray"> 
+            {% if photo.album_photo_images.all %}
+            {% for photo in photo.album_photo_images.all%}
+              {% if photo.images %}
+                {% if forloop.first %}
+                <img style="max-height: 100px; height: 100px; object-fit: cover;" src="{{photo.images.url}}">
                 {% endif %}
+              {% endif %}
+            {% endfor %}
+            {% else %}
+            {% for photo in photo.image.all%}
+              {% if photo.images %}
+                {% if forloop.first %}
+                <img style="max-height: 100px; height: 100px; object-fit: cover;" src="{{photo.images.url}}">
+                {% endif %}
+              {% endif %}
+              {% endfor %}
             {% endif %}
             <div class="card-body"><small class="text-muted">{{ photo.created_at|date:"Y-m-d"}}</small>
               <p class="card-text">Name: {{ photo.name|title }}</p>
@@ -57,4 +69,9 @@
 </div>
 </div>
 </div>
+<style>
+  .dashcard{
+    height: 300px;
+  }
+</style>
 {% endblock %}

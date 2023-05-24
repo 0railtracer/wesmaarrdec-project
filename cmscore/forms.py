@@ -5,7 +5,15 @@ from cmsblg.models import *
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.forms.models import inlineformset_factory
+from django.shortcuts import render
+from django.utils.html import format_html
+# from django.forms import widgets
 
+# class ImageSelect(widgets.Select):
+#     def render_option(self, selected_choices, option_value, option_label):
+#         option_data = self.choices.queryset.get(pk=option_value)
+#         return '<option value="%s">%s<img src="%s" alt="%s"></option>' % (
+#             option_value, option_label, option_data.images.url, option_label)
 
 def generate_unique_slug(model, title):
     slug = slugify(title)
@@ -29,14 +37,22 @@ class PostImagesForm(forms.ModelForm):
 PostImagesFormSet = inlineformset_factory(Post, PostImages, form=PostImagesForm, extra=1, can_delete=True)
 
 class PostForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            selected_images = self.instance.image.all()
+            self.fields['image'].queryset = PostImages.objects.all()
+            self.fields['image'].widget.attrs['selected_images'] = [str(image.pk) for image in selected_images]
+
     class Meta:
         model = Post
-        fields = ['category', 'title', 'intro', 'body']
+        fields = ['category', 'title', 'intro', 'body', 'image']
         labels = {
             'title': 'Title',
             'category': 'Category',
             'intro': 'Introduction',
-            'body': 'Content'
+            'body': 'Content',
+            'image': 'Image',
         }
 
     def form_valid(self, form):
@@ -127,36 +143,41 @@ class SlideForm(ModelForm):
 class AlbumForm(ModelForm):
     class Meta:
         model = Album
-        fields = ['name', 'caption', 'event_id', 'proj_id', 'prog_id', 'project', 'program']
+        fields = ['name', 'caption', 'event_id', 'project', 'program']
         labels = {
             'name': 'Name',
             'caption': 'Caption',
             'event_id': 'Event Id',
-            'proj_id': 'Project Id',
-            'prog_id': 'Program Id',
             'project': 'Related Project',
             'program': 'Related Program',
         }
 
 class AlbumPhotoImagesForm(forms.ModelForm):
     class Meta:
-        model = AlbumPhotoImages
+        model = PostImages
         fields = ['images']
         widgets = {
             'images': forms.FileInput(attrs={'multiple': True, 'accept': 'image/*'}),
         }
         
-AlbumPhotoImagesFormSet = inlineformset_factory(AlbumPhoto, AlbumPhotoImages, form=AlbumPhotoImagesForm, extra=1, can_delete=True)
+AlbumPhotoImagesFormSet = inlineformset_factory(AlbumPhoto, PostImages, form=AlbumPhotoImagesForm, extra=1, can_delete=True)
 
 class PhotoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            selected_images = self.instance.image.all()
+            self.fields['image'].queryset = PostImages.objects.all()
+            self.fields['image'].widget.attrs['selected_images'] = [str(image.pk) for image in selected_images]
+
     class Meta:
         model = AlbumPhoto
-        fields = ['name','caption','carousel','events','news','album']
+        fields = ['name', 'caption', 'carousel', 'events', 'news', 'album', 'image']
         labels = '__all__'
         widgets = {
-                'carousel': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_carousel'}),
-                'events': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_events'}),
-                'news': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_news'}),
+            'carousel': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_carousel'}),
+            'events': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_events'}),
+            'news': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_news'}),
         }
 
 class ContentForm(forms.ModelForm):

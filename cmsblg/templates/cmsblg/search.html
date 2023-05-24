@@ -20,7 +20,7 @@
                                 <div class="content is-medium">
                                     <a href="{% url 'post_detail' post.category.slug post.slug %}">
                                         <h3>Author: {{ post.author }} </h3>
-                                        <h6 class="title">Title: {{ post.title }}</h6>
+                                        <h6 class="title" style="text-decoration: underline; color: #66b366;">Title: {{ post.title }}</h6>
                                     </a>
                                 </div>
                                 <hr>
@@ -37,7 +37,7 @@
                             {% for com in commodities %}
                                 <div class="content is-medium">
                                     <a href="{% url 'commodetail' com_id=com.com_id %}">
-                                        <h1>{{ com.name }}</h1>
+                                        <h1 style="text-decoration: underline; color: #66b366;">{{ com.name }}</h1>
                                         <p>{{ com.detail }}</p>
                                     </a>
                                 </div>
@@ -57,7 +57,7 @@
                                     {% if cmi.agency_id%}
                                     <a href="{% url 'cmidetail' cmi_id=cmi.agency_id %}">
                                     {% endif%}
-                                        <p>{{cmi.name }}</p>
+                                        <p style="text-decoration: underline; color: #66b366;">{{cmi.name }}</p>
                                     </a>
                                 </div>
                                 <hr>
@@ -74,7 +74,7 @@
                             {% for pic in photo %}
                                 <div class="content is-medium">
                                     <a href="{% url 'album' %}">
-                                        <h1>{{pic.name }}</h1>
+                                        <h1 style="text-decoration: underline; color: #66b366;">{{pic.name }}</h1>
                                         <p>{{ pic.caption }}</p>
                                     </a>
                                 </div>
@@ -92,7 +92,7 @@
                             {% for pro in project %}
                                 <div class="content is-medium">
                                     <a href="{% url 'onprojectdetail' proj_id=pro.proj_id %}">
-                                        <h6>{{pro.title}}</h6>
+                                        <h6 style="text-decoration: underline; color: #66b366;">{{pro.title}}</h6>
                                         <p>{{pro.description}}</p>
                                     </a>
                                 </div>
@@ -110,7 +110,7 @@
                             {% for cat in category %}
                                 <div class="content is-medium">
                                     <a href="{% url 'category_detail' cat.slug %}">
-                                        <h3>{{cat.title}}</h3>
+                                        <h3 style="text-decoration: underline; color: #66b366;">{{cat.title}}</h3>
                                     </a>
                                 </div>
                                 <hr>

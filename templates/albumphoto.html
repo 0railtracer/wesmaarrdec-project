@@ -15,14 +15,39 @@
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
                         <div class="card-container">
-                        {% for photo in albumphotos %}
+                            {% for albumphoto in albumphotos %}
+                            {% for image in albumphoto.image.all %}
+                                <div class="card" style="width: 15rem;">
+                                    <img id="img_{{ image.pk }}" src="{{ image.images.url }}" style="height: 250px; max-height: 250px; object-fit: cover;" class="d-block w-100 enlarge-image" alt="{{ image.alt_text }}"
+                                        onclick="enlargeImg('img_{{ image.pk }}')" onmouseout="resetImg('img_{{ image.pk }}')">
+                                    <div class="card-body">
+                                        <a href="{{image.images.url}}"><h5 class="card-title shadows">{{ albumphoto.name }}</h5></a> 
+                                        <p class="card-text">{{ albumphoto.caption }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% for image in albumphoto.album_photo_images.all %}
+                                {% if image.images %}
+                                    <div class="card" style="width: 15rem;">
+                                        <img id="img_{{ image.pk }}" src="{{ image.images.url }}" style="height: 250px; max-height: 250px; object-fit: cover;" class="d-block w-100 enlarge-image" alt="{{ image.alt_text }}"
+                                            onclick="enlargeImg('img_{{ image.pk }}')" onmouseout="resetImg('img_{{ image.pk }}')">
+                                        <div class="card-body">
+                                            <a href="{{image.images.url}}"><h5 class="card-title shadows">{{ albumphoto.name }}</h5></a> 
+                                            <p class="card-text">{{ albumphoto.caption }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+
+                        <!-- {% for photo in albumphotos %}
                         <div class="card" style="width: 25rem;">
                             <div id="carousel-{{ photo.id }}" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-indicators">
                                 {% if photo.image %}
                                 <button type="button" data-bs-target="#carousel-{{ photo.id }}" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                                 {% endif %}
-                                {% for image in photo.albumphotoimages_set.all %}
+                                {% for image in photo.album_photo_images.all %}
                                 <button type="button" data-bs-target="#carousel-{{ photo.id }}" data-bs-slide-to="{{ forloop.counter }}" aria-label="Slide {{ forloop.counter }}"></button>
                                 {% endfor %}
                             </div>
@@ -32,7 +57,12 @@
                                 <img src="{{ photo.image.url }}" style="height: 250px; max-height: 250px; object-fit: cover;" class="d-block w-100 enlarge-image" alt="{{ photo.name }}">
                             </div>
                             {% endif %}
-                            {% for image in photo.albumphotoimages_set.all %}
+                                {% for image in photo.image.all %}
+                                    <div class="carousel-item{% if forloop.first and not photo.image %} active{% endif %}">
+                                        <img src="{{ image.image.url }}" style="height: 250px; max-height: 250px; object-fit: cover;" class="d-block w-100 enlarge-image" alt="{{ image.alt_text }}">
+                                    </div>
+                                {% endfor %}
+                            {% for image in photo.album_photo_images.all %}
                                 {% if image.images %}
                                     <div class="carousel-item{% if forloop.first and not photo.image %} active{% endif %}">
                                         <img src="{{ image.images.url }}" style="height: 250px; max-height: 250px; object-fit: cover;" class="d-block w-100 enlarge-image" alt="{{ image.alt_text }}">
@@ -51,7 +81,6 @@
                             </div>
 
                             <div class="card-body">
-                            <!-- <h5 class="card-title">{{ photo.name }}</h5> -->
                             <p class="card-text">{{ photo.caption }}</p>
                             <a href="{% url 'albumimgs' photo.pk %}"> <button type="button" class="btn btn-success">
                             View All Images
@@ -63,19 +92,49 @@
                         <div class="content">
                             <p>There are no photos in this album...</p>
                         </div>
+                        {% endfor %} -->
+                        <!-- albumphoto.html -->
+
+                        <!-- {% for albumphoto in albumphotos %}
+                        <h3>{{ albumphoto.name }}</h3>
+                        <p>{{ albumphoto.caption }}</p>
+                        
+                        {% for image in albumphoto.image.all %}
+                            <img src="{{ image.images.url }}" alt="{{ image.post.title }}">
                         {% endfor %}
+                        {% endfor %} -->
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+        <!-- script to set display property -->
+<script>
+    function enlargeImg(imageId) {
+        var img = document.getElementById(imageId);
+        img.style.transform = "scale(1.5)";
+        img.style.transition = "transform 0.25s ease";
+    }
+
+    function resetImg(imageId) {
+        var img = document.getElementById(imageId);
+        img.style.transform = "scale(1)";
+        img.style.transition = "transform 0.25s ease";
+    }
+</script>
 
     <style>
+    .shadows:hover{
+        text-decoration: underline;
+         color: #66b366;
+    }
+
     .card-container {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: space-evenly;
         align-items: flex-start;
     }
 

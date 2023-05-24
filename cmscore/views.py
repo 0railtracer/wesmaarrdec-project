@@ -237,7 +237,7 @@ def mypost(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'single-post.html', {'page_obj': page_obj})
 
-
+@login_required(login_url='/login')
 def updatepost(request, slug):
     post = get_object_or_404(Post, slug=slug)
     ImageFormSet = modelformset_factory(PostImages, form=PostImagesForm, extra=1, can_delete=True)
@@ -251,6 +251,7 @@ def updatepost(request, slug):
             post_form.instance.author = request.user
             post_form.instance.slug = generate_unique_slug(Post, post_form.cleaned_data['title'])
             post.save()
+            post_form.save_m2m()
 
             # Delete images that were removed from the formset
             for form in post_images_formset.deleted_forms:
@@ -303,6 +304,7 @@ def allpost(request):
 
     return render(request, 'allposts.html', {'page_obj': page_obj})
 
+@login_required(login_url='/login')
 def createpost(request):
     ImageFormSet = modelformset_factory(PostImages, form=PostImagesForm, extra=1)
 
@@ -317,6 +319,7 @@ def createpost(request):
             post_form.instance.author = request.user
             post_form.instance.slug = generate_unique_slug(Post, post_form.cleaned_data['title'])
             post.save()
+            post_form.save_m2m()
 
             for i, form in enumerate(post_images_formset.cleaned_data):
                 if form:
@@ -375,6 +378,7 @@ def deletepost(request, slug):
         messages.error(request, f'Error deleting Post: {str(e)}')
     return redirect('/dashcommunity')
 
+@login_required(login_url='/login')
 def deletepostuser(request, slug):
     slide = get_object_or_404(Post, slug=slug)
     try:
@@ -1268,15 +1272,17 @@ def dashboard(request):
 }
     return render(request, 'dashboard.html', context)
 
+@staff_member_required(login_url='/login')
 def postman(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by('-created_at')
     context = {'posts': posts}
     return render(request, 'post-section.html', context)
 
+@staff_member_required(login_url='/login')
 def galleryman(request):
     loginbg = get_object_or_404(Loginbg)
-    photos = AlbumPhoto.objects.all()
-    albums = Album.objects.all()
+    photos = AlbumPhoto.objects.order_by('-created_at')
+    albums = Album.objects.order_by('-created_at')
     context = {
         'photos': photos,
         'loginbg': loginbg,
@@ -1337,13 +1343,16 @@ def deleteAlbum(request, pk):
 
 def album(request, pk):
     albums = get_object_or_404(Album, pk=pk)
-    albumphotos = albums.photos.all()
+    albumphotos = albums.photos.order_by('-created_at')
+    print(albumphotos)
+        
     context = {
         'albums': albums,
         'albumphotos': albumphotos,
         }
 
     return render(request, 'albumphoto.html', context)
+
 
 def albumimgs(request, pk):
     albumphotos = get_object_or_404(AlbumPhoto, pk=pk)
@@ -1358,10 +1367,10 @@ def albumimgs(request, pk):
 
 @staff_member_required(login_url='/login')
 def createphoto(request):
-    PhotoFormSet = modelformset_factory(AlbumPhotoImages, form=AlbumPhotoImagesForm, extra=1)
+    PhotoFormSet = modelformset_factory(PostImages, form=AlbumPhotoImagesForm, extra=1)
 
     photo_form = PhotoForm()
-    photo_images_formset = PhotoFormSet(queryset=AlbumPhotoImages.objects.none())
+    photo_images_formset = PhotoFormSet(queryset=PostImages.objects.none())
 
     if request.method == 'POST':
         photo_form = PhotoForm(request.POST, request.FILES)
@@ -1370,11 +1379,12 @@ def createphoto(request):
             album = photo_form.save(commit=False)
             album.created_by = request.user
             album.save()
+            photo_form.save_m2m()
 
             for i, form in enumerate(photo_images_formset.cleaned_data):
                 if form:
                     for image in request.FILES.getlist(f'form-{i}-images'):
-                        album_photo_images = AlbumPhotoImages.objects.create(albumphoto=album)
+                        album_photo_images = PostImages.objects.create(albumphoto=album)
 
                         # Check if an image with the same file name already exists in the media root directory
                         filename, extension = os.path.splitext(image.name)
@@ -1383,7 +1393,7 @@ def createphoto(request):
                             album_photo_images.images.name = filename + extension
                         else:
                             # Check if an image with the same file name exists in the AlbumPhotoImages model
-                            existing_image = AlbumPhotoImages.objects.filter(images__contains=filename).first()
+                            existing_image = PostImages.objects.filter(images__contains=filename).first()
                             if existing_image:
                                 album_photo_images.images = existing_image.images
                             else:
@@ -1399,18 +1409,20 @@ def createphoto(request):
     }
     return render(request, 'multi-image.html', context)
 
+@staff_member_required(login_url='/login')
 def photoupdate(request, albumphoto_id):
     albumphoto = get_object_or_404(AlbumPhoto, pk=albumphoto_id)
     PhotoFormSet = modelformset_factory(
-        AlbumPhotoImages, form=AlbumPhotoImagesForm, extra=1, can_delete=True)
+        PostImages, form=AlbumPhotoImagesForm, extra=1, can_delete=True)
 
     if request.method == 'POST':
         photo_form = PhotoForm(request.POST, request.FILES, instance=albumphoto)
-        photo_images_formset = PhotoFormSet(request.POST, request.FILES, queryset=albumphoto.albumphotoimages_set.all())
+        photo_images_formset = PhotoFormSet(request.POST, request.FILES, queryset=albumphoto.album_photo_images.all())
         if photo_form.is_valid() and photo_images_formset.is_valid():
             albumphoto = photo_form.save(commit=False)
             albumphoto.modified_by = request.user.username # Update with username instead of user instance
             albumphoto.save()
+            photo_form.save_m2m()
 
             for form in photo_images_formset.deleted_forms:
 
@@ -1424,7 +1436,7 @@ def photoupdate(request, albumphoto_id):
                         albumphoto.albumphotoimages_set.filter(id=form['id']).delete()
                     else:
                         for image in request.FILES.getlist(f'form-{i}-images'):
-                            album_photo_images = AlbumPhotoImages(albumphoto=albumphoto)
+                            album_photo_images = PostImages(albumphoto=albumphoto)
 
                             # Check if an image with the same file name already exists in the media root directory
                             filename, extension = os.path.splitext(image.name)
@@ -1433,7 +1445,7 @@ def photoupdate(request, albumphoto_id):
                                 album_photo_images.images.name = filename + extension
                             else:
                                 # Check if an image with the same file name exists in the AlbumPhotoImages model
-                                existing_image = AlbumPhotoImages.objects.filter(images__contains=filename).first()
+                                existing_image = PostImages.objects.filter(images__contains=filename).first()
                                 if existing_image:
                                     album_photo_images.images.name = existing_image.images.name
                                 else:
@@ -1452,7 +1464,7 @@ def photoupdate(request, albumphoto_id):
 
     else:
         photo_form = PhotoForm(instance=albumphoto)
-        photo_images_formset = PhotoFormSet(queryset=albumphoto.albumphotoimages_set.all())
+        photo_images_formset = PhotoFormSet(queryset=albumphoto.album_photo_images.all())
 
     context = {
         'photo_form': photo_form,
@@ -1638,7 +1650,7 @@ def contact(request):
 
     return render(request, 'contact.html')
 
-
+@staff_member_required(login_url='/login')
 def map(request):
 
     m = folium.Map(location=[7.040, 122.075], zoom_start=7)
@@ -1653,6 +1665,7 @@ def map(request):
 
     return render(request, 'map.html', context)
 
+@staff_member_required(login_url='/login')
 def dashabout(request):
     loginbg = get_object_or_404(Loginbg)
     try:
@@ -1673,22 +1686,26 @@ def dashabout(request):
     context = {'consortium': consortium, 'consortium_url': url, 'loginbg': loginbg, 'org': org}
     return render(request, 'dash-about.html', context)
 
+@staff_member_required(login_url='/login')
 def dashcmi(request):
     context = {'consortium': consortium}
     return render(request, 'dash-cmi.html', context)
 
+@staff_member_required(login_url='/login')
 def dashslider(request):
     loginbg = get_object_or_404(Loginbg)
     slides = Slide.objects.all
     context = {'loginbg': loginbg, 'slides':slides}
     return render(request, 'dash-slider.html', context)
 
+@staff_member_required(login_url='/login')
 def dashfaq(request):
     loginbg = get_object_or_404(Loginbg)
     faq = Fact.objects.all()
     context = {'loginbg': loginbg, 'faq': faq}
     return render(request, 'dash-faq.html', context)
 
+@staff_member_required(login_url='/login')
 def dashcommodity(request):
     cnx = mysql.connector.connect(
                     user=db_settings['USER'],
@@ -1708,6 +1725,7 @@ def dashcommodity(request):
     context = {'commodity': commodity}
     return render(request, 'dash-commodities.html', context)
 
+@staff_member_required(login_url='/login')
 def dashcommunity(request):
     loginbg = get_object_or_404(Loginbg)
     posts = Post.objects.all()
@@ -1715,6 +1733,7 @@ def dashcommunity(request):
     context = {'posts': posts, 'loginbg': loginbg, 'categories': categories}
     return render(request, 'dash-community.html', context)
 
+@staff_member_required(login_url='/login')
 def dashproject(request):
     cnx = mysql.connector.connect(
                     user=db_settings['USER'],
@@ -1734,6 +1753,7 @@ def dashproject(request):
     context = {'projects': projects}
     return render(request, 'dash-projects.html', context)
 
+@staff_member_required(login_url='/login')
 def dashservices(request):
     loginbg = get_object_or_404(Loginbg)
     cnx = mysql.connector.connect(
@@ -1754,6 +1774,7 @@ def dashservices(request):
     context = {'loginbg': loginbg, 'services': services}
     return render(request, 'dash-services.html', context)
 
+@staff_member_required(login_url='/login')
 def dashuser(request):
     loginbg = get_object_or_404(Loginbg)
     User = get_user_model()
@@ -1793,6 +1814,7 @@ def dashuser(request):
             }
     return render(request, 'dash-users.html', context)
 
+@staff_member_required(login_url='/login')
 def dashslider(request):
     loginbg = get_object_or_404(Loginbg)
     try:
@@ -1819,6 +1841,7 @@ def dashslider(request):
 #         context['commodity_list'] = paginator.get_page(page)
 #         return context
 
+@staff_member_required(login_url='/login')
 def dashcontent(request):
     loginbg = get_object_or_404(Loginbg)
     farmcontent = Content.objects.filter(content_type=Content.FARM)
@@ -1843,6 +1866,7 @@ class ContentCreate(LoginRequiredMixin, CreateView):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
 
+@staff_member_required(login_url='/login')
 def contentdelete(request, id):
     content = get_object_or_404(Content, id=id)
     try:
@@ -1852,14 +1876,17 @@ def contentdelete(request, id):
         messages.error(request, f'Error deleting Post: {str(e)}')
     return redirect('/dashcontent')
 
+@staff_member_required(login_url='/login')
 def aboutus(request):
 
     return render(request, 'aboutcsd.html')
 
+@staff_member_required(login_url='/login')
 def manual(request):
 
     return render(request, 'manual.html')
 
+@staff_member_required(login_url='/login')
 def loginbgcreate(request):
 
     form = LoginbgForm()

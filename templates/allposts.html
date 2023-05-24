@@ -51,6 +51,7 @@
                               <div class="card mb-5" style="max-width: 40rem; margin: auto; text-align-last: center;">
                                 <div class="container text-center">
                                   <div class="row">
+                                    {% if post.postimages_set.all %}
                                     {% for post_image in post.postimages_set.all %}
                                       {% if post_image.images %}
                                         <div class="col">
@@ -64,6 +65,21 @@
                                         {% endif %}
                                       {% endif %}
                                     {% endfor %}
+                                    {% else %}
+                                    {% for post_image in post.image.all %}
+                                      {% if post_image.images %}
+                                        <div class="col">
+                                          <a href="{% url 'post_detail' post.category.slug post.slug %}">
+                                            <img src="{{ post_image.images.url }}" class="card-img-top mt-3" alt="..." style="max-width:300px; height: 200px; max-height: 200px; object-fit: cover;">
+                                          </a>
+                                        </div>
+                                        {% if forloop.counter == 2 %}
+                                          </div>
+                                          <div class="row">
+                                        {% endif %}
+                                      {% endif %}
+                                      {% endfor %}
+                                      {% endif %}
                                   </div>
                                 </div>
                                 <div class="card-body">

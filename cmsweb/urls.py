@@ -19,16 +19,25 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import sitemaps
 from django.contrib.sitemaps.views import sitemap
-
+from auth_user.views import *
 from cmscore.views import *
 from cmsblg.views import *
+from django.contrib.auth import views as auth_views  
 
 urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
     path('robots.txt', robots_txt, name='robots_txt'),
     path('admin/', admin.site.urls),
     path('', include('cmscore.urls')), 
-    path('', include('registration.urls')),
+    path('', include('auth_user.urls')),
+    path('reset_password/', auth_views.PasswordResetView.as_view(template_name='reset_password.html'),
+         name="reset_password"),
+    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name='reset_password_sent.html'),
+         name="password_reset_done"),
+    path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='reset_password_form.html'),
+         name="password_reset_confirm"),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='reset_password_done.html'),
+         name="password_reset_complete"),
     path('', include('cmsblg.urls')),   
     # path('', include,('Chat.urls')),
 ]

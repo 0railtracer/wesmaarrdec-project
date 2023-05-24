@@ -4,7 +4,7 @@
 {% block content%}
 <div class="hero">
   <div class="container my-5">
-    <div class="i-am-centered">
+    <div class="i-am-centered" style="max-width: 600px; margin: auto;">
         <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in post_form %}
@@ -13,6 +13,19 @@
               {{ field }}
               <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
             </div>
+            {% elif field.name == 'image' %}
+                <!-- <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% for image_obj in field.value %}
+                        <div>
+                            <img src="{{ image_obj.image.url }}" alt="{{ image_obj.image.name }}">
+                            <span>{{ image_obj.image.name }}</span> -->
+                            <!-- Include hidden input fields for existing images in the selection -->
+                            <!-- <input type="hidden" name="{{ field.html_name }}" value="{{ image_obj.pk }}">
+                        </div>
+                    {% endfor %}
+                    {{ field }}
+                </div> -->
           {% else %}
             <div class="form-group">
               <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -20,6 +33,19 @@
             </div>
           {% endif %}
         {% endfor %}
+        <div class="form-group" style="max-height: 100px; overflow-y: auto;">
+          <label for="{{ post_form.image.id_for_label }}">{{ post_form.image.label }}</label>
+          {% for image in post_form.image.field.queryset %}
+            <div class="form-check">
+              <a href="{{ image.images.url }}" target="_blank">
+                <input type="checkbox" name="{{ post_form.image.html_name }}" value="{{ image.pk }}"
+                  {% if image.pk|stringformat:"d" in post_form.image.widget.attrs.selected_images %}checked{% endif %}>
+                <label for="id_{{ post_form.image.auto_id }}_{{ image.pk }}">{{ image }}</label>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+
         {{ post_images_formset.management_form }}
         {% for form in post_images_formset %}
         <div class="form-group">

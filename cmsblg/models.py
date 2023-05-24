@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from multiselectfield import MultiSelectField
 from auth_user.models import User
+from cmscore.models import AlbumPhoto
 import os
 import random
 from random import choice
@@ -63,7 +64,7 @@ class Post(models.Model):
     featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=CHOICES_STATUS, default=ACTIVE)
-    # image = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    image = models.ManyToManyField('PostImages', related_name='postimg', blank=True)
     modified_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     modified_by = models.CharField(max_length=50, blank=True, null=True)
 
@@ -79,11 +80,12 @@ class Post(models.Model):
         return '/%s/%s/' % (self.category.slug, self.slug)
     
 class PostImages(models.Model):
-    post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE, null=True, blank=True)
+    albumphoto = models.ForeignKey(AlbumPhoto, related_name='album_photo_images', default=None, on_delete=models.CASCADE, null=True, blank=True)
     images = models.ImageField(upload_to=get_existing_file_name, verbose_name='Image', blank=True)
 
     def __str__(self):
-        return self.post.title
+        return self.images.name
 
 # class Comment(models.Model):
 #     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)

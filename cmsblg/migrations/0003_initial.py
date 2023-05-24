@@ -12,7 +12,7 @@ def create_categories(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('cmsblg', '0001_initial'),
+        ('cmsblg', '0002_initial'),
     ]
 
     operations = [

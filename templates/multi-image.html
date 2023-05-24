@@ -8,19 +8,44 @@
         <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in photo_form %}
-          {% if field.widget.input_type == 'checkbox' %}
-            <div class="form-group form-check">
-              {{ field }}
-              <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-            </div>
-          {% else %}
-            <div class="form-group">
-              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-              {{ field|add_class:"form-control" }}
-            </div>
-          {% endif %}
+            {% if field.widget.input_type == 'checkbox' %}
+                <div class="form-group form-check">
+                    {{ field }}
+                    <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                </div>
+            {% elif field.name == 'image' %}
+                <!-- <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% for image_obj in field.value %}
+                        <div>
+                            <img src="{{ image_obj.image.url }}" alt="{{ image_obj.image.name }}">
+                            <span>{{ image_obj.image.name }}</span> -->
+                            <!-- Include hidden input fields for existing images in the selection -->
+                            <!-- <input type="hidden" name="{{ field.html_name }}" value="{{ image_obj.pk }}">
+                        </div>
+                    {% endfor %}
+                    {{ field }}
+                </div> -->
+            {% else %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:"form-control" }}
+                </div>
+            {% endif %}
         {% endfor %}
-        {{ photo_images_formset.management_form }}
+        <div class="form-group" style="max-height: 200px; overflow-y: auto;">
+          <label for="{{ photo_form.image.id_for_label }}">{{ photo_form.image.label }}</label>
+          {% for image in photo_form.image.field.queryset %}
+            <div class="form-check">
+              <a href="{{ image.images.url }}" target="_blank">
+                <input type="checkbox" name="{{ photo_form.image.html_name }}" value="{{ image.pk }}"
+                  {% if image.pk|stringformat:"d" in photo_form.image.widget.attrs.selected_images %}checked{% endif %}>
+                <label for="id_{{ photo_form.image.auto_id }}_{{ image.pk }}">{{ image }}</label>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+        {{ photo_images_formset.management_form }}  
         {% for form in photo_images_formset %}
         <div class="form-group">
             <label for="{{ form.images.id_for_label }}">{{ form.images.label }}</label>

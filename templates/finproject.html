@@ -14,12 +14,12 @@
           <div class="col-md-9">
             {% for project in finprojects %}
             <div class="d-lg-flex post-entry-2">
-              <a href="{{ project.image1.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+              <!-- <a href="{{ project.image1.url }}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
                 <img src="{{ project.image1.url }}" alt="" class="img-fluid">
-              </a>
+              </a> -->
               <div>
                 <div class="post-meta"><span class="date">Completed On</span> <span class="mx-1">&bullet;</span> <span>{{project.end_date}}</span></div>
-                <h3><a href="{% url 'onprojectdetail' proj_id=project.proj_id %}">{{project.title}}</a></h3>
+                <h3><a href="{% url 'onprojectdetail' proj_id=project.proj_id %}" style="text-decoration: underline; color: #66b366;">{{project.title}}</a></h3>
                 <p>{{project.proj_description}}</p>
                 <div class="d-flex align-items-center author">
                   <div class="name">

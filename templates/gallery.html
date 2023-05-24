@@ -19,7 +19,8 @@
                                         <div class="swiper sliderFeaturedPosts">
                                             <div class="swiper-wrapper">
                                             {% for carousel in carousel %}
-                                            {% for image in carousel.albumphotoimages_set.all %}
+                                            {% if carousel.album_photo_images.all %}
+                                            {% for image in carousel.album_photo_images.all %}
                                                 <div class="swiper-slide">
                                                 {% if image.images %}
                                                     <a href="#" class="img-bg d-flex align-items-end" style="background-image: url('{{ image.images.url }}');">
@@ -31,6 +32,20 @@
                                                 {% endif %}
                                                 </div>
                                             {% endfor %}
+                                            {% else %}
+                                            {% for image in carousel.image.all %}
+                                                <div class="swiper-slide">
+                                                {% if image.images %}
+                                                    <a href="#" class="img-bg d-flex align-items-end" style="background-image: url('{{ image.images.url }}');">
+                                                    <div class="img-bg-inner">
+                                                        <h2>{{ carousel.name }}</h2>
+                                                        <p>{{ carousel.caption }}</p>
+                                                    </div>
+                                                    </a>
+                                                {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                            {% endif %}
                                             {% endfor %}
                                             </div>
 
