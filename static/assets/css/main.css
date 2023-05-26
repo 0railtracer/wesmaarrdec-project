@@ -688,6 +688,12 @@ section {
   background-position: center center;
 }
 
+.img-cmi{
+  max-height: 150px;
+  float: left;
+  margin-right: 15px;
+}
+
 @media (max-width: 768px) {
   .img-bg {
     height: 400px;
