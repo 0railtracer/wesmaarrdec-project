@@ -110,8 +110,18 @@
               {{ map|safe }}
               {% endif %}
             </div>
-            <!-- <a href="#" class="me-4 thumbnail"> -->
+            <!-- <a href="#" class="me-4 thumbnail"> ------------------------------------------------------------------------->
               {% if cmi.url %}
+            
+            <!-- UPDATED LOGO BESIDE CMI CODE CMI NAME-->
+            <div class="logo ps-md-5 mt-4 mt-md-0">
+              <img src="{{cmi.logo_url}}" alt="" class="img-cmi">
+              <h5 class="post-meta">{{cmi.agency_code}}</h5>
+              <h1 class="cmititle mb-4">{{cmi.name}}</h1>
+              <p>{{cmi.detail}}</p>
+            </div>
+            <!-- END UPDATED LOGO BESIDE CMI CODE CMI NAME ------------------------------------------------------------------->
+            
               <a href="{{ cmi.url }}" style="margin: auto;">
               <img src="{{cmi.logo_url}}" style="    width: 400px;
               max-width: 100%;
@@ -139,7 +149,7 @@
               <div class="col ">
 <!-- Button trigger modal -->
               <!-- <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Com"> -->
-                <h1 class="cmdtitle">Commodities</h1>
+                <h3 class="cmibtn">Commodities</h3>
                 <div class="shadow" style="max-height: 350px; overflow-y: auto;">
                 {% if commodities %}
                 {% for com in commodities %}
@@ -157,7 +167,7 @@
               <div class="col ">
 <!-- Button trigger modal -->
               <!-- <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Proj"> -->
-                <h1 class="cmdtitle">Projects</h1>
+                <h3 class="cmibtn">Projects</h3>
                 <div class="shadow" style="max-height: 350px; overflow-y: auto;">
                 {% if projects %}
                 {% for proj in projects %}
@@ -175,7 +185,7 @@
               <div class="col ">
 <!-- Button trigger modal -->
               <!-- <button type="button" class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#Prog"> -->
-                <h1 class="cmdtitle">Programs</h1> 
+                <h3 class="cmibtn">Programs</h3>
                 <div class="shadow" style="max-height: 350px; overflow-y: auto;">
                 {% if programs %}
                 {% for prog in programs %}
