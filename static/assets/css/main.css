@@ -124,6 +124,12 @@ section {
   color: #008001;
 }
 
+.cmibtn{
+  background-color: #008001;
+  color: #ffffff;
+  text-align: center;
+}
+
 /* Form Input Fieldds */
 .form-control:active,
 .form-control:focus {
