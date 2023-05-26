@@ -67,7 +67,7 @@
           </li>
           <li class="dropdown"><a href="{% url 'community' %}"><span>COMMUNITY</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul>
-              <li><a href="{% url 'facts' %}">Faqs</a></li>
+              <li><a href="{% url 'facts' %}">FAQs</a></li>
               <li><a href="{% url 'gallery' %}">Gallery</a></li>
             </ul>
           </li>
@@ -80,11 +80,8 @@
               <li><a href="{% url 'finproject' %}">Completed</a></li>
             </ul>
           </li>
-          <li class="dropdown"><a href="{% url 'services' %}"><span>SERVICES</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-            <ul>
-              <li><a href="#">Comming Soon</a></li>
-            </ul>
-          </li>
+          <a href="{% url 'services' %}"><span>SERVICES</span></a>
+          
           {% if user.is_superuser or user.is_staff %}
           <a href="{% url 'dashuser' %}"><span>DASH</span></a>
           {% endif %}
